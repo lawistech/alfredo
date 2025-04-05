@@ -1,876 +1,1021 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Alfredo Media - Digital Solutions</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <style>
-        :root {
-            --primary: #0099FF;
-            --primary-light: #33ADFF;
-            --primary-dark: #0077CC;
-            --accent: #FF6600;
-            --accent-dark: #CC5200;
-            --dark: #1A1A1A;
-            --darker: #121212;
-            --light: #FFFFFF;
-            --gray-100: #F1F5F9;
-            --gray-200: #E2E8F0;
-            --gray-300: #CBD5E1;
-            --gray-400: #94A3B8;
-            --gray-500: #64748B;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1E293B;
-            --gray-900: #0F172A;
+      :root {
+        --primary: #0099ff;
+        --primary-light: #33adff;
+        --primary-dark: #0077cc;
+        --accent: #ff6600;
+        --accent-dark: #cc5200;
+        --dark: #1a1a1a;
+        --darker: #121212;
+        --light: #ffffff;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-800: #1e293b;
+        --gray-900: #0f172a;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: linear-gradient(to bottom, var(--dark), var(--darker));
+        color: var(--light);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      .flex {
+        display: flex;
+      }
+
+      .items-center {
+        align-items: center;
+      }
+
+      .justify-between {
+        justify-content: space-between;
+      }
+
+      .justify-center {
+        justify-content: center;
+      }
+
+      .grid {
+        display: grid;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      /* Typography */
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+      }
+
+      h1 {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        background: linear-gradient(
+          45deg,
+          var(--primary-light) 0%,
+          var(--primary) 20%,
+          var(--accent) 40%,
+          #ff9900 60%,
+          var(--accent-dark) 80%,
+          var(--primary) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 300% auto;
+        animation: gradientShift 6s ease infinite;
+        text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        letter-spacing: -1px;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        50% {
+          background-position: 100% 50%;
         }
-        
-        html {
-            scroll-behavior: smooth;
+        100% {
+          background-position: 0% 50%;
         }
-        
-        body {
-            background: linear-gradient(to bottom, var(--dark), var(--darker));
-            color: var(--light);
-            line-height: 1.6;
-            overflow-x: hidden;
+      }
+
+      h2 {
+        font-size: clamp(1.75rem, 4vw, 2.5rem);
+        position: relative;
+        padding-bottom: 1rem;
+      }
+
+      h3 {
+        font-size: clamp(1.25rem, 3vw, 1.75rem);
+      }
+
+      p {
+        margin-bottom: 1.5rem;
+        color: var(--gray-300);
+      }
+
+      /* Header */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        padding: 1.5rem 0;
+        transition: all 0.3s ease;
+        background: transparent;
+        backdrop-filter: none;
+      }
+
+      .header-scrolled {
+        padding: 1rem 0;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        background: rgba(26, 26, 26, 0.95);
+        backdrop-filter: blur(10px);
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-decoration: none;
+        color: var(--light);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .logo-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+
+      .nav-list {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+      }
+
+      .nav-link {
+        color: var(--gray-300);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+        position: relative;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(to right, var(--primary), var(--accent));
+        transition: width 0.3s;
+      }
+
+      .nav-link:hover {
+        color: var(--light);
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .mobile-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--light);
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      /* Hero */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        padding: 8rem 0 4rem;
+        background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 70% 30%,
+            rgba(0, 153, 255, 0.15),
+            transparent 70%
+          ),
+          radial-gradient(
+            circle at 30% 70%,
+            rgba(255, 102, 0, 0.1),
+            transparent 60%
+          );
+        z-index: 0;
+      }
+
+      .hero-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-img {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .hero-logo-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 50%;
+        box-shadow: 0 15px 35px rgba(0, 153, 255, 0.3),
+          0 5px 15px rgba(255, 102, 0, 0.2);
+        animation: float 6s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px) rotate(0deg);
         }
-        
-        .container {
-            width: 100%;
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
+        50% {
+          transform: translateY(-20px) rotate(2deg);
         }
-        
-        .flex {
-            display: flex;
+        100% {
+          transform: translateY(0px) rotate(0deg);
         }
-        
-        .items-center {
-            align-items: center;
+      }
+
+      .hero-title {
+        margin-bottom: 1.5rem;
+        position: relative;
+      }
+
+      .hero-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 80px;
+        height: 4px;
+        background: var(--accent);
+        border-radius: 2px;
+      }
+
+      .hero-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      @media (max-width: 768px) {
+        .hero-title::after {
+          left: 50%;
+          transform: translateX(-50%);
         }
-        
-        .justify-between {
-            justify-content: space-between;
-        }
-        
-        .justify-center {
-            justify-content: center;
-        }
-        
-        .grid {
-            display: grid;
-        }
-        
-        .text-center {
-            text-align: center;
-        }
-        
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-        }
-        
-        h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            background: linear-gradient(45deg, 
-                var(--primary-light) 0%, 
-                var(--primary) 20%, 
-                var(--accent) 40%, 
-                #FF9900 60%,
-                var(--accent-dark) 80%,
-                var(--primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 300% auto;
-            animation: gradientShift 6s ease infinite;
-            text-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            letter-spacing: -1px;
+      }
+
+      /* Services */
+      .services {
+        padding: 8rem 0;
+        position: relative;
+      }
+
+      .services::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle at 30% 70%,
+          rgba(255, 102, 0, 0.15),
+          transparent 70%
+        );
+        z-index: -1;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+
+      .section-title span {
+        display: block;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--primary);
+        letter-spacing: 2px;
+        margin-bottom: 0.5rem;
+      }
+
+      .section-title h2::after {
+        content: "";
+        display: block;
+        width: 50px;
+        height: 3px;
+        background: var(--accent);
+        margin: 1rem auto 0;
+      }
+
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .service-card {
+        background: rgba(26, 26, 26, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        padding: 2rem;
+        transition: all 0.3s ease;
+      }
+
+      .service-card:hover {
+        transform: translateY(-10px);
+        border-color: rgba(0, 153, 255, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .service-icon {
+        width: 4rem;
+        height: 4rem;
+        background: var(--primary);
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .service-icon svg {
+        width: 2rem;
+        height: 2rem;
+        fill: none;
+        stroke: white;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .service-title {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+      }
+
+      /* Pricing */
+      .pricing {
+        padding: 8rem 0;
+        position: relative;
+      }
+
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .pricing-card {
+        background: rgba(26, 26, 26, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        padding: 2.5rem 2rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .pricing-card.featured {
+        transform: scale(1.03);
+      }
+
+      .pricing-card.featured::before {
+        content: "Most Popular";
+        position: absolute;
+        top: 1rem;
+        right: -3rem;
+        background: var(--accent);
+        color: white;
+        padding: 0.25rem 3rem;
+        transform: rotate(45deg);
+        font-size: 0.75rem;
+        font-weight: 600;
+        z-index: 1;
+      }
+
+      .pricing-card:hover {
+        transform: translateY(-10px);
+        border-color: rgba(0, 153, 255, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .pricing-card.featured:hover {
+        transform: scale(1.03) translateY(-10px);
+      }
+
+      .pricing-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .pricing-name {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+      }
+
+      .pricing-price {
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--light);
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .pricing-price sup {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-right: 0.25rem;
+        vertical-align: super;
+      }
+
+      .pricing-vat {
+        font-size: 0.875rem;
+        color: var(--gray-400);
+      }
+
+      .pricing-features {
+        margin-bottom: 2rem;
+        list-style: none;
+      }
+
+      .pricing-feature {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        font-size: 0.9375rem;
+      }
+
+      .pricing-feature::before {
+        content: "✓";
+        display: inline-block;
+        color: var(--accent);
+        margin-right: 0.75rem;
+        font-weight: bold;
+      }
+
+      /* CTA */
+      .cta {
+        padding: 6rem 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .cta::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(0, 153, 255, 0.1),
+          rgba(255, 102, 0, 0.1)
+        );
+        z-index: -1;
+      }
+
+      .cta-card {
+        background: rgba(26, 26, 26, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 1.5rem;
+        padding: 4rem 2rem;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-block;
+        padding: 0.875rem 2rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        text-align: center;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+        box-shadow: 0 4px 20px rgba(0, 153, 255, 0.5);
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 153, 255, 0.6);
+      }
+
+      .btn-accent {
+        background: var(--accent);
+        color: white;
+        box-shadow: 0 4px 20px rgba(255, 102, 0, 0.5);
+      }
+
+      .btn-accent:hover {
+        background: var(--accent-dark);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 102, 0, 0.6);
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 2px solid var(--primary);
+        color: var(--primary);
+      }
+
+      .btn-outline:hover {
+        background: var(--primary);
+        color: white;
+      }
+
+      /* Footer */
+      footer {
+        background: var(--darker);
+        padding: 5rem 0 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr repeat(3, 1fr);
+        gap: 2rem;
+        margin-bottom: 3rem;
+      }
+
+      .footer-brand {
+        margin-bottom: 1.5rem;
+      }
+
+      .footer-brand-desc {
+        color: var(--gray-400);
+        font-size: 0.9375rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .footer-social {
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      .social-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .social-icon:hover {
+        background: var(--primary);
+        transform: translateY(-3px);
+      }
+
+      .footer-heading {
+        font-size: 1.125rem;
+        margin-bottom: 1.5rem;
+        color: var(--light);
+      }
+
+      .footer-links {
+        list-style: none;
+      }
+
+      .footer-link {
+        margin-bottom: 0.75rem;
+      }
+
+      .footer-link a {
+        color: var(--gray-400);
+        text-decoration: none;
+        transition: color 0.3s;
+        font-size: 0.9375rem;
+      }
+
+      .footer-link a:hover {
+        color: var(--primary);
+      }
+
+      .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        padding-top: 2rem;
+        text-align: center;
+        color: var(--gray-500);
+        font-size: 0.875rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 992px) {
+        .hero-content {
+          grid-template-columns: 1fr;
+          text-align: center;
+          gap: 3rem;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        h2 {
-            font-size: clamp(1.75rem, 4vw, 2.5rem);
-            position: relative;
-            padding-bottom: 1rem;
-        }
-        
-        h3 {
-            font-size: clamp(1.25rem, 3vw, 1.75rem);
-        }
-        
-        p {
-            margin-bottom: 1.5rem;
-            color: var(--gray-300);
-        }
-        
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 1.5rem 0;
-            transition: all 0.3s ease;
-            background: rgba(26, 26, 26, 0.85);
-            backdrop-filter: blur(10px);
-        }
-        
-        .header-scrolled {
-            padding: 1rem 0;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
-            color: var(--light);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .logo-icon {
-            width: 2.5rem;
-            height: 2.5rem;
-        }
-        
-        .nav-list {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-        
-        .nav-link {
-            color: var(--gray-300);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            position: relative;
-        }
-        
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            transition: width 0.3s;
-        }
-        
-        .nav-link:hover {
-            color: var(--light);
-        }
-        
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        
-        .mobile-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--light);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            padding: 8rem 0 4rem;
-            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 70% 30%, rgba(0, 153, 255, 0.15), transparent 70%),
-                radial-gradient(circle at 30% 70%, rgba(255, 102, 0, 0.1), transparent 60%);
-            z-index: 0;
-        }
-        
-        .hero-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .hero-img {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .hero-logo-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 50%;
-            box-shadow: 0 15px 35px rgba(0, 153, 255, 0.3), 0 5px 15px rgba(255, 102, 0, 0.2);
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0% {
-                transform: translateY(0px) rotate(0deg);
-            }
-            50% {
-                transform: translateY(-20px) rotate(2deg);
-            }
-            100% {
-                transform: translateY(0px) rotate(0deg);
-            }
-        }
-        
-        .hero-title {
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-        
-        .hero-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 80px;
-            height: 4px;
-            background: var(--accent);
-            border-radius: 2px;
-        }
-        
-        .hero-particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        @media (max-width: 768px) {
-            .hero-title::after {
-                left: 50%;
-                transform: translateX(-50%);
-            }
-        }
-        
-        /* Services */
-        .services {
-            padding: 8rem 0;
-            position: relative;
-        }
-        
-        .services::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 70%, rgba(255, 102, 0, 0.15), transparent 70%);
-            z-index: -1;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-        
-        .section-title span {
-            display: block;
-            text-transform: uppercase;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--primary);
-            letter-spacing: 2px;
-            margin-bottom: 0.5rem;
-        }
-        
-        .section-title h2::after {
-            content: '';
-            display: block;
-            width: 50px;
-            height: 3px;
-            background: var(--accent);
-            margin: 1rem auto 0;
-        }
-        
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .service-card {
-            background: rgba(26, 26, 26, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 1rem;
-            padding: 2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(0, 153, 255, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-        
-        .service-icon {
-            width: 4rem;
-            height: 4rem;
-            background: var(--primary);
-            border-radius: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .service-icon svg {
-            width: 2rem;
-            height: 2rem;
-            fill: none;
-            stroke: white;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-        
-        .service-title {
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-        }
-        
-        /* Pricing */
-        .pricing {
-            padding: 8rem 0;
-            position: relative;
-        }
-        
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .pricing-card {
-            background: rgba(26, 26, 26, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 1rem;
-            padding: 2.5rem 2rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .pricing-card.featured {
-            transform: scale(1.03);
-        }
-        
-        .pricing-card.featured::before {
-            content: 'Most Popular';
-            position: absolute;
-            top: 1rem;
-            right: -3rem;
-            background: var(--accent);
-            color: white;
-            padding: 0.25rem 3rem;
-            transform: rotate(45deg);
-            font-size: 0.75rem;
-            font-weight: 600;
-            z-index: 1;
-        }
-        
-        .pricing-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(0, 153, 255, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-        
-        .pricing-card.featured:hover {
-            transform: scale(1.03) translateY(-10px);
-        }
-        
-        .pricing-header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .pricing-name {
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-        }
-        
-        .pricing-price {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--light);
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        
-        .pricing-price sup {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-right: 0.25rem;
-            vertical-align: super;
-        }
-        
-        .pricing-vat {
-            font-size: 0.875rem;
-            color: var(--gray-400);
-        }
-        
-        .pricing-features {
-            margin-bottom: 2rem;
-            list-style: none;
-        }
-        
-        .pricing-feature {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            font-size: 0.9375rem;
-        }
-        
-        .pricing-feature::before {
-            content: '✓';
-            display: inline-block;
-            color: var(--accent);
-            margin-right: 0.75rem;
-            font-weight: bold;
-        }
-        
-        /* CTA */
-        .cta {
-            padding: 6rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .cta::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(0, 153, 255, 0.1), rgba(255, 102, 0, 0.1));
-            z-index: -1;
-        }
-        
-        .cta-card {
-            background: rgba(26, 26, 26, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 1.5rem;
-            padding: 4rem 2rem;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            padding: 0.875rem 2rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            text-align: center;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 20px rgba(0, 153, 255, 0.5);
-        }
-        
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 153, 255, 0.6);
-        }
-        
-        .btn-accent {
-            background: var(--accent);
-            color: white;
-            box-shadow: 0 4px 20px rgba(255, 102, 0, 0.5);
-        }
-        
-        .btn-accent:hover {
-            background: var(--accent-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 102, 0, 0.6);
-        }
-        
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-        
-        .btn-outline:hover {
-            background: var(--primary);
-            color: white;
-        }
-        
-        /* Footer */
-        footer {
-            background: var(--darker);
-            padding: 5rem 0 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
         .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr repeat(3, 1fr);
-            gap: 2rem;
-            margin-bottom: 3rem;
+          grid-template-columns: 1fr 1fr;
         }
-        
-        .footer-brand {
-            margin-bottom: 1.5rem;
+      }
+
+      @media (max-width: 768px) {
+        .nav-list {
+          position: fixed;
+          top: 0;
+          right: -100%;
+          width: 250px;
+          height: 100vh;
+          background: var(--darker);
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 2rem;
+          transition: all 0.3s ease;
+          z-index: 1000;
         }
-        
-        .footer-brand-desc {
-            color: var(--gray-400);
-            font-size: 0.9375rem;
-            margin-bottom: 1.5rem;
+
+        .nav-list.active {
+          right: 0;
         }
-        
+
+        .mobile-toggle {
+          display: block;
+        }
+
+        .service-card,
+        .pricing-card {
+          text-align: center;
+        }
+
+        .pricing-card.featured {
+          transform: none;
+          order: -1;
+        }
+
+        .service-icon {
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .pricing-feature {
+          justify-content: center;
+        }
+
+        .footer-grid {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+
         .footer-social {
-            display: flex;
-            gap: 0.75rem;
+          justify-content: center;
         }
-        
-        .social-icon {
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .social-icon:hover {
-            background: var(--primary);
-            transform: translateY(-3px);
-        }
-        
-        .footer-heading {
-            font-size: 1.125rem;
-            margin-bottom: 1.5rem;
-            color: var(--light);
-        }
-        
-        .footer-links {
-            list-style: none;
-        }
-        
-        .footer-link {
-            margin-bottom: 0.75rem;
-        }
-        
-        .footer-link a {
-            color: var(--gray-400);
-            text-decoration: none;
-            transition: color 0.3s;
-            font-size: 0.9375rem;
-        }
-        
-        .footer-link a:hover {
-            color: var(--primary);
-        }
-        
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 2rem;
-            text-align: center;
-            color: var(--gray-500);
-            font-size: 0.875rem;
-        }
-        
-        /* Responsive */
-        @media (max-width: 992px) {
-            .hero-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: 3rem;
-            }
-            
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .nav-list {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 250px;
-                height: 100vh;
-                background: var(--darker);
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 2rem;
-                transition: all 0.3s ease;
-                z-index: 1000;
-            }
-            
-            .nav-list.active {
-                right: 0;
-            }
-            
-            .mobile-toggle {
-                display: block;
-            }
-            
-            .service-card, .pricing-card {
-                text-align: center;
-            }
-            
-            .pricing-card.featured {
-                transform: none;
-                order: -1;
-            }
-            
-            .service-icon {
-                margin-left: auto;
-                margin-right: auto;
-            }
-            
-            .pricing-feature {
-                justify-content: center;
-            }
-            
-            .footer-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .footer-social {
-                justify-content: center;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Header -->
     <header id="header">
-        <div class="container flex justify-between items-center">
-            <a href="#" class="logo">
-                <svg class="logo-icon" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="120" cy="120" r="110" fill="#0099FF"/>
-                    <circle cx="120" cy="120" r="90" fill="#1A1A1A"/>
-                    <circle cx="120" cy="120" r="80" stroke="#FF6600" stroke-width="16" fill="none"/>
-                    <path d="M120 40 L120 200 M40 120 L200 120" stroke="#FF6600" stroke-width="16"/>
-                    <path d="M60,65 a90,90 0 1,0 120,0" fill="none" stroke="#0099FF" stroke-width="16"/>
-                    <path d="M60,175 a90,90 0 1,1 120,0" fill="none" stroke="#0099FF" stroke-width="16"/>
-                </svg>
-                Alfredo Media
-            </a>
-            <nav>
-                <button class="mobile-toggle">☰</button>
-                <ul class="nav-list">
-                    <li><a href="#" class="nav-link">Home</a></li>
-                    <li><a href="#services" class="nav-link">Services</a></li>
-                    <li><a href="#pricing" class="nav-link">Pricing</a></li>
-                    <li><a href="#about" class="nav-link">About</a></li>
-                    <li><a href="#contact" class="nav-link">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container flex justify-between items-center">
+        <a href="#" class="logo">
+          <img src="img/logo.png" alt="Alfredo Media Logo" class="logo-icon" />
+          Alfredo Media
+        </a>
+        <nav>
+          <button class="mobile-toggle">☰</button>
+          <ul class="nav-list">
+            <li><a href="#" class="nav-link">Home</a></li>
+            <li><a href="#services" class="nav-link">Services</a></li>
+            <li><a href="#pricing" class="nav-link">Pricing</a></li>
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1 class="hero-title">Your digital journey starts with our expertise</h1>
-                    <p class="hero-subtitle">We're the easiest way to get more clients! Our goal is to make the process as simple and understandable as possible, so you can focus on what you do best.</p>
-                    <a href="#services" class="btn btn-primary">Discover Our Services</a>
-                </div>
-                <div class="hero-img">
-                    <img src="img/logo.png" alt="Alfredo Media Logo" class="hero-logo-image">
-                </div>
-            </div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-text">
+            <h1 class="hero-title">
+              Your digital journey starts with our expertise
+            </h1>
+            <p class="hero-subtitle">
+              We're the easiest way to get more clients! Our goal is to make the
+              process as simple and understandable as possible, so you can focus
+              on what you do best.
+            </p>
+            <a href="#services" class="btn btn-primary"
+              >Discover Our Services</a
+            >
+          </div>
+          <div class="hero-img">
+            <img
+              src="img/logo.png"
+              alt="Alfredo Media Logo"
+              class="hero-logo-image"
+            />
+          </div>
         </div>
-        <div class="hero-particles" id="particles-js"></div>
+      </div>
+      <div class="hero-particles" id="particles-js"></div>
     </section>
 
     <!-- Digital Future Section -->
     <section id="services" class="services">
-        <div class="container">
-            <div class="section-title">
-                <span>Our Vision</span>
-                <h2>The future is digital</h2>
-                <p>In a world that's constantly evolving, many businesses are noticing that traditional methods aren't as effective. Most people today use their mobile phones to search for service providers online.</p>
-            </div>
-            
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 16.5V15.5M12 13.5V8.5M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" />
-                        </svg>
-                    </div>
-                    <h3 class="service-title">Web Development</h3>
-                    <p>We create user-friendly and engaging websites that bring your business into the digital age, helping you connect with modern customers.</p>
-                </div>
-                
-                <div class="service-card">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M9.31 17.25L14.69 17.25C15.5 17.25 16.31 16.95 16.93 16.33C18.61 14.65 20.75 11.4 18.75 7.25C18.02 5.84 16.71 4.92 15.19 4.63C13.67 4.34 12.09 4.7 10.83 5.62C9.94 6.31 8.98 6.38 8.03 5.83C7.37 5.44 6.61 5.33 5.87 5.51C5.13 5.69 4.48 6.15 4.06 6.79C2.85 8.65 2.99 13.21 6.09 16.32C6.71 16.95 7.51 17.25 8.31 17.25" />
-                            <path d="M12 17V20" />
-                        </svg>
-                    </div>
-                    <h3 class="service-title">Digital Marketing</h3>
-                    <p>Gain online visibility and ensure your business stays competitive in an increasingly digital world with our comprehensive marketing strategies.</p>
-                </div>
-                
-                <div class="service-card">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M8 12H12M16 12H12M12 12V8M12 12V16M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" />
-                        </svg>
-                    </div>
-                    <h3 class="service-title">E-commerce Solutions</h3>
-                    <p>Transform your brick-and-mortar store into a thriving online business with our custom e-commerce solutions designed for growth.</p>
-                </div>
-            </div>
+      <div class="container">
+        <div class="section-title">
+          <span>Our Vision</span>
+          <h2>The future is digital</h2>
+          <p>
+            In a world that's constantly evolving, many businesses are noticing
+            that traditional methods aren't as effective. Most people today use
+            their mobile phones to search for service providers online.
+          </p>
         </div>
+
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 16.5V15.5M12 13.5V8.5M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                />
+              </svg>
+            </div>
+            <h3 class="service-title">Web Development</h3>
+            <p>
+              We create user-friendly and engaging websites that bring your
+              business into the digital age, helping you connect with modern
+              customers.
+            </p>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M9.31 17.25L14.69 17.25C15.5 17.25 16.31 16.95 16.93 16.33C18.61 14.65 20.75 11.4 18.75 7.25C18.02 5.84 16.71 4.92 15.19 4.63C13.67 4.34 12.09 4.7 10.83 5.62C9.94 6.31 8.98 6.38 8.03 5.83C7.37 5.44 6.61 5.33 5.87 5.51C5.13 5.69 4.48 6.15 4.06 6.79C2.85 8.65 2.99 13.21 6.09 16.32C6.71 16.95 7.51 17.25 8.31 17.25"
+                />
+                <path d="M12 17V20" />
+              </svg>
+            </div>
+            <h3 class="service-title">Digital Marketing</h3>
+            <p>
+              Gain online visibility and ensure your business stays competitive
+              in an increasingly digital world with our comprehensive marketing
+              strategies.
+            </p>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M8 12H12M16 12H12M12 12V8M12 12V16M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                />
+              </svg>
+            </div>
+            <h3 class="service-title">E-commerce Solutions</h3>
+            <p>
+              Transform your brick-and-mortar store into a thriving online
+              business with our custom e-commerce solutions designed for growth.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Pricing Section -->
     <section id="pricing" class="pricing">
-        <div class="container">
-            <div class="section-title">
-                <span>Transparent Pricing</span>
-                <h2>Affordable packages for all businesses</h2>
-                <p>Choose the perfect plan for your business needs with our transparent pricing structure.</p>
-            </div>
-            
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3 class="pricing-name">BASIC</h3>
-                        <span class="pricing-price"><sup>€</sup>975</span>
-                        <span class="pricing-vat">plus 19% VAT</span>
-                    </div>
-                    <ul class="pricing-features">
-                        <li class="pricing-feature">Homepage</li>
-                        <li class="pricing-feature">Responsive design for all devices</li>
-                        <li class="pricing-feature">Contact form integration</li>
-                        <li class="pricing-feature">Social media integration</li>
-                        <li class="pricing-feature">Free customizations</li>
-                    </ul>
-                    <a href="#" class="btn btn-outline">Buy Now</a>
-                </div>
-                
-                <div class="pricing-card featured">
-                    <div class="pricing-header">
-                        <h3 class="pricing-name">PREMIUM</h3>
-                        <span class="pricing-price"><sup>€</sup>1975</span>
-                        <span class="pricing-vat">plus 19% VAT</span>
-                    </div>
-                    <ul class="pricing-features">
-                        <li class="pricing-feature">Homepage + 4 pages</li>
-                        <li class="pricing-feature">Responsive design for all devices</li>
-                        <li class="pricing-feature">Contact form integration</li>
-                        <li class="pricing-feature">Social media integration</li>
-                        <li class="pricing-feature">Appointment booking system</li>
-                        <li class="pricing-feature">Online shop</li>
-                        <li class="pricing-feature">Free customizations</li>
-                    </ul>
-                    <a href="#" class="btn btn-accent">Buy Now</a>
-                </div>
-                
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3 class="pricing-name">STANDARD</h3>
-                        <span class="pricing-price"><sup>€</sup>1475</span>
-                        <span class="pricing-vat">plus 19% VAT</span>
-                    </div>
-                    <ul class="pricing-features">
-                        <li class="pricing-feature">Homepage + 2 pages</li>
-                        <li class="pricing-feature">Responsive design for all devices</li>
-                        <li class="pricing-feature">Contact form integration</li>
-                        <li class="pricing-feature">Social media integration</li>
-                        <li class="pricing-feature">Appointment booking system</li>
-                        <li class="pricing-feature">Free customizations</li>
-                    </ul>
-                    <a href="#" class="btn btn-outline">Buy Now</a>
-                </div>
-            </div>
+      <div class="container">
+        <div class="section-title">
+          <span>Transparent Pricing</span>
+          <h2>Affordable packages for all businesses</h2>
+          <p>
+            Choose the perfect plan for your business needs with our transparent
+            pricing structure.
+          </p>
         </div>
+
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <h3 class="pricing-name">BASIC</h3>
+              <span class="pricing-price"><sup>€</sup>975</span>
+              <span class="pricing-vat">plus 19% VAT</span>
+            </div>
+            <ul class="pricing-features">
+              <li class="pricing-feature">Homepage</li>
+              <li class="pricing-feature">Responsive design for all devices</li>
+              <li class="pricing-feature">Contact form integration</li>
+              <li class="pricing-feature">Social media integration</li>
+              <li class="pricing-feature">Free customizations</li>
+            </ul>
+            <a href="#" class="btn btn-outline">Buy Now</a>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="pricing-header">
+              <h3 class="pricing-name">PREMIUM</h3>
+              <span class="pricing-price"><sup>€</sup>1975</span>
+              <span class="pricing-vat">plus 19% VAT</span>
+            </div>
+            <ul class="pricing-features">
+              <li class="pricing-feature">Homepage + 4 pages</li>
+              <li class="pricing-feature">Responsive design for all devices</li>
+              <li class="pricing-feature">Contact form integration</li>
+              <li class="pricing-feature">Social media integration</li>
+              <li class="pricing-feature">Appointment booking system</li>
+              <li class="pricing-feature">Online shop</li>
+              <li class="pricing-feature">Free customizations</li>
+            </ul>
+            <a href="#" class="btn btn-accent">Buy Now</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <h3 class="pricing-name">STANDARD</h3>
+              <span class="pricing-price"><sup>€</sup>1475</span>
+              <span class="pricing-vat">plus 19% VAT</span>
+            </div>
+            <ul class="pricing-features">
+              <li class="pricing-feature">Homepage + 2 pages</li>
+              <li class="pricing-feature">Responsive design for all devices</li>
+              <li class="pricing-feature">Contact form integration</li>
+              <li class="pricing-feature">Social media integration</li>
+              <li class="pricing-feature">Appointment booking system</li>
+              <li class="pricing-feature">Free customizations</li>
+            </ul>
+            <a href="#" class="btn btn-outline">Buy Now</a>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Call to action -->
     <section class="cta">
-        <div class="container">
-            <div class="cta-card">
-                <h2>This website could be yours</h2>
-                <p>Let's work together to ensure that your business is not only present but also successful online and offline.</p>
-                <a href="#contact" class="btn btn-accent">Get Started Today</a>
-            </div>
+      <div class="container">
+        <div class="cta-card">
+          <h2>This website could be yours</h2>
+          <p>
+            Let's work together to ensure that your business is not only present
+            but also successful online and offline.
+          </p>
+          <a href="#contact" class="btn btn-accent">Get Started Today</a>
         </div>
+      </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <div class="footer-brand">
-                        <a href="#" class="logo">
-                            <svg class
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-brand">
+              <a href="#" class="logo">
+                <img
+                  src="img/logo.png"
+                  alt="Alfredo Media Logo"
+                  class="logo-icon"
+                />
+              </a>
+            </div>
+            <p class="footer-brand-desc">
+              Alfredo Media is your partner in digital transformation, offering
+              innovative solutions to help your business thrive.
+            </p>
+            <div class="footer-social">
+              <a href="#" class="social-icon"
+                ><img src="img/facebook-icon.svg" alt="Facebook"
+              /></a>
+              <a href="#" class="social-icon"
+                ><img src="img/twitter-icon.svg" alt="Twitter"
+              /></a>
+              <a href="#" class="social-icon"
+                ><img src="img/linkedin-icon.svg" alt="LinkedIn"
+              /></a>
+            </div>
+          </div>
+          <div>
+            <h3 class="footer-heading">Quick Links</h3>
+            <ul class="footer-links">
+              <li class="footer-link"><a href="#">Home</a></li>
+              <li class="footer-link"><a href="#services">Services</a></li>
+              <li class="footer-link"><a href="#pricing">Pricing</a></li>
+              <li class="footer-link"><a href="#about">About</a></li>
+              <li class="footer-link"><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="footer-heading">Services</h3>
+            <ul class="footer-links">
+              <li class="footer-link"><a href="#">Web Development</a></li>
+              <li class="footer-link"><a href="#">Digital Marketing</a></li>
+              <li class="footer-link"><a href="#">E-commerce Solutions</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="footer-heading">Contact Us</h3>
+            <ul class="footer-links">
+              <li class="footer-link">
+                <a href="#">Email: info@alfredomedia.com</a>
+              </li>
+              <li class="footer-link"><a href="#">Phone: +123 456 7890</a></li>
+              <li class="footer-link">
+                <a href="#">Address: 123 Digital Street, Tech City</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2023 Alfredo Media. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Add this script before the closing body tag -->
+    <script>
+      // Scroll event to change header background
+      window.addEventListener("scroll", function () {
+        const header = document.getElementById("header");
+        if (window.scrollY > 50) {
+          header.classList.add("header-scrolled");
+        } else {
+          header.classList.remove("header-scrolled");
+        }
+      });
+
+      // Mobile menu toggle
+      document
+        .querySelector(".mobile-toggle")
+        .addEventListener("click", function () {
+          document.querySelector(".nav-list").classList.toggle("active");
+        });
+    </script>
+  </body>
+</html>
