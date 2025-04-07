@@ -181,6 +181,10 @@
       font-weight: 500;
       transition: color 0.3s;
       position: relative;
+      display: block;
+      width: 100%;
+      padding: 0.75rem 0;
+      text-align: center;
     }
 
     .nav-link::after {
@@ -209,6 +213,34 @@
       color: var(--light);
       font-size: 1.5rem;
       cursor: pointer;
+    }
+
+    /* Mobile Close Button Styling */
+    .mobile-close-container {
+      display: block;
+      width: 100%;
+      text-align: right;
+      padding: 1rem;
+    }
+
+    .mobile-close {
+      background: none;
+      border: none;
+      color: var(--light);
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-close:hover {
+      background-color: var(--primary);
     }
 
     /* Page Header */
@@ -468,14 +500,11 @@
         gap: 2rem;
         transition: all 0.3s ease;
         z-index: 1000;
+        padding-top: 1rem;
       }
 
       .nav-list.active {
         right: 0;
-      }
-
-      .mobile-toggle {
-        display: block;
       }
 
       .footer-grid {
@@ -504,6 +533,9 @@
       <nav>
         <button class="mobile-toggle">☰</button>
         <ul class="nav-list">
+          <li class="mobile-close-container">
+            <button class="mobile-close">✕</button>
+          </li>
           <li>
             <a href="https://alfredomedia.nangkil.com/" class="nav-link"
               >HOME</a
@@ -847,6 +879,13 @@
       .querySelector(".mobile-toggle")
       .addEventListener("click", function () {
         document.querySelector(".nav-list").classList.toggle("active");
+      });
+
+    // Mobile menu close button
+    document
+      .querySelector(".mobile-close")
+      .addEventListener("click", function () {
+        document.querySelector(".nav-list").classList.remove("active");
       });
   </script>
 </body>

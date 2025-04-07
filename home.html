@@ -212,6 +212,34 @@
         cursor: pointer;
       }
 
+      /* Mobile Close Button Styling */
+      .mobile-close-container {
+        display: none; /* Hidden by default (on desktop) */
+        width: 100%;
+        text-align: right;
+        padding: 1rem;
+      }
+
+      .mobile-close {
+        background: none;
+        border: none;
+        color: var(--light);
+        font-size: 1.5rem;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+
+      .mobile-close:hover {
+        background-color: var(--primary);
+      }
+
       /* Hero */
       .hero {
         min-height: 100vh;
@@ -746,12 +774,17 @@
         <nav>
           <button class="mobile-toggle">☰</button>
           <ul class="nav-list">
-            <li><a href="#" class="nav-link">HOME</a></li>
+            <li class="mobile-close-container">
+              <button class="mobile-close">✕</button>
+            </li>
+            <li><a href="home.html" class="nav-link">HOME</a></li>
             <li><a href="team.html" class="nav-link">ÜBER UNS</a></li>
-            <li><a href="#services" class="nav-link">DIENSTLEISTUNGEN</a></li>
-            <li><a href="#portfolio" class="nav-link">PORTFOLIO</a></li>
-            <li><a href="#merch" class="nav-link">MERCH</a></li>
-            <li><a href="#contact" class="nav-link">KONTAKT</a></li>
+            <li>
+              <a href="3-finger-plan.html" class="nav-link">DIENSTLEISTUNGEN</a>
+            </li>
+            <li><a href="portfolio.html" class="nav-link">PORTFOLIO</a></li>
+            <li><a href="merch.html" class="nav-link">MERCH</a></li>
+            <li><a href="contact.html" class="nav-link">KONTAKT</a></li>
           </ul>
         </nav>
       </div>
@@ -1030,15 +1063,36 @@
       document
         .querySelector(".mobile-toggle")
         .addEventListener("click", function () {
-          document.querySelector(".nav-list").classList.toggle("active");
+          document.querySelector(".nav-list").classList.add("active");
         });
 
-      // Mobile menu close
+      // Mobile menu close button
       document
         .querySelector(".mobile-close")
         .addEventListener("click", function () {
           document.querySelector(".nav-list").classList.remove("active");
         });
+
+      // Close mobile menu when clicking a nav link (for better UX)
+      document.querySelectorAll(".nav-link").forEach(function (link) {
+        link.addEventListener("click", function () {
+          document.querySelector(".nav-list").classList.remove("active");
+        });
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener("click", function (event) {
+        const navList = document.querySelector(".nav-list");
+        const mobileToggle = document.querySelector(".mobile-toggle");
+
+        if (
+          navList.classList.contains("active") &&
+          !navList.contains(event.target) &&
+          event.target !== mobileToggle
+        ) {
+          navList.classList.remove("active");
+        }
+      });
     </script>
   </body>
 </html>
