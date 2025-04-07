@@ -240,6 +240,25 @@
       .mobile-close:hover {
         background-color: var(--primary);
       }
+      
+      /* Mobile menu overlay */
+      .mobile-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 999;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .mobile-overlay.active {
+        display: block;
+        opacity: 1;
+      }
 
       /* Button Styles from home.html */
       .btn {
@@ -582,6 +601,9 @@
         </nav>
       </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-overlay"></div>
 
     <!-- Page Header -->
     <section class="page-header">
