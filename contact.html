@@ -220,6 +220,12 @@
         text-align: right;
         padding: 1rem;
       }
+      
+      @media (max-width: 768px) {
+        .mobile-close-container {
+          display: block;
+        }
+      }
 
       .mobile-close {
         background: none;
@@ -235,10 +241,6 @@
         background-color: rgba(255, 255, 255, 0.1);
         border-radius: 50%;
         transition: all 0.3s ease;
-      }
-
-      .mobile-close:hover {
-        background-color: var(--primary);
       }
       
       /* Mobile menu overlay */
@@ -761,6 +763,8 @@
         .querySelector(".mobile-toggle")
         .addEventListener("click", function () {
           document.querySelector(".nav-list").classList.add("active");
+          document.querySelector(".mobile-overlay").classList.add("active");
+          document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
         });
 
       // Mobile menu close button
@@ -768,12 +772,25 @@
         .querySelector(".mobile-close")
         .addEventListener("click", function () {
           document.querySelector(".nav-list").classList.remove("active");
+          document.querySelector(".mobile-overlay").classList.remove("active");
+          document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
+        });
+
+      // Close mobile menu when clicking on overlay
+      document
+        .querySelector(".mobile-overlay")
+        .addEventListener("click", function () {
+          document.querySelector(".nav-list").classList.remove("active");
+          document.querySelector(".mobile-overlay").classList.remove("active");
+          document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
         });
 
       // Close mobile menu when clicking a nav link (for better UX)
       document.querySelectorAll(".nav-link").forEach(function (link) {
         link.addEventListener("click", function () {
           document.querySelector(".nav-list").classList.remove("active");
+          document.querySelector(".mobile-overlay").classList.remove("active");
+          document.body.style.overflow = ""; // Re-enable scrolling
         });
       });
 
@@ -788,6 +805,8 @@
           event.target !== mobileToggle
         ) {
           navList.classList.remove("active");
+          document.querySelector(".mobile-overlay").classList.remove("active");
+          document.body.style.overflow = ""; // Re-enable scrolling
         }
       });
 

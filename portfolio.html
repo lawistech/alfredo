@@ -218,27 +218,41 @@
         display: none; /* Hidden by default (on desktop) */
         width: 100%;
         text-align: right;
-        padding: 1rem;
+        padding: 1rem 1.5rem;
+        position: relative;
+        margin-bottom: 0.5rem;
+      }
+      
+      @media (max-width: 768px) {
+        .mobile-close-container {
+          display: block;
+        }
       }
 
       .mobile-close {
-        background: none;
+        background: rgba(255, 255, 255, 0.1);
         border: none;
         color: var(--light);
-        font-size: 1.5rem;
+        font-size: 1.25rem;
+        font-weight: bold;
         cursor: pointer;
-        width: 30px;
-        height: 30px;
+        width: 36px;
+        height: 36px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: rgba(255, 255, 255, 0.1);
         border-radius: 50%;
         transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       }
 
       .mobile-close:hover {
-        background-color: var(--primary);
+        background-color: var(--accent);
+        transform: scale(1.1);
+      }
+      
+      .mobile-close:active {
+        transform: scale(0.95);
       }
       
       /* Mobile menu overlay */
@@ -563,7 +577,7 @@
           <button class="mobile-toggle">☰</button>
           <ul class="nav-list">
             <li class="mobile-close-container">
-              <button class="mobile-close">✕</button>
+              <button class="mobile-close" aria-label="Schließen Sie das Mobilmenü" title="Menü schließen">✕</button>
             </li>
             <li>
               <a href="https://alfredomedia.nangkil.com/" class="nav-link"
@@ -787,20 +801,38 @@
       document
         .querySelector(".mobile-toggle")
         .addEventListener("click", function () {
-          document.querySelector(".nav-list").classList.add("active");
+          const navList = document.querySelector(".nav-list");
+          const overlay = document.querySelector(".mobile-overlay");
+          const closeBtn = document.querySelector(".mobile-close");
+          
+          navList.classList.add("active");
+          overlay.classList.add("active");
+          document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
+          
+          // Focus on the close button for accessibility
+          setTimeout(() => {
+            closeBtn.focus();
+          }, 100);
         });
 
       // Mobile menu close button
       document
         .querySelector(".mobile-close")
         .addEventListener("click", function () {
-          document.querySelector(".nav-list").classList.remove("active");
+          closeMenu();
+        });
+
+      // Close mobile menu when clicking on overlay
+      document
+        .querySelector(".mobile-overlay")
+        .addEventListener("click", function () {
+          closeMenu();
         });
 
       // Close mobile menu when clicking a nav link (for better UX)
       document.querySelectorAll(".nav-link").forEach(function (link) {
         link.addEventListener("click", function () {
-          document.querySelector(".nav-list").classList.remove("active");
+          closeMenu();
         });
       });
 
@@ -814,9 +846,33 @@
           !navList.contains(event.target) &&
           event.target !== mobileToggle
         ) {
-          navList.classList.remove("active");
+          closeMenu();
         }
       });
+
+      // Close mobile menu with Escape key
+      document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+          const navList = document.querySelector(".nav-list");
+          if (navList.classList.contains("active")) {
+            closeMenu();
+          }
+        }
+      });
+      
+      // Helper function to close the mobile menu
+      function closeMenu() {
+        const navList = document.querySelector(".nav-list");
+        const overlay = document.querySelector(".mobile-overlay");
+        const mobileToggle = document.querySelector(".mobile-toggle");
+        
+        navList.classList.remove("active");
+        overlay.classList.remove("active");
+        document.body.style.overflow = ""; // Re-enable scrolling
+        
+        // Return focus to the menu toggle button for accessibility
+        mobileToggle.focus();
+      }
     </script>
   </body>
 </html>
