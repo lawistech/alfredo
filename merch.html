@@ -211,23 +211,22 @@
         color: var(--light);
         font-size: 1.5rem;
         cursor: pointer;
-      }
-
-      /* Mobile Close Button Styling */
-      .mobile-close-container {
+      }      /* Mobile Close Button Styling */
+      .custom-close-container {
         display: none; /* Hidden by default (on desktop) */
         width: 100%;
         text-align: right;
         padding: 1rem;
       }
       
+      /* Only show close button on mobile devices */
       @media (max-width: 768px) {
-        .mobile-close-container {
+        .custom-close-container {
           display: block;
         }
       }
 
-      .mobile-close {
+      .custom-close-button {
         background: none;
         border: none;
         color: var(--light);
@@ -243,7 +242,7 @@
         transition: all 0.3s ease;
       }
 
-      .mobile-close:hover {
+      .custom-close-button:hover {
         background-color: var(--primary);
       }
       
@@ -558,9 +557,8 @@
         </a>
         <nav>
           <button class="mobile-toggle">☰</button>
-          <ul class="nav-list">
-            <li class="mobile-close-container">
-              <button class="mobile-close">✕</button>
+          <ul class="nav-list">            <li class="custom-close-container">
+              <button class="custom-close-button">✕</button>
             </li>
             <li>
               <a href="https://alfredomedia.nangkil.com/" class="nav-link"
@@ -784,11 +782,9 @@
           document.querySelector(".nav-list").classList.add("active");
           document.querySelector(".mobile-overlay").classList.add("active");
           document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
-        });
-
-      // Mobile menu close button
+        });      // Mobile menu close button
       document
-        .querySelector(".mobile-close")
+        .querySelector(".custom-close-button")
         .addEventListener("click", function () {
           document.querySelector(".nav-list").classList.remove("active");
           document.querySelector(".mobile-overlay").classList.remove("active");

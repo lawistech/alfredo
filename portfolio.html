@@ -211,10 +211,8 @@
         color: var(--light);
         font-size: 1.5rem;
         cursor: pointer;
-      }
-
-      /* Mobile Close Button Styling */
-      .mobile-close-container {
+      }      /* Mobile Close Button Styling */
+      .custom-close-container {
         display: none; /* Hidden by default (on desktop) */
         width: 100%;
         text-align: right;
@@ -223,13 +221,14 @@
         margin-bottom: 0.5rem;
       }
       
+      /* Only show close button on mobile devices */
       @media (max-width: 768px) {
-        .mobile-close-container {
+        .custom-close-container {
           display: block;
         }
       }
 
-      .mobile-close {
+      .custom-close-button {
         background: rgba(255, 255, 255, 0.1);
         border: none;
         color: var(--light);
@@ -246,12 +245,12 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       }
 
-      .mobile-close:hover {
+      .custom-close-button:hover {
         background-color: var(--accent);
         transform: scale(1.1);
       }
       
-      .mobile-close:active {
+      .custom-close-button:active {
         transform: scale(0.95);
       }
       
@@ -575,9 +574,8 @@
         </a>
         <nav>
           <button class="mobile-toggle">☰</button>
-          <ul class="nav-list">
-            <li class="mobile-close-container">
-              <button class="mobile-close" aria-label="Schließen Sie das Mobilmenü" title="Menü schließen">✕</button>
+          <ul class="nav-list">            <li class="custom-close-container">
+              <button class="custom-close-button" aria-label="Schließen Sie das Mobilmenü" title="Menü schließen">✕</button>
             </li>
             <li>
               <a href="https://alfredomedia.nangkil.com/" class="nav-link"
@@ -813,11 +811,9 @@
           setTimeout(() => {
             closeBtn.focus();
           }, 100);
-        });
-
-      // Mobile menu close button
+        });      // Mobile menu close button
       document
-        .querySelector(".mobile-close")
+        .querySelector(".custom-close-button")
         .addEventListener("click", function () {
           closeMenu();
         });

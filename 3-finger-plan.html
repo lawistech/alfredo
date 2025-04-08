@@ -213,9 +213,7 @@
       color: var(--light);
       font-size: 1.5rem;
       cursor: pointer;
-    }
-
-    /* Mobile Close Button Styling */
+    }    /* Mobile Close Button Styling */
     .mobile-close-container {
       display: none; /* Hidden by default (on desktop) */
       width: 100%;
@@ -223,6 +221,27 @@
       padding: 1rem;
     }
     
+    .mobile-close {
+      background: none;
+      border: none;
+      color: var(--light);
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-close:hover {
+      background-color: var(--primary);
+    }
+    
+    /* Only show close button on mobile devices */
     @media (max-width: 768px) {
       .mobile-close-container {
         display: block;
