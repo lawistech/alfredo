@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="de">
   <head>
@@ -7,25 +9,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <style>
-      :root {
-        --primary: #0099ff;
-        --primary-light: #33adff;
-        --primary-dark: #0077cc;
-        --accent: #ff6600;
-        --accent-dark: #cc5200;
-        --dark: #1a1a1a;
-        --darker: #121212;
-        --light: #ffffff;
-        --gray-100: #f1f5f9;
-        --gray-200: #e2e8f0;
-        --gray-300: #cbd5e1;
-        --gray-400: #94a3b8;
-        --gray-500: #64748b;
-        --gray-600: #475569;
-        --gray-700: #334155;
-        --gray-800: #1e293b;
-        --gray-900: #0f172a;
-      }
+
+:root {
+  --primary: #0099ff;
+  --primary-light: #33adff;
+  --primary-dark: #0077cc;
+  --accent: #ff6600;
+  --accent-dark: #cc5200;
+  --dark: #1a1a1a;
+  --darker: #121212;
+  --light: #ffffff;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+}
+
 
       * {
         margin: 0;
@@ -87,8 +91,8 @@
         font-weight: 700;
         line-height: 1.2;
         margin-bottom: 1rem;
-      }
-
+      }      
+      
       h1 {
         font-size: clamp(2.5rem, 5vw, 4rem);
         background: linear-gradient(
@@ -96,7 +100,7 @@
           var(--primary-light) 0%,
           var(--primary) 20%,
           var(--accent) 40%,
-          #ff9900 60%,
+          #EECA5E 60%,
           var(--accent-dark) 80%,
           var(--primary) 100%
         );
@@ -182,8 +186,8 @@
         font-weight: 500;
         transition: color 0.3s;
         position: relative;
-      }
-
+      }      
+      
       .nav-link::after {
         content: "";
         position: absolute;
@@ -209,43 +213,7 @@
         border: none;
         color: var(--light);
         font-size: 1.5rem;
-        cursor: pointer;      }      /* Mobile Close Button Styling */
-      .custom-close-container {
-        display: none; /* Hidden by default (on desktop) */
-        width: 100%;
-        text-align: right;
-        padding: 1rem;
-      }
-      
-      .custom-close-button {
-        background: none;
-        border: none;
-        color: var(--light);
-        font-size: 1.5rem;
         cursor: pointer;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        transition: all 0.3s ease;
-      }
-      
-      .custom-close-button:hover {
-        background-color: var(--primary);
-      }
-      
-      /* Only show close button on mobile devices */
-      @media (max-width: 768px) {
-        .custom-close-container {
-          display: block;
-        }
-      }
-
-      .mobile-close:hover {
-        background-color: var(--primary);
       }
       
       /* Mobile menu overlay */
@@ -276,8 +244,8 @@
         overflow: hidden;
         padding: 8rem 0 4rem;
         background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
-      }
-
+      }      
+      
       .hero::before {
         content: "";
         position: absolute;
@@ -287,12 +255,12 @@
         height: 100%;
         background: radial-gradient(
             circle at 70% 30%,
-            rgba(0, 153, 255, 0.15),
+            rgba(10, 35, 66, 0.15),
             transparent 70%
           ),
           radial-gradient(
             circle at 30% 70%,
-            rgba(255, 102, 0, 0.1),
+            rgba(212, 175, 55, 0.1),
             transparent 60%
           );
         z-index: 0;
@@ -312,14 +280,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
-      }
-
+      }      
+      
       .hero-logo-image {
         max-width: 100%;
         height: auto;
         border-radius: 50%;
-        box-shadow: 0 15px 35px rgba(0, 153, 255, 0.3),
-          0 5px 15px rgba(255, 102, 0, 0.2);
+        box-shadow: 0 15px 35px rgba(10, 35, 66, 0.3),
+          0 5px 15px rgba(212, 175, 55, 0.2);
         animation: float 6s ease-in-out infinite;
       }
 
@@ -353,7 +321,8 @@
 
       @media (max-width: 768px) {
         .hero-title::after {
-          left: 50%;
+          left:
+          50%;
           transform: translateX(-50%);
         }
       }
@@ -372,8 +341,8 @@
       .services {
         padding: 8rem 0;
         position: relative;
-      }
-
+      }      
+      
       .services::before {
         content: "";
         position: absolute;
@@ -383,7 +352,7 @@
         height: 100%;
         background: radial-gradient(
           circle at 30% 70%,
-          rgba(255, 102, 0, 0.15),
+          rgba(212, 175, 55, 0.15),
           transparent 70%
         );
         z-index: -1;
@@ -568,8 +537,8 @@
         padding: 6rem 0;
         position: relative;
         overflow: hidden;
-      }
-
+      }      
+      
       .cta::before {
         content: "";
         position: absolute;
@@ -579,8 +548,8 @@
         height: 100%;
         background: linear-gradient(
           135deg,
-          rgba(0, 153, 255, 0.1),
-          rgba(255, 102, 0, 0.1)
+          rgba(10, 35, 66, 0.1),
+          rgba(212, 175, 55, 0.1)
         );
         z-index: -1;
       }
@@ -608,30 +577,30 @@
         cursor: pointer;
         border: none;
         font-size: 1rem;
-      }
-
+      }      
+      
       .btn-primary {
         background: var(--primary);
         color: white;
-        box-shadow: 0 4px 20px rgba(0, 153, 255, 0.5);
+        box-shadow: 0 4px 20px rgba(10, 35, 66, 0.5);
       }
 
       .btn-primary:hover {
         background: var(--primary-dark);
         transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 153, 255, 0.6);
+        box-shadow: 0 8px 25px rgba(10, 35, 66, 0.6);
       }
 
       .btn-accent {
         background: var(--accent);
-        color: white;
-        box-shadow: 0 4px 20px rgba(255, 102, 0, 0.5);
+        color: var(--dark);
+        box-shadow: 0 4px 20px rgba(212, 175, 55, 0.5);
       }
 
       .btn-accent:hover {
         background: var(--accent-dark);
         transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(255, 102, 0, 0.6);
+        box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
       }
 
       .btn-outline {
@@ -803,10 +772,8 @@
           Alfredo Media
         </a>
         <nav>
-          <button class="mobile-toggle">☰</button>          <ul class="nav-list">
-            <li class="custom-close-container">
-              <button class="custom-close-button">✕</button>
-            </li>
+          <button class="mobile-toggle">☰</button>
+          <ul class="nav-list">
             <li>
               <a href="https://alfredomedia.nangkil.com/" class="nav-link"
                 >HOME</a
@@ -1124,13 +1091,6 @@
           document.querySelector(".nav-list").classList.add("active");
           document.querySelector(".mobile-overlay").classList.add("active");
           document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
-        });      // Mobile menu close button
-      document
-        .querySelector(".custom-close-button")
-        .addEventListener("click", function () {
-          document.querySelector(".nav-list").classList.remove("active");
-          document.querySelector(".mobile-overlay").classList.remove("active");
-          document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
         });
 
       // Close mobile menu when clicking on overlay
