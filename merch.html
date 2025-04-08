@@ -211,39 +211,6 @@
         color: var(--light);
         font-size: 1.5rem;
         cursor: pointer;
-      }      /* Mobile Close Button Styling */
-      .custom-close-container {
-        display: none; /* Hidden by default (on desktop) */
-        width: 100%;
-        text-align: right;
-        padding: 1rem;
-      }
-      
-      /* Only show close button on mobile devices */
-      @media (max-width: 768px) {
-        .custom-close-container {
-          display: block;
-        }
-      }
-
-      .custom-close-button {
-        background: none;
-        border: none;
-        color: var(--light);
-        font-size: 1.5rem;
-        cursor: pointer;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        transition: all 0.3s ease;
-      }
-
-      .custom-close-button:hover {
-        background-color: var(--primary);
       }
       
       /* Mobile menu overlay */
@@ -557,9 +524,7 @@
         </a>
         <nav>
           <button class="mobile-toggle">☰</button>
-          <ul class="nav-list">            <li class="custom-close-container">
-              <button class="custom-close-button">✕</button>
-            </li>
+          <ul class="nav-list">
             <li>
               <a href="https://alfredomedia.nangkil.com/" class="nav-link"
                 >HOME</a
@@ -782,13 +747,6 @@
           document.querySelector(".nav-list").classList.add("active");
           document.querySelector(".mobile-overlay").classList.add("active");
           document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
-        });      // Mobile menu close button
-      document
-        .querySelector(".custom-close-button")
-        .addEventListener("click", function () {
-          document.querySelector(".nav-list").classList.remove("active");
-          document.querySelector(".mobile-overlay").classList.remove("active");
-          document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
         });
 
       // Close mobile menu when clicking on overlay
