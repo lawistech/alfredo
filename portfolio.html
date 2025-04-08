@@ -211,47 +211,6 @@
         color: var(--light);
         font-size: 1.5rem;
         cursor: pointer;
-      }      /* Mobile Close Button Styling */
-      .custom-close-container {
-        display: none; /* Hidden by default (on desktop) */
-        width: 100%;
-        text-align: right;
-        padding: 1rem 1.5rem;
-        position: relative;
-        margin-bottom: 0.5rem;
-      }
-      
-      /* Only show close button on mobile devices */
-      @media (max-width: 768px) {
-        .custom-close-container {
-          display: block;
-        }
-      }
-
-      .custom-close-button {
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        color: var(--light);
-        font-size: 1.25rem;
-        font-weight: bold;
-        cursor: pointer;
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      }
-
-      .custom-close-button:hover {
-        background-color: var(--accent);
-        transform: scale(1.1);
-      }
-      
-      .custom-close-button:active {
-        transform: scale(0.95);
       }
       
       /* Mobile menu overlay */
@@ -574,9 +533,7 @@
         </a>
         <nav>
           <button class="mobile-toggle">☰</button>
-          <ul class="nav-list">            <li class="custom-close-container">
-              <button class="custom-close-button" aria-label="Schließen Sie das Mobilmenü" title="Menü schließen">✕</button>
-            </li>
+          <ul class="nav-list">
             <li>
               <a href="https://alfredomedia.nangkil.com/" class="nav-link"
                 >HOME</a
@@ -801,21 +758,10 @@
         .addEventListener("click", function () {
           const navList = document.querySelector(".nav-list");
           const overlay = document.querySelector(".mobile-overlay");
-          const closeBtn = document.querySelector(".mobile-close");
           
           navList.classList.add("active");
           overlay.classList.add("active");
           document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
-          
-          // Focus on the close button for accessibility
-          setTimeout(() => {
-            closeBtn.focus();
-          }, 100);
-        });      // Mobile menu close button
-      document
-        .querySelector(".custom-close-button")
-        .addEventListener("click", function () {
-          closeMenu();
         });
 
       // Close mobile menu when clicking on overlay
