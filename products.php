@@ -525,6 +525,359 @@ if (!empty($product_categories) && !is_wp_error($product_categories)) {
   width: 100%; /* Ensure it takes full width when in column layout */
 }
 
+.alfredo-product-unavailable {
+  background: rgba(255, 0, 0, 0.1);
+  color: var(--light);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 0, 0, 0.2);
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* Enhanced Variable Product Styling */
+
+/* General variations form */
+.variations_form {
+  margin-bottom: 2rem;
+}
+
+/* Table layout */
+.variations {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  border-collapse: separate;
+  border-spacing: 0 1rem;
+}
+
+/* Labels */
+.variations label {
+  font-weight: 600;
+  color: var(--gray-300);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Reset variations link */
+.reset_variations {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.reset_variations:hover {
+  color: var(--primary-light);
+  text-decoration: underline;
+}
+
+/* Color swatches */
+.variations .value .variable-item {
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Color swatches */
+.variable-items-wrapper.color-variable-items-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.variable-items-wrapper .variable-item.color-variable-item {
+  width: 30px;
+  height: 30px;
+  padding: 2px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.variable-items-wrapper .variable-item.color-variable-item.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.variable-items-wrapper .variable-item.color-variable-item:hover {
+  border-color: var(--primary-light);
+}
+
+.variable-items-wrapper .variable-item.color-variable-item .variable-item-span {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+}
+
+/* Button/Image swatches */
+.variable-items-wrapper.button-variable-items-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.variable-items-wrapper .variable-item.button-variable-item {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--gray-300);
+  transition: all 0.3s ease;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.variable-items-wrapper .variable-item.button-variable-item.selected {
+  background: rgba(0, 153, 255, 0.15);
+  border-color: var(--primary);
+  color: var(--light);
+}
+
+.variable-items-wrapper .variable-item.button-variable-item:hover {
+  background: rgba(0, 153, 255, 0.1);
+  border-color: var(--primary-light);
+}
+
+/* Dropdown select for variations */
+.variations select {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2em;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--light);
+  width: 100%;
+  max-width: 300px;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.variations select:hover {
+  border-color: var(--primary-light);
+}
+
+.variations select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(0, 153, 255, 0.2);
+}
+
+/* Price display for variations */
+.woocommerce-variation-price {
+  margin-bottom: 1.5rem;
+}
+
+.woocommerce-variation-price .price {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--accent) !important;
+  display: block;
+}
+
+.woocommerce-variation-price .price del {
+  font-size: 1.25rem;
+  opacity: 0.7;
+  font-weight: normal;
+  margin-right: 0.5rem;
+}
+
+.woocommerce-variation-price .price ins {
+  text-decoration: none;
+}
+
+/* Variation description */
+.woocommerce-variation-description {
+  margin-bottom: 1.5rem;
+  font-size: 0.9375rem;
+  color: var(--gray-300);
+}
+
+/* Variation availability */
+.woocommerce-variation-availability {
+  margin-bottom: 1.5rem;
+}
+
+.woocommerce-variation-availability p.stock {
+  margin: 0;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.woocommerce-variation-availability p.in-stock {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.woocommerce-variation-availability p.out-of-stock {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* Quantity input for variable products */
+.woocommerce-variation-add-to-cart {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+/* Enhance quantity input styling */
+.alfredo-quantity-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  flex-shrink: 0;
+  width: auto;
+  min-width: 120px;
+  transition: border-color 0.3s ease;
+}
+
+.alfredo-quantity-wrapper:hover {
+  border-color: var(--primary-light);
+}
+
+.alfredo-quantity-btn {
+  width: 36px;
+  height: 100%;
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: var(--light);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
+
+.alfredo-quantity-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.alfredo-quantity-input {
+  width: 40px !important;
+  padding: 0 !important;
+  height: 100% !important;
+  min-height: 45px !important;
+  text-align: center !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--light) !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  -moz-appearance: textfield !important;
+}
+
+.alfredo-quantity-input::-webkit-outer-spin-button,
+.alfredo-quantity-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Enhanced add to cart button */
+.alfredo-add-to-cart-button,
+.single_add_to_cart_button {
+  flex-grow: 1;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem;
+  background: var(--accent) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 0.5rem !important;
+  padding: 0 2rem !important;
+  height: 45px !important;
+  min-height: 45px !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 10px rgba(255, 102, 0, 0.3) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.alfredo-add-to-cart-button::before,
+.single_add_to_cart_button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.7s ease;
+}
+
+.alfredo-add-to-cart-button:hover,
+.single_add_to_cart_button:hover {
+  background: var(--accent-dark) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 20px rgba(255, 102, 0, 0.4) !important;
+}
+
+.alfredo-add-to-cart-button:hover::before,
+.single_add_to_cart_button:hover::before {
+  left: 100%;
+}
+
+.alfredo-add-to-cart-button svg,
+.single_add_to_cart_button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.alfredo-add-to-cart-button.loading::after,
+.single_add_to_cart_button.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: rotation 0.6s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
 /* Fix for variable products */
 .variations_form .variations {
   margin-bottom: 1.5rem;
@@ -553,7 +906,331 @@ if (!empty($product_categories) && !is_wp_error($product_categories)) {
   width: 100%;
 }
 
-/* ...existing code... */
+/* Tabs section styles */
+.alfredo-tabs-container {
+  margin-top: 4rem;
+}
+
+.alfredo-tabs {
+  display: flex;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 2rem;
+}
+
+.alfredo-tab {
+  padding: 1rem 1.5rem;
+  color: var(--gray-400);
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.alfredo-tab:after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.alfredo-tab.active {
+  color: var(--light);
+}
+
+.alfredo-tab.active:after {
+  width: 100%;
+}
+
+.alfredo-tab-content {
+  display: none;
+  padding: 1rem 0 2rem;
+}
+
+.alfredo-tab-content.active {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.alfredo-tab-content h3 {
+  margin-bottom: 1.5rem;
+  color: var(--primary-light);
+}
+
+.alfredo-specs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.alfredo-specs-table th,
+.alfredo-specs-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.alfredo-specs-table th {
+  width: 30%;
+  color: var(--gray-300);
+  font-weight: 600;
+}
+
+.alfredo-specs-table td {
+  color: var(--light);
+}
+
+.alfredo-testimonial {
+  background: rgba(26, 26, 26, 0.4);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.alfredo-testimonial-rating {
+  display: flex;
+  margin-bottom: 1rem;
+  color: var(--accent);
+}
+
+.alfredo-testimonial-content {
+  color: var(--gray-300);
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.alfredo-testimonial-author {
+  color: var(--light);
+  font-weight: 500;
+}
+
+/* Related products section */
+.alfredo-related-products {
+  margin-top: 4rem;
+}
+
+.alfredo-related-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--primary-light);
+}
+
+.alfredo-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.alfredo-product-card {
+  background: rgba(26, 26, 26, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.alfredo-product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.alfredo-product-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.alfredo-product-card-info {
+  padding: 1.5rem;
+}
+
+.alfredo-product-card-title {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--light);
+}
+
+.alfredo-product-card-price {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.alfredo-product-card-button {
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.alfredo-product-card-button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-3px);
+}
+
+/* CTA section */
+.alfredo-cta-section {
+  margin-top: 4rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(0, 153, 255, 0.1), rgba(255, 102, 0, 0.1));
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.alfredo-cta-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.alfredo-cta-description {
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  color: var(--gray-300);
+  font-size: 1.1rem;
+}
+
+.alfredo-cta-button {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 20px rgba(255, 102, 0, 0.3);
+}
+
+.alfredo-cta-button:hover {
+  background: var(--accent-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 102, 0, 0.4);
+}
+
+/* Secure checkout info */
+.alfredo-secure-checkout {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  color: var(--gray-400);
+  font-size: 0.875rem;
+}
+
+.alfredo-secure-checkout svg {
+  color: var(--primary);
+}
+
+/* Custom styling for variable products wrapper */
+.alfredo-variations-wrapper {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(26, 26, 26, 0.3);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.alfredo-variations-wrapper.valid-selection {
+  border-color: rgba(0, 153, 255, 0.3);
+  background: rgba(0, 153, 255, 0.05);
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .alfredo-product-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .alfredo-feature-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .alfredo-products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  
+  .variations_form .variations th,
+  .variations_form .variations td {
+    display: block;
+    width: 100%;
+  }
+  
+  .variations_form .variations th {
+    padding-bottom: 0.25rem;
+  }
+  
+  .variations_form .variations td {
+    padding-top: 0.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .alfredo-product-actions {
+    flex-direction: column;
+  }
+  
+  .alfredo-quantity-wrapper {
+    margin-bottom: 1rem !important;
+    width: 100%;
+  }
+  
+  .woocommerce-variation-add-to-cart {
+    flex-direction: column;
+  }
+  
+  .woocommerce-variation-add-to-cart .quantity {
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  
+  .woocommerce-variation-add-to-cart .single_add_to_cart_button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .alfredo-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .alfredo-tab {
+    flex: 1 0 auto;
+    text-align: center;
+  }
+  
+  .alfredo-products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .variable-items-wrapper {
+    justify-content: center;
+  }
+}
 </style>
 
 
@@ -656,58 +1333,64 @@ if (!empty($product_categories) && !is_wp_error($product_categories)) {
           <?php endif; ?>
         </div>
         
-        <!-- 
-        DEBUG INFO: 
-        Product Type: <?php echo $product->get_type(); ?>
-        Is Purchasable: <?php echo $product->is_purchasable() ? 'Yes' : 'No'; ?>
-        In Stock: <?php echo $product->is_in_stock() ? 'Yes' : 'No'; ?>
-        -->
-        
-        <?php
-        // Remove the conditional check that might be preventing display
-        ?>
-        <form class="cart" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data'>
-          <?php
-          // For variable products, we need to output the variations form
-          if ($product->is_type('variable')) {
-              // This outputs the variation form
-              do_action('woocommerce_variable_add_to_cart');
-          } else {
-              // This is for simple, grouped, and other product types
-          ?>
-          <div class="alfredo-product-actions">
-            <div class="alfredo-quantity-wrapper">
-              <button type="button" class="alfredo-quantity-btn alfredo-decrease-qty">-</button>
-              <?php
-              woocommerce_quantity_input(
-                array(
-                  'min_value'   => apply_filters('woocommerce_quantity_input_min', $product->get_min_purchase_quantity(), $product),
-                  'max_value'   => apply_filters('woocommerce_quantity_input_max', $product->get_max_purchase_quantity(), $product),
-                  'input_value' => isset($_POST['quantity']) ? wc_stock_amount(wp_unslash($_POST['quantity'])) : $product->get_min_purchase_quantity(),
-                  'classes'     => apply_filters('woocommerce_quantity_input_classes', array('input-text', 'qty', 'text', 'alfredo-quantity-input'), $product),
-                )
-              );
-              ?>
-              <button type="button" class="alfredo-quantity-btn alfredo-increase-qty">+</button>
-            </div>
+        <?php 
+        // Add to cart form with improved variable product handling
+        if ($product->is_purchasable() && $product->is_in_stock()) {
+            echo '<form class="cart" action="'.esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())).'" method="post" enctype="multipart/form-data">';
             
-            <button type="submit" name="add-to-cart" value="<?php echo esc_attr($product->get_id()); ?>" class="alfredo-add-to-cart-button">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="9" cy="21" r="1"></circle>
-                <circle cx="20" cy="21" r="1"></circle>
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-              </svg>
-              In den Warenkorb
-            </button>
-          </div>
-          <?php } ?>
-          
-          <?php
-          // Additional cart hooks that might be needed
-          do_action('woocommerce_before_add_to_cart_button');
-          do_action('woocommerce_after_add_to_cart_button');
-          ?>
-        </form>
+            // For variable products
+            if ($product->is_type('variable')) {
+                // Add a wrapper div with a class for easier styling
+                echo '<div class="alfredo-variations-wrapper">';
+                
+                // This outputs the variation form with all the dropdowns/swatches
+                do_action('woocommerce_variable_add_to_cart');
+                
+                echo '</div>';
+            } else {
+                // For simple products
+                echo '<div class="alfredo-product-actions">';
+                
+                // Quantity input
+                echo '<div class="alfredo-quantity-wrapper">';
+                echo '<button type="button" class="alfredo-quantity-btn alfredo-decrease-qty">-</button>';
+                
+                woocommerce_quantity_input(array(
+                    'min_value' => apply_filters('woocommerce_quantity_input_min', $product->get_min_purchase_quantity(), $product),
+                    'max_value' => apply_filters('woocommerce_quantity_input_max', $product->get_max_purchase_quantity(), $product),
+                    'input_value' => isset($_POST['quantity']) ? wc_stock_amount(wp_unslash($_POST['quantity'])) : $product->get_min_purchase_quantity(),
+                    'classes' => apply_filters('woocommerce_quantity_input_classes', array('input-text', 'qty', 'text', 'alfredo-quantity-input'), $product),
+                ));
+                
+                echo '<button type="button" class="alfredo-quantity-btn alfredo-increase-qty">+</button>';
+                echo '</div>'; // End quantity wrapper
+                
+                // Add to cart button
+                echo '<button type="submit" name="add-to-cart" value="'.esc_attr($product->get_id()).'" class="alfredo-add-to-cart-button">';
+                echo '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+                echo '<circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>';
+                echo '<path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>';
+                echo '</svg> In den Warenkorb';
+                echo '</button>';
+                
+                echo '</div>'; // End product actions
+            }
+            
+            do_action('woocommerce_before_add_to_cart_button');
+            do_action('woocommerce_after_add_to_cart_button');
+            
+            echo '</form>';
+        } else {
+            // Display out of stock or not purchasable message
+            echo '<p class="alfredo-product-unavailable">';
+            if (!$product->is_in_stock()) {
+                echo 'Dieses Produkt ist leider nicht mehr verfügbar.';
+            } else {
+                echo 'Dieses Produkt kann derzeit nicht gekauft werden.';
+            }
+            echo '</p>';
+        }
+        ?>
         
         <div class="alfredo-secure-checkout">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1020,6 +1703,45 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Initialize quantity buttons
   initQuantityButtons();
+  
+  // Variation selection highlighting
+  jQuery(document).on('change', '.variations select', function() {
+    const select = jQuery(this);
+    const selectedValue = select.val();
+    
+    if (selectedValue) {
+      select.addClass('has-selection');
+    } else {
+      select.removeClass('has-selection');
+    }
+  });
+
+  // Add loading animation to add to cart button
+  jQuery('.single_add_to_cart_button').on('click', function() {
+    jQuery(this).addClass('loading');
+  });
+
+  // Re-initialize quantity buttons when variation changes
+  jQuery(document).on('show_variation', function() {
+    // Highlight the variations container when a valid combination is selected
+    jQuery('.alfredo-variations-wrapper').addClass('valid-selection');
+    
+    // Re-initialize quantity controls
+    setTimeout(initQuantityButtons, 100);
+    
+    // Smooth scroll to price if needed
+    const priceElement = jQuery('.woocommerce-variation-price');
+    if (priceElement.length && window.innerWidth < 768) {
+      jQuery('html, body').animate({
+        scrollTop: priceElement.offset().top - 100
+      }, 300);
+    }
+  });
+
+  // Handle "no matches found" state
+  jQuery(document).on('hide_variation', function() {
+    jQuery('.alfredo-variations-wrapper').removeClass('valid-selection');
+  });
   
   // Re-initialize quantity buttons when variation changes (for variable products)
   jQuery(document).on('found_variation', function() {
