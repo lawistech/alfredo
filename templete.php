@@ -115,7 +115,7 @@ header {
   font-weight: 500;
   transition: color 0.3s;
   position: relative;
-}      
+}
 
 .nav-link::after {
   content: "";
@@ -890,10 +890,10 @@ footer {
       </svg>
     </button>
   </div>
-  
+
   <div class="cart-body" id="cart-items">
     <!-- Cart items will be dynamically inserted here -->
-    
+
     <!-- Empty cart state -->
     <div class="cart-empty" id="cart-empty">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -906,7 +906,7 @@ footer {
       <a href="/shop/" class="cart-empty-action">Zum Shop</a>
     </div>
   </div>
-  
+
   <div class="cart-footer" id="cart-footer">
     <div class="cart-totals">
       <div class="cart-totals-row">
@@ -952,25 +952,55 @@ footer {
 <!-- JavaScript for Cart Functionality -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM fully loaded, initializing cart functionality');
+
   // Cart elements
   const cartToggle = document.getElementById('cart-toggle');
+  console.log('Cart toggle element:', cartToggle);
+
   const cartSidebar = document.getElementById('cart-sidebar');
+  console.log('Cart sidebar element:', cartSidebar);
+
   const cartOverlay = document.getElementById('cart-overlay');
+  console.log('Cart overlay element:', cartOverlay);
+
   const cartClose = document.getElementById('cart-close');
+  console.log('Cart close element:', cartClose);
+
   const cartItemsContainer = document.getElementById('cart-items');
+  console.log('Cart items container element:', cartItemsContainer);
+
   const cartEmptyState = document.getElementById('cart-empty');
+  console.log('Cart empty state element:', cartEmptyState);
+
   const cartCount = document.querySelector('.cart-count');
+  console.log('Cart count element:', cartCount);
+
   const cartItemsCount = document.getElementById('cart-items-count');
+  console.log('Cart items count element:', cartItemsCount);
+
   const cartSubtotal = document.getElementById('cart-subtotal');
+  console.log('Cart subtotal element:', cartSubtotal);
+
   const cartTotal = document.getElementById('cart-total');
+  console.log('Cart total element:', cartTotal);
+
   const cartFooter = document.getElementById('cart-footer');
-  
+  console.log('Cart footer element:', cartFooter);
+
   // Notification toast elements
   const toast = document.getElementById('notification-toast');
+  console.log('Toast element:', toast);
+
   const toastTitle = document.getElementById('toast-title');
+  console.log('Toast title element:', toastTitle);
+
   const toastMessage = document.getElementById('toast-message');
+  console.log('Toast message element:', toastMessage);
+
   const toastClose = document.getElementById('toast-close');
-  
+  console.log('Toast close element:', toastClose);
+
   // Sample cart data (this would be replaced with actual data from your e-commerce system)
   let cart = {
     items: [],
@@ -978,7 +1008,7 @@ document.addEventListener('DOMContentLoaded', function() {
     shipping: 0,
     total: 0
   };
-  
+
   // Sample products (this would come from your database)
   const products = [
     {
@@ -1012,56 +1042,65 @@ document.addEventListener('DOMContentLoaded', function() {
       attributes: {}
     }
   ];
-  
+
   // Toggle cart sidebar
   function toggleCart() {
+    console.log('Toggling cart sidebar');
     cartSidebar.classList.toggle('active');
     cartOverlay.classList.toggle('active');
-    
+
     // Disable body scroll when cart is open
     if (cartSidebar.classList.contains('active')) {
+      console.log('Cart is now open');
       document.body.style.overflow = 'hidden';
     } else {
+      console.log('Cart is now closed');
       document.body.style.overflow = '';
     }
   }
-  
+
   // Format price
   function formatPrice(price) {
     return price.toFixed(2).replace('.', ',') + ' €';
   }
-  
+
   // Update cart display
   function updateCartDisplay() {
+    console.log('Updating cart display, cart items:', cart.items);
+
     // Update cart item count
     const totalItems = cart.items.reduce((total, item) => total + item.quantity, 0);
     cartCount.textContent = totalItems;
     cartItemsCount.textContent = totalItems;
-    
+    console.log('Total items in cart:', totalItems);
+
     // Show/hide empty state
     if (cart.items.length === 0) {
+      console.log('Cart is empty, showing empty state');
       cartEmptyState.style.display = 'block';
       cartFooter.style.display = 'none';
     } else {
+      console.log('Cart has items, hiding empty state');
       cartEmptyState.style.display = 'none';
       cartFooter.style.display = 'block';
-      
+
       // Clear current items
-      while (cartItemsContainer.firstChild !== cartEmptyState) {
-        if (cartItemsContainer.firstChild !== cartEmptyState) {
-          cartItemsContainer.removeChild(cartItemsContainer.firstChild);
-        } else {
-          break;
+      console.log('Clearing current cart items from display');
+      // Remove all cart items but keep the empty state element
+      const cartChildren = Array.from(cartItemsContainer.children);
+      cartChildren.forEach(child => {
+        if (child !== cartEmptyState) {
+          cartItemsContainer.removeChild(child);
         }
-      }
-      
+      });
+
       // Add cart items
       cart.items.forEach((item, index) => {
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
         cartItem.setAttribute('data-id', item.id);
         cartItem.style.animationDelay = `${index * 0.1}s`;
-        
+
         // Build attributes string
         let attributesHTML = '';
         if (item.attributes && Object.keys(item.attributes).length > 0) {
@@ -1069,7 +1108,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .map(([key, value]) => `${key}: ${value}`)
             .join(' / ');
         }
-        
+
         cartItem.innerHTML = `
           <div class="cart-item-image">
             <img src="${item.image}" alt="${item.name}">
@@ -1100,83 +1139,93 @@ document.addEventListener('DOMContentLoaded', function() {
             </svg>
           </button>
         `;
-        
+
         cartItemsContainer.insertBefore(cartItem, cartEmptyState);
-        
+
         // Add event listeners to buttons
         cartItem.querySelector('.decrease-qty').addEventListener('click', () => decreaseQuantity(item.id));
         cartItem.querySelector('.increase-qty').addEventListener('click', () => increaseQuantity(item.id));
         cartItem.querySelector('.cart-item-remove').addEventListener('click', () => removeFromCart(item.id));
       });
     }
-    
+
     // Update totals
     cartSubtotal.textContent = formatPrice(cart.subtotal);
     cartTotal.textContent = formatPrice(cart.total);
   }
-  
+
   // Calculate cart totals
   function calculateTotals() {
     cart.subtotal = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
     // Here you could add tax calculations, shipping costs, etc.
     cart.total = cart.subtotal + cart.shipping;
   }
-  
+
   // Add item to cart
   function addToCart(productId, quantity = 1) {
+    console.log('Adding to cart, product ID:', productId, 'quantity:', quantity);
+
     // Find product
     const product = products.find(p => p.id === productId);
-    if (!product) return;
-    
+    if (!product) {
+      console.error('Product not found with ID:', productId);
+      return;
+    }
+
+    console.log('Product found:', product);
+
     // Check if product already in cart
     const existingItem = cart.items.find(item => item.id === productId);
-    
+
     if (existingItem) {
       // Increase quantity
       existingItem.quantity += quantity;
+      console.log('Increased quantity for existing item, new quantity:', existingItem.quantity);
     } else {
       // Add new item
       const cartItem = {...product, quantity};
       cart.items.push(cartItem);
+      console.log('Added new item to cart:', cartItem);
     }
-    
+
     // Update totals and display
     calculateTotals();
     updateCartDisplay();
-    
+
     // Animate cart count
     cartCount.classList.add('pulse');
     setTimeout(() => {
       cartCount.classList.remove('pulse');
     }, 500);
-    
+
     // Show notification
     showNotification('Produkt hinzugefügt', `${product.name} wurde deinem Warenkorb hinzugefügt.`);
-    
+
     // Save cart to localStorage (for persistence)
     saveCart();
+    console.log('Current cart:', cart);
   }
-  
+
   // Remove item from cart
   function removeFromCart(productId) {
     // Remove the item
     cart.items = cart.items.filter(item => item.id !== productId);
-    
+
     // Update totals and display
     calculateTotals();
     updateCartDisplay();
-    
+
     // Show notification
     showNotification('Produkt entfernt', 'Das Produkt wurde aus deinem Warenkorb entfernt.');
-    
+
     // Save cart to localStorage
     saveCart();
   }
-  
+
   // Decrease item quantity
   function decreaseQuantity(productId) {
     const item = cart.items.find(item => item.id === productId);
-    
+
     if (item) {
       if (item.quantity > 1) {
         item.quantity--;
@@ -1184,113 +1233,155 @@ document.addEventListener('DOMContentLoaded', function() {
         // Remove item if quantity is 1
         return removeFromCart(productId);
       }
-      
+
       // Update totals and display
       calculateTotals();
       updateCartDisplay();
-      
+
       // Save cart to localStorage
       saveCart();
     }
   }
-  
+
   // Increase item quantity
   function increaseQuantity(productId) {
     const item = cart.items.find(item => item.id === productId);
-    
+
     if (item) {
       item.quantity++;
-      
+
       // Update totals and display
       calculateTotals();
       updateCartDisplay();
-      
+
       // Save cart to localStorage
       saveCart();
     }
   }
-  
+
   // Save cart to localStorage
   function saveCart() {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    try {
+      const cartJson = JSON.stringify(cart);
+      localStorage.setItem('cart', cartJson);
+      console.log('Cart saved to localStorage:', cartJson);
+    } catch (e) {
+      console.error('Error saving cart to localStorage:', e);
+    }
   }
-  
+
   // Load cart from localStorage
   function loadCart() {
-    const savedCart = localStorage.getItem('cart');
-    
-    if (savedCart) {
-      try {
+    try {
+      const savedCart = localStorage.getItem('cart');
+      console.log('Loaded cart from localStorage:', savedCart);
+
+      if (savedCart) {
         cart = JSON.parse(savedCart);
         calculateTotals();
         updateCartDisplay();
-      } catch (e) {
-        console.error('Error loading cart from localStorage', e);
+        console.log('Cart loaded and displayed:', cart);
+      } else {
+        console.log('No saved cart found in localStorage');
       }
+    } catch (e) {
+      console.error('Error loading cart from localStorage:', e);
     }
   }
-  
+
   // Show notification toast
   function showNotification(title, message, duration = 3000) {
     toastTitle.textContent = title;
     toastMessage.textContent = message;
-    
+
     toast.classList.add('show');
-    
+
     // Auto-hide toast after duration
     const toastTimeout = setTimeout(() => {
       hideNotification();
     }, duration);
-    
+
     // Store timeout in the toast to clear it if closed manually
     toast.dataset.timeout = toastTimeout;
   }
-  
+
   // Hide notification toast
   function hideNotification() {
     toast.classList.remove('show');
-    
+
     // Clear timeout if exists
     if (toast.dataset.timeout) {
       clearTimeout(parseInt(toast.dataset.timeout));
       toast.dataset.timeout = null;
     }
   }
-  
+
   // Add event listeners
-  cartToggle.addEventListener('click', toggleCart);
-  cartClose.addEventListener('click', toggleCart);
-  cartOverlay.addEventListener('click', toggleCart);
-  toastClose.addEventListener('click', hideNotification);
-  
+  console.log('Setting up cart event listeners');
+
+  // Check if elements exist before adding event listeners
+  if (cartToggle) {
+    console.log('Cart toggle button found, adding click event');
+    cartToggle.addEventListener('click', function(e) {
+      console.log('Cart toggle button clicked');
+      toggleCart();
+    });
+  } else {
+    console.error('Cart toggle button not found!');
+  }
+
+  if (cartClose) {
+    cartClose.addEventListener('click', toggleCart);
+  } else {
+    console.error('Cart close button not found!');
+  }
+
+  if (cartOverlay) {
+    cartOverlay.addEventListener('click', toggleCart);
+  } else {
+    console.error('Cart overlay not found!');
+  }
+
+  if (toastClose) {
+    toastClose.addEventListener('click', hideNotification);
+  } else {
+    console.error('Toast close button not found!');
+  }
+
   // Close cart with Escape key
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && cartSidebar.classList.contains('active')) {
       toggleCart();
     }
   });
-  
+
   // Demo: Add "Add to Cart" button event listeners on the page
   // This would usually be handled by your e-commerce system
   document.addEventListener('click', function(e) {
-    if (e.target.matches('.add-to-cart, .add-to-cart *')) {
+    // Find the add-to-cart button or its child elements
+    const addToCartBtn = e.target.closest('.add-to-cart');
+
+    if (addToCartBtn) {
       e.preventDefault();
-      
+
       // Get the product ID from data attribute
-      const productId = parseInt(e.target.closest('.add-to-cart').dataset.productId);
-      
+      const productId = parseInt(addToCartBtn.dataset.productId);
+      console.log('Add to cart clicked for product ID:', productId);
+
       if (productId) {
         // Add the product to cart
         addToCart(productId);
-        
+
         // If cart is not visible, show it
         if (!cartSidebar.classList.contains('active')) {
           toggleCart();
         }
+      } else {
+        console.error('No product ID found on add-to-cart button');
       }
     }
   });
-  
+
   // Enhanced Header Scroll Effect
   function handleHeaderScroll() {
     const header = document.getElementById("header");
@@ -1300,63 +1391,67 @@ document.addEventListener('DOMContentLoaded', function() {
       header.classList.remove("header-scrolled");
     }
   }
-  
+
   window.addEventListener("scroll", handleHeaderScroll);
-  
+
   // Mobile menu functionality
   const mobileToggle = document.querySelector(".mobile-toggle");
   const mobileOverlay = document.querySelector(".mobile-overlay");
   const navList = document.querySelector(".nav-list");
-  
+
   if (mobileToggle && mobileOverlay && navList) {
     mobileToggle.addEventListener("click", function() {
       navList.classList.add("active");
       mobileOverlay.classList.add("active");
       document.body.style.overflow = "hidden"; // Prevent scrolling
     });
-    
+
     function closeMobileMenu() {
       navList.classList.remove("active");
       mobileOverlay.classList.remove("active");
-      
+
       // Only re-enable scrolling if cart is not open
       if (!cartSidebar.classList.contains('active')) {
         document.body.style.overflow = "";
       }
     }
-    
+
     mobileOverlay.addEventListener("click", closeMobileMenu);
-    
+
     document.querySelectorAll(".nav-link").forEach(function(link) {
       link.addEventListener("click", closeMobileMenu);
     });
   }
-  
+
   // Initialize the cart
+  console.log('Initializing cart...');
   loadCart();
-  
+
   // For demo purposes: Add some items to the cart initially if it's empty
   if (cart.items.length === 0) {
-    // Uncomment this to have some items in cart by default
-    // addToCart(1);
-    // addToCart(3);
+    console.log('Cart is empty, adding demo items');
+    // Add demo items to cart for testing
+    addToCart(1);
+    addToCart(3);
+  } else {
+    console.log('Cart already has items:', cart.items.length);
   }
-  
+
   // Dynamic cart count update (for WooCommerce AJAX add-to-cart)
   // This listens for WooCommerce events when items are added to cart
   document.addEventListener('added_to_cart', function(e, fragments, cart_hash, button) {
     // Reload cart from localStorage or make an AJAX request to get cart data
     loadCart();
   });
-  
+
   // Function to update cart from WooCommerce data
   // This would be used in a real implementation with WooCommerce
   function updateCartFromWooCommerce(wooCartData) {
     if (!wooCartData) return;
-    
+
     // Clear current cart
     cart.items = [];
-    
+
     // Map WooCommerce cart items to our cart structure
     for (const [key, item] of Object.entries(wooCartData.items)) {
       cart.items.push({
@@ -1368,15 +1463,15 @@ document.addEventListener('DOMContentLoaded', function() {
         attributes: item.variation
       });
     }
-    
+
     // Update totals
     cart.subtotal = parseFloat(wooCartData.subtotal);
     cart.total = parseFloat(wooCartData.total);
-    
+
     // Update display
     updateCartDisplay();
   }
-  
+
   // Example of AJAX request to get WooCommerce cart data
   // This is a placeholder for how you might fetch cart data from WooCommerce
   function fetchWooCommerceCart() {
@@ -1391,34 +1486,109 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Error fetching cart:', error);
       });
   }
-  
+
   // Add demo products to the page (for testing only)
   function addDemoProducts() {
+    console.log('Adding demo products to page');
     const demoProductsSection = document.createElement('div');
     demoProductsSection.className = 'container';
     demoProductsSection.style.padding = '8rem 0 2rem';
-    demoProductsSection.innerHTML = `
-      <h2 style="color: var(--light); margin-bottom: 2rem; text-align: center;">Demo Produkte</h2>
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem;">
-        ${products.map(product => `
-          <div class="product-card" style="background: rgba(26, 26, 26, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;">
-            <div style="width: 100%; height: 250px; overflow: hidden;">
-              <img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
-            <div style="padding: 1.5rem;">
-              <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--light);">${product.name}</h3>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
-                <span style="font-size: 1.25rem; font-weight: 600; color: var(--accent);">${formatPrice(product.price)}</span>
-                <button class="add-to-cart btn btn-primary" data-product-id="${product.id}" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
-                  In den Warenkorb
-                </button>
-              </div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    `;
-    
+
+    // Create heading
+    const heading = document.createElement('h2');
+    heading.textContent = 'Demo Produkte';
+    heading.style.color = 'var(--light)';
+    heading.style.marginBottom = '2rem';
+    heading.style.textAlign = 'center';
+    demoProductsSection.appendChild(heading);
+
+    // Create product grid
+    const productGrid = document.createElement('div');
+    productGrid.style.display = 'grid';
+    productGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(250px, 1fr))';
+    productGrid.style.gap = '2rem';
+    demoProductsSection.appendChild(productGrid);
+
+    // Add each product
+    products.forEach(product => {
+      console.log('Creating product card for:', product.name, 'ID:', product.id);
+
+      const productCard = document.createElement('div');
+      productCard.className = 'product-card';
+      productCard.style.background = 'rgba(26, 26, 26, 0.6)';
+      productCard.style.border = '1px solid rgba(255, 255, 255, 0.05)';
+      productCard.style.borderRadius = '1rem';
+      productCard.style.overflow = 'hidden';
+      productCard.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+
+      // Image container
+      const imageContainer = document.createElement('div');
+      imageContainer.style.width = '100%';
+      imageContainer.style.height = '250px';
+      imageContainer.style.overflow = 'hidden';
+
+      const image = document.createElement('img');
+      image.src = product.image;
+      image.alt = product.name;
+      image.style.width = '100%';
+      image.style.height = '100%';
+      image.style.objectFit = 'cover';
+
+      imageContainer.appendChild(image);
+      productCard.appendChild(imageContainer);
+
+      // Content container
+      const contentContainer = document.createElement('div');
+      contentContainer.style.padding = '1.5rem';
+
+      const title = document.createElement('h3');
+      title.textContent = product.name;
+      title.style.fontSize = '1.25rem';
+      title.style.marginBottom = '0.5rem';
+      title.style.color = 'var(--light)';
+      contentContainer.appendChild(title);
+
+      const priceActionContainer = document.createElement('div');
+      priceActionContainer.style.display = 'flex';
+      priceActionContainer.style.justifyContent = 'space-between';
+      priceActionContainer.style.alignItems = 'center';
+      priceActionContainer.style.marginTop = '1rem';
+
+      const price = document.createElement('span');
+      price.textContent = formatPrice(product.price);
+      price.style.fontSize = '1.25rem';
+      price.style.fontWeight = '600';
+      price.style.color = 'var(--accent)';
+      priceActionContainer.appendChild(price);
+
+      const addToCartBtn = document.createElement('button');
+      addToCartBtn.className = 'add-to-cart btn btn-primary';
+      addToCartBtn.dataset.productId = product.id;
+      addToCartBtn.textContent = 'In den Warenkorb';
+      addToCartBtn.style.padding = '0.5rem 1rem';
+      addToCartBtn.style.fontSize = '0.875rem';
+
+      // Add click event directly to the button
+      addToCartBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('Add to cart button clicked directly for product ID:', product.id);
+        addToCart(product.id);
+
+        // If cart is not visible, show it
+        if (!cartSidebar.classList.contains('active')) {
+          toggleCart();
+        }
+      });
+
+      priceActionContainer.appendChild(addToCartBtn);
+      contentContainer.appendChild(priceActionContainer);
+      productCard.appendChild(contentContainer);
+
+      productGrid.appendChild(productCard);
+    });
+
+    console.log('Demo products section created with', products.length, 'products');
+
     // Add the demo products section before the footer
     const footer = document.querySelector('footer');
     if (footer) {
@@ -1427,10 +1597,10 @@ document.addEventListener('DOMContentLoaded', function() {
       document.body.appendChild(demoProductsSection);
     }
   }
-  
-  // Uncomment this to show demo products
-  // addDemoProducts();
-  
+
+  // Show demo products for testing
+  addDemoProducts();
+
   // Add CSS for pulse animation when an item is added to cart
   const style = document.createElement('style');
   style.textContent = `
@@ -1445,7 +1615,7 @@ document.addEventListener('DOMContentLoaded', function() {
         transform: scale(1);
       }
     }
-    
+
     .pulse {
       animation: pulse 0.5s ease-in-out;
     }
@@ -1453,7 +1623,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.head.appendChild(style);
 });
 </script>
-    
+
 
 
 
@@ -1536,14 +1706,14 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="footer-bottom">
         <p>
           &copy; 2023 Alfredo Media. Alle Rechte vorbehalten. |
-          <a href="/impressum/">Impressum</a> | 
+          <a href="/impressum/">Impressum</a> |
           <a href="/datenschutz/">Datenschutz</a> |
           <a href="/haftungsausschluss/">Haftungsausschluss</a>
         </p>
       </div>
     </div>
   </footer>
-  
+
   <!-- JavaScript for Header Interaction -->
   <script>
     // Scroll event to change header background
@@ -1555,7 +1725,7 @@ document.addEventListener('DOMContentLoaded', function() {
         header.classList.remove("header-scrolled");
       }
     });
-  
+
     // Mobile menu toggle
     document
       .querySelector(".mobile-toggle")
@@ -1564,7 +1734,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector(".mobile-overlay").classList.add("active");
         document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
       });
-  
+
     // Close mobile menu when clicking on overlay
     document
       .querySelector(".mobile-overlay")
@@ -1573,7 +1743,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector(".mobile-overlay").classList.remove("active");
         document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
       });
-  
+
     // Close mobile menu when clicking a nav link (for better UX)
     document.querySelectorAll(".nav-link").forEach(function (link) {
       link.addEventListener("click", function () {
@@ -1582,12 +1752,12 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.style.overflow = ""; // Re-enable scrolling
       });
     });
-  
+
     // Update cart count (example function - connect to your cart system)
     function updateCartCount(count) {
       document.querySelector(".cart-count").textContent = count;
     }
-    
+
     // You would typically call this with data from your cart system
     // For example: updateCartCount(5);
   </script>
