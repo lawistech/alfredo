@@ -398,6 +398,174 @@ if (!empty($product_categories) && !is_wp_error($product_categories)) {
 
 <script>
 jQuery(document).ready(function($) {
+  // Add notification system
+  const createNotificationSystem = function() {
+    // Create notification container if it doesn't exist
+    if (!$('#alfredo-notification-container').length) {
+      $('body').append('<div id="alfredo-notification-container"></div>');
+      
+      // Add styles for notifications
+      $('<style>')
+        .prop('type', 'text/css')
+        .html(`
+          #alfredo-notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            width: 300px;
+          }
+          .alfredo-notification {
+            background: rgba(26, 26, 26, 0.95);
+            border-left: 4px solid var(--accent);
+            color: white;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            position: relative;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+          }
+          .alfredo-notification.show {
+            transform: translateX(0);
+          }
+          .alfredo-notification.success {
+            border-left-color: #34c759;
+          }
+          .alfredo-notification.error {
+            border-left-color: #ff3b30;
+          }
+          .alfredo-notification-icon {
+            margin-right: 15px;
+            color: var(--accent);
+          }
+          .alfredo-notification.success .alfredo-notification-icon {
+            color: #34c759;
+          }
+          .alfredo-notification.error .alfredo-notification-icon {
+            color: #ff3b30;
+          }
+          .alfredo-notification-content {
+            flex: 1;
+          }
+          .alfredo-notification-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+          }
+          .alfredo-notification-message {
+            font-size: 14px;
+            opacity: 0.9;
+          }
+          .alfredo-notification-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            line-height: 1;
+          }
+          .alfredo-notification-close:hover {
+            color: white;
+          }
+          .alfredo-notification-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            width: 100%;
+          }
+          .alfredo-notification-progress-bar {
+            height: 100%;
+            width: 100%;
+            background: var(--accent);
+            transform-origin: left;
+            animation: progress-shrink 5s linear forwards;
+          }
+          .alfredo-notification.success .alfredo-notification-progress-bar {
+            background: #34c759;
+          }
+          .alfredo-notification.error .alfredo-notification-progress-bar {
+            background: #ff3b30;
+          }
+          @keyframes progress-shrink {
+            from { transform: scaleX(1); }
+            to { transform: scaleX(0); }
+          }
+        `)
+        .appendTo('head');
+    }
+  };
+
+  // Show notification function
+  const showNotification = function(title, message, type = 'default', duration = 5000) {
+    createNotificationSystem();
+    
+    // Create notification element
+    const $notification = $('<div class="alfredo-notification"></div>');
+    
+    // Add type class
+    if (type) {
+      $notification.addClass(type);
+    }
+    
+    // Create icon
+    let iconSvg = '';
+    if (type === 'success') {
+      iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+    } else if (type === 'error') {
+      iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+    } else {
+      iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+    }
+    
+    // Build notification content
+    $notification.html(`
+      <div class="alfredo-notification-icon">${iconSvg}</div>
+      <div class="alfredo-notification-content">
+        <div class="alfredo-notification-title">${title}</div>
+        <div class="alfredo-notification-message">${message}</div>
+      </div>
+      <button class="alfredo-notification-close">&times;</button>
+      <div class="alfredo-notification-progress">
+        <div class="alfredo-notification-progress-bar"></div>
+      </div>
+    `);
+    
+    // Add to container
+    $('#alfredo-notification-container').append($notification);
+    
+    // Show with animation
+    setTimeout(() => {
+      $notification.addClass('show');
+    }, 10);
+    
+    // Handle close button
+    $notification.find('.alfredo-notification-close').on('click', function() {
+      $notification.removeClass('show');
+      setTimeout(() => {
+        $notification.remove();
+      }, 300);
+    });
+    
+    // Auto-remove after duration
+    setTimeout(() => {
+      $notification.removeClass('show');
+      setTimeout(() => {
+        $notification.remove();
+      }, 300);
+    }, duration);
+    
+    return $notification;
+  };
+
   // Tabs functionality
   $('.alfredo-tab').on('click', function() {
     const tabId = $(this).data('tab');
@@ -482,6 +650,61 @@ jQuery(document).ready(function($) {
   // Initialize and run when variations change
   styleQuantityInputs();
   $('body').on('woocommerce_variation_has_changed', styleQuantityInputs);
+  
+  // Listen for AJAX add to cart event
+  $(document.body).on('added_to_cart', function(event, fragments, cart_hash, $button) {
+    // Show success notification
+    showNotification(
+      'Produkt hinzugefügt!',
+      'Das Produkt wurde erfolgreich zu Ihrem Warenkorb hinzugefügt.',
+      'success'
+    );
+  });
+  
+  // Also listen for form submissions for non-AJAX add to cart
+  $('form.cart').on('submit', function(e) {
+    // Only needed if AJAX is disabled, otherwise the added_to_cart event will fire
+    if (!$('body').hasClass('woocommerce-ajax-enabled')) {
+      // Show notification with a small delay to give time for page reload/redirect
+      setTimeout(function() {
+        showNotification(
+          'Produkt hinzugefügt!',
+          'Das Produkt wurde erfolgreich zu Ihrem Warenkorb hinzugefügt.',
+          'success'
+        );
+      }, 100);
+    }
+  });
+  
+  // Handle errors
+  $(document.body).on('wc_fragments_refreshed wc_fragments_ajax_error', function(event) {
+    if (event.type === 'wc_fragments_ajax_error') {
+      showNotification(
+        'Fehler',
+        'Es gab ein Problem beim Hinzufügen des Produkts. Bitte versuchen Sie es erneut.',
+        'error'
+      );
+    }
+  });
+  
+  // Image zoom effect on hover (optional)
+  const productImageWrapper = document.querySelector('.alfredo-product-image-wrapper');
+  const productImage = document.querySelector('.alfredo-product-image');
+
+  if (productImageWrapper && productImage && window.innerWidth > 768) {
+    productImageWrapper.addEventListener('mousemove', function(e) {
+      const { left, top, width, height } = this.getBoundingClientRect();
+      const x = (e.clientX - left) / width;
+      const y = (e.clientY - top) / height;
+
+      productImage.style.transformOrigin = `${x * 100}% ${y * 100}%`;
+      productImage.style.transform = 'scale(1.5)';
+    });
+
+    productImageWrapper.addEventListener('mouseleave', function() {
+      productImage.style.transform = 'scale(1)';
+    });
+  }
 });
 </script>
 
