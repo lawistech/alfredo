@@ -143,7 +143,7 @@ header {
   width: 100%;
 }
 
-.mobile-toggle {
+.c-mobile-toggle {
   display: none;
   background: none;
   border: none;
@@ -684,7 +684,7 @@ header {
 }
 
 @media (max-width: 768px) {
-  .mobile-toggle {
+  .c-mobile-toggle {
     display: block;
   }
   
@@ -740,7 +740,7 @@ header {
       Adstethik
     </a>
     <nav>
-      <button class="mobile-toggle" aria-label="Toggle Menu">☰</button>
+      <button class="c-mobile-toggle" aria-label="Toggle Menu">☰</button>
       <?php
         wp_nav_menu(array(
           'theme_location' => 'primary-menu',
@@ -750,7 +750,7 @@ header {
             echo '<ul class="nav-list">
               <li><a href="' . esc_url(home_url('/')) . '" class="nav-link">HOME</a></li>
               <li><a href="' . esc_url(home_url('/about/')) . '" class="nav-link">ÜBER UNS</a></li>
-              <li><a href="' . esc_url(home_url('/services/')) . '" class="nav-link">DIENSTLEISTUNGEN</a></li>
+              <li><a href="' . esc_url(home_url('/pricing/')) . '" class="nav-link">DIENSTLEISTUNGEN</a></li>
               <li><a href="' . esc_url(home_url('/portfolio/')) . '" class="nav-link">PORTFOLIO</a></li>
               <li><a href="' . esc_url(home_url('/merch/')) . '" class="nav-link">MERCH</a></li>
               <li><a href="' . esc_url(home_url('/contact/')) . '" class="nav-link">KONTAKT</a></li>
@@ -1003,7 +1003,7 @@ jQuery(document).ready(function($) {
   });
   
   // Mobile menu functionality
-  const mobileToggle = document.querySelector('.mobile-toggle');
+  const mobileToggle = document.querySelector('.c-mobile-toggle');
   const mobileOverlay = document.querySelector('.mobile-overlay');
   const navList = document.querySelector('.nav-list');
   
