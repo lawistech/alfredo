@@ -752,7 +752,7 @@ header {
               <li><a href="' . esc_url(home_url('/about/')) . '" class="nav-link">ÜBER UNS</a></li>
               <li><a href="' . esc_url(home_url('/services/')) . '" class="nav-link">DIENSTLEISTUNGEN</a></li>
               <li><a href="' . esc_url(home_url('/portfolio/')) . '" class="nav-link">PORTFOLIO</a></li>
-              <li><a href="' . esc_url(home_url('/shop/')) . '" class="nav-link">SHOP</a></li>
+              <li><a href="' . esc_url(home_url('/merch/')) . '" class="nav-link">MERCH</a></li>
               <li><a href="' . esc_url(home_url('/contact/')) . '" class="nav-link">KONTAKT</a></li>
             </ul>';
           }
