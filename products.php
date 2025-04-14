@@ -1546,122 +1546,8 @@ if (!empty($product_categories) && !is_wp_error($product_categories)) {
   </section>
 </div>
 
+
 <script>
-// Notification function
-function showNotification(title, message) {
-  // Check if notification container exists, if not create it
-  let notificationContainer = document.getElementById('alfredo-notifications');
-  if (!notificationContainer) {
-    notificationContainer = document.createElement('div');
-    notificationContainer.id = 'alfredo-notifications';
-    notificationContainer.style.position = 'fixed';
-    notificationContainer.style.top = '20px';
-    notificationContainer.style.right = '20px';
-    notificationContainer.style.zIndex = '9999';
-    document.body.appendChild(notificationContainer);
-
-    // Add styles for notifications
-    const style = document.createElement('style');
-    style.textContent = `
-      .alfredo-notification {
-        background: rgba(26, 26, 26, 0.9);
-        border-left: 4px solid #0099ff;
-        color: white;
-        padding: 15px 20px;
-        margin-bottom: 10px;
-        border-radius: 4px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        display: flex;
-        flex-direction: column;
-        min-width: 300px;
-        max-width: 400px;
-        transform: translateX(120%);
-        transition: transform 0.3s ease;
-      }
-      .alfredo-notification.error {
-        border-left-color: #ff3b30;
-      }
-      .alfredo-notification.success {
-        border-left-color: #34c759;
-      }
-      .alfredo-notification.show {
-        transform: translateX(0);
-      }
-      .alfredo-notification-title {
-        font-weight: bold;
-        margin-bottom: 5px;
-      }
-      .alfredo-notification-message {
-        font-size: 14px;
-      }
-      .alfredo-notification-close {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: none;
-        border: none;
-        color: white;
-        cursor: pointer;
-        font-size: 16px;
-        opacity: 0.7;
-      }
-      .alfredo-notification-close:hover {
-        opacity: 1;
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  // Create notification element
-  const notification = document.createElement('div');
-  notification.className = 'alfredo-notification';
-  if (title.toLowerCase() === 'error') {
-    notification.classList.add('error');
-  } else if (title.toLowerCase() === 'success') {
-    notification.classList.add('success');
-  }
-
-  // Add title
-  const notificationTitle = document.createElement('div');
-  notificationTitle.className = 'alfredo-notification-title';
-  notificationTitle.textContent = title;
-  notification.appendChild(notificationTitle);
-
-  // Add message
-  const notificationMessage = document.createElement('div');
-  notificationMessage.className = 'alfredo-notification-message';
-  notificationMessage.textContent = message;
-  notification.appendChild(notificationMessage);
-
-  // Add close button
-  const closeButton = document.createElement('button');
-  closeButton.className = 'alfredo-notification-close';
-  closeButton.innerHTML = '&times;';
-  closeButton.addEventListener('click', () => {
-    notification.style.opacity = '0';
-    setTimeout(() => {
-      notification.remove();
-    }, 300);
-  });
-  notification.appendChild(closeButton);
-
-  // Add to container
-  notificationContainer.appendChild(notification);
-
-  // Show notification with animation
-  setTimeout(() => {
-    notification.classList.add('show');
-  }, 10);
-
-  // Auto-remove after 5 seconds
-  setTimeout(() => {
-    notification.classList.remove('show');
-    setTimeout(() => {
-      notification.remove();
-    }, 300);
-  }, 5000);
-}
-
 document.addEventListener('DOMContentLoaded', function() {
   // Tabs functionality
   const tabs = document.querySelectorAll('.alfredo-tab');
@@ -1699,194 +1585,249 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Quantity buttons
-  const quantityInput = document.querySelector('.alfredo-quantity-input');
-  const decreaseBtn = document.querySelector('.alfredo-decrease-qty');
-  const increaseBtn = document.querySelector('.alfredo-increase-qty');
+  // Notification function
+  function showNotification(title, message) {
+    // Check if notification container exists, if not create it
+    let notificationContainer = document.getElementById('alfredo-notifications');
+    if (!notificationContainer) {
+      notificationContainer = document.createElement('div');
+      notificationContainer.id = 'alfredo-notifications';
+      notificationContainer.style.position = 'fixed';
+      notificationContainer.style.top = '20px';
+      notificationContainer.style.right = '20px';
+      notificationContainer.style.zIndex = '9999';
+      document.body.appendChild(notificationContainer);
 
-  if (quantityInput && decreaseBtn && increaseBtn) {
-    decreaseBtn.addEventListener('click', () => {
-      const currentValue = parseInt(quantityInput.value);
-      if (currentValue > 1) {
-        quantityInput.value = currentValue - 1;
-        quantityInput.dispatchEvent(new Event('change', { bubbles: true }));
-      }
+      // Add styles for notifications
+      const style = document.createElement('style');
+      style.textContent = `
+        .alfredo-notification {
+          background: rgba(26, 26, 26, 0.9);
+          border-left: 4px solid #0099ff;
+          color: white;
+          padding: 15px 20px;
+          margin-bottom: 10px;
+          border-radius: 4px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          display: flex;
+          flex-direction: column;
+          min-width: 300px;
+          max-width: 400px;
+          transform: translateX(120%);
+          transition: transform 0.3s ease;
+        }
+        .alfredo-notification.error {
+          border-left-color: #ff3b30;
+        }
+        .alfredo-notification.success {
+          border-left-color: #34c759;
+        }
+        .alfredo-notification.show {
+          transform: translateX(0);
+        }
+        .alfredo-notification-title {
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+        .alfredo-notification-message {
+          font-size: 14px;
+        }
+        .alfredo-notification-close {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: none;
+          border: none;
+          color: white;
+          cursor: pointer;
+          font-size: 16px;
+          opacity: 0.7;
+        }
+        .alfredo-notification-close:hover {
+          opacity: 1;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = 'alfredo-notification';
+    if (title.toLowerCase() === 'error') {
+      notification.classList.add('error');
+    } else if (title.toLowerCase() === 'success') {
+      notification.classList.add('success');
+    }
+
+    // Add title
+    const notificationTitle = document.createElement('div');
+    notificationTitle.className = 'alfredo-notification-title';
+    notificationTitle.textContent = title;
+    notification.appendChild(notificationTitle);
+
+    // Add message
+    const notificationMessage = document.createElement('div');
+    notificationMessage.className = 'alfredo-notification-message';
+    notificationMessage.textContent = message;
+    notification.appendChild(notificationMessage);
+
+    // Add close button
+    const closeButton = document.createElement('button');
+    closeButton.className = 'alfredo-notification-close';
+    closeButton.innerHTML = '&times;';
+    closeButton.addEventListener('click', () => {
+      notification.style.opacity = '0';
+      setTimeout(() => {
+        notification.remove();
+      }, 300);
     });
+    notification.appendChild(closeButton);
 
-    increaseBtn.addEventListener('click', () => {
-      const currentValue = parseInt(quantityInput.value);
-      const max = quantityInput.getAttribute('max') ? parseInt(quantityInput.getAttribute('max')) : '';
+    // Add to container
+    notificationContainer.appendChild(notification);
 
-      if (!max || currentValue < max) {
-        quantityInput.value = currentValue + 1;
-        quantityInput.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    });
+    // Show notification with animation
+    setTimeout(() => {
+      notification.classList.add('show');
+    }, 10);
+
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => {
+        notification.remove();
+      }, 300);
+    }, 5000);
   }
 
-  // Smooth scrolling for anchor links
-  const anchorLinks = document.querySelectorAll('a[href^="#"]');
-
-  anchorLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      const href = this.getAttribute('href');
-
-      if (href !== '#') {
-        e.preventDefault();
-        const targetElement = document.querySelector(href);
-
-        if (targetElement) {
-          window.scrollTo({
-            top: targetElement.getBoundingClientRect().top + window.pageYOffset - 100,
-            behavior: 'smooth'
-          });
-        }
+  // Quantity button functionality
+  function initQuantityControls() {
+    // Find all quantity inputs
+    const quantityInputs = document.querySelectorAll('.qty, .input-text.qty.text');
+    
+    quantityInputs.forEach(input => {
+      // Skip if already handled
+      if (input.closest('.alfredo-quantity-wrapper')) {
+        return;
       }
-    });
-  });
-
-  // Enhanced Add to cart functionality with AJAX
-  const addToCartButton = document.querySelector('.alfredo-add-to-cart-button');
-  const productForm = document.querySelector('form.cart');
-
-  if (addToCartButton && productForm) {
-    productForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      // Check if this is a variable product
-      const isVariableProduct = productForm.classList.contains('variations_form');
-
-      // For variable products, check if all variations are selected
-      if (isVariableProduct) {
-        const variationInputs = productForm.querySelectorAll('select[name^="attribute_"]');
-        let allSelected = true;
-        let missingAttributes = [];
-
-        variationInputs.forEach(select => {
-          if (!select.value) {
-            allSelected = false;
-            const attributeName = select.name.replace('attribute_', '');
-            const label = select.closest('tr').querySelector('label');
-            missingAttributes.push(label ? label.textContent : attributeName);
-          }
-        });
-
-        if (!allSelected) {
-          showNotification('Error', 'Please select ' + missingAttributes.join(', ') + ' before adding to cart.');
-          return;
+      
+      // Create wrapper element
+      const wrapper = document.createElement('div');
+      wrapper.className = 'alfredo-quantity-wrapper';
+      
+      // Create decrease button
+      const decreaseBtn = document.createElement('button');
+      decreaseBtn.type = 'button';
+      decreaseBtn.className = 'alfredo-quantity-btn alfredo-decrease-qty';
+      decreaseBtn.textContent = '−';
+      
+      // Create increase button
+      const increaseBtn = document.createElement('button');
+      increaseBtn.type = 'button';
+      increaseBtn.className = 'alfredo-quantity-btn alfredo-increase-qty';
+      increaseBtn.textContent = '+';
+      
+      // Add input to wrapper with buttons
+      const parent = input.parentNode;
+      parent.insertBefore(wrapper, input);
+      wrapper.appendChild(decreaseBtn);
+      wrapper.appendChild(input);
+      wrapper.appendChild(increaseBtn);
+      
+      // Add event listeners to buttons
+      decreaseBtn.addEventListener('click', function() {
+        const currentValue = parseInt(input.value, 10);
+        if (currentValue > 1) {
+          input.value = currentValue - 1;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
         }
-
-        // Check if variation_id is present and valid
-        const variationId = productForm.querySelector('input[name="variation_id"]');
-        if (!variationId || !variationId.value || variationId.value === '0') {
-          showNotification('Error', 'Please select a valid product variation.');
-          return;
+      });
+      
+      increaseBtn.addEventListener('click', function() {
+        const currentValue = parseInt(input.value, 10);
+        const max = input.getAttribute('max') ? parseInt(input.getAttribute('max'), 10) : '';
+        
+        if (!max || currentValue < max) {
+          input.value = currentValue + 1;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
         }
-      }
-
-      // Add loading state
-      const submitButton = isVariableProduct ?
-        productForm.querySelector('.single_add_to_cart_button') :
-        addToCartButton;
-
-      submitButton.classList.add('loading');
-      submitButton.disabled = true;
-
-      // Get form data
-      const formData = new FormData(this);
-
-      // Add the add-to-cart parameter if not already present
-      if (!formData.has('add-to-cart')) {
-        const productId = isVariableProduct ?
-          productForm.querySelector('input[name="product_id"]').value :
-          submitButton.value;
-        formData.append('add-to-cart', productId);
-      }
-
-      // Add AJAX parameter
-      formData.append('wc-ajax', 'add_to_cart');
-
-      // Check if WooCommerce params are available
-      let ajaxUrl = '/wp-admin/admin-ajax.php?wc-ajax=add_to_cart';
-      if (typeof wc_add_to_cart_params !== 'undefined' && wc_add_to_cart_params.wc_ajax_url) {
-        ajaxUrl = wc_add_to_cart_params.wc_ajax_url.toString().replace('%%endpoint%%', 'add_to_cart');
-      }
-
-      // Log the form data for debugging
-      console.log('Form data being sent:');
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-      }
-
-      // Send AJAX request
-      fetch(ajaxUrl, {
-        method: 'POST',
-        credentials: 'same-origin',
-        body: formData
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Handle successful response
-        if (data.error) {
-          // Show error message
-          console.error('Error adding to cart:', data.message);
-          showNotification('Error', data.message || 'Error adding to cart');
-        } else {
-          // Success - update fragments, etc.
-          if (data.fragments) {
-            // Check if jQuery is available
-            if (typeof jQuery !== 'undefined') {
-              // Update fragments using jQuery
-              jQuery.each(data.fragments, function(key, value) {
-                jQuery(key).replaceWith(value);
-              });
-
-              // Trigger event so other scripts can react
-              jQuery(document.body).trigger('added_to_cart', [data.fragments, data.cart_hash, submitButton]);
-            } else {
-              // Fallback to vanilla JS
-              Object.keys(data.fragments).forEach(key => {
-                const elements = document.querySelectorAll(key);
-                elements.forEach(el => {
-                  const tempDiv = document.createElement('div');
-                  tempDiv.innerHTML = data.fragments[key];
-                  el.parentNode.replaceChild(tempDiv.firstElementChild, el);
-                });
-              });
-
-              // Dispatch custom event
-              const event = new CustomEvent('added_to_cart', {
-                detail: { fragments: data.fragments, cart_hash: data.cart_hash }
-              });
-              document.body.dispatchEvent(event);
-            }
-          }
-
-          // Show success message
-          if (data.message) {
-            // Create a notification instead of alert
-            showNotification('Success', data.message);
-          } else {
-            showNotification('Success', 'Product added to cart');
-          }
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        showNotification('Error', 'There was an error adding to cart. Please try again.');
-      })
-      .finally(() => {
-        // Remove loading state
-        submitButton.classList.remove('loading');
-        submitButton.disabled = false;
       });
     });
   }
+
+  // Function to check if we're on a variation product page
+  function isVariableProduct() {
+    return document.querySelector('form.variations_form') !== null;
+  }
+
+  // Check if all variations are selected
+  function allVariationsSelected() {
+    const selects = document.querySelectorAll('form.variations_form select[name^="attribute_"]');
+    return Array.from(selects).every(select => select.value !== '');
+  }
+
+  // Important: Clear any problematic items from cart on page load
+  // This helps prevent the "Please choose product options" error
+  if (window.location.href.includes('/cart/') && document.querySelector('.woocommerce-error')) {
+    // Add a clear cart button for debugging
+    const clearCartBtn = document.createElement('button');
+    clearCartBtn.textContent = 'Clear Cart';
+    clearCartBtn.className = 'button';
+    clearCartBtn.style.marginBottom = '20px';
+    clearCartBtn.addEventListener('click', function() {
+      // Make a request to clear the cart
+      fetch('/wp-admin/admin-ajax.php', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'action=woocommerce_clear_cart_url'
+      })
+      .then(() => {
+        window.location.reload();
+      });
+    });
+    
+    const returnBtn = document.querySelector('.return-to-shop');
+    if (returnBtn) {
+      returnBtn.parentNode.insertBefore(clearCartBtn, returnBtn);
+    }
+  }
+
+  // Initialize quantity controls
+  initQuantityControls();
+
+  // For variable products - important event listeners
+  if (isVariableProduct() && typeof jQuery !== 'undefined') {
+    jQuery('form.variations_form').on('found_variation', function(event, variation) {
+      setTimeout(initQuantityControls, 100);
+    });
+    
+    jQuery('form.variations_form').on('reset_data', function() {
+      setTimeout(initQuantityControls, 100);
+    });
+    
+    // Very important: prevent form submission if not all variations are selected
+    jQuery('form.variations_form').on('submit', function(e) {
+      if (!allVariationsSelected()) {
+        e.preventDefault();
+        showNotification('Error', 'Please select all product options before adding to cart');
+        return false;
+      }
+      // Continue with normal submission for variations
+      return true;
+    });
+  }
+
+  // For simple products only
+  const simpleForms = document.querySelectorAll('form.cart:not(.variations_form)');
+  simpleForms.forEach(form => {
+    form.addEventListener('submit', function(e) {
+      // Normal submission for simple products
+      showNotification('Success', 'Adding product to cart...');
+    });
+  });
 
   // Image zoom effect on hover (optional)
   const productImageWrapper = document.querySelector('.alfredo-product-image-wrapper');
@@ -1907,130 +1848,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Enhanced quantity buttons
-  function initQuantityButtons() {
-    const quantityInputs = document.querySelectorAll('.qty, .alfredo-quantity-input');
-
-    quantityInputs.forEach(function(quantityInput) {
-      // Look for closest decrease/increase buttons
-      const wrapper = quantityInput.closest('.alfredo-quantity-wrapper') || quantityInput.parentElement;
-      const decreaseBtn = wrapper.querySelector('.alfredo-decrease-qty') ||
-                          wrapper.previousElementSibling ||
-                          document.createElement('button');
-
-      const increaseBtn = wrapper.querySelector('.alfredo-increase-qty') ||
-                          wrapper.nextElementSibling ||
-                          document.createElement('button');
-
-      if (decreaseBtn) {
-        decreaseBtn.addEventListener('click', function() {
-          const currentValue = parseInt(quantityInput.value);
-          if (currentValue > 1) {
-            quantityInput.value = currentValue - 1;
-            quantityInput.dispatchEvent(new Event('change', { bubbles: true }));
-          }
-        });
-      }
-
-      if (increaseBtn) {
-        increaseBtn.addEventListener('click', function() {
-          const currentValue = parseInt(quantityInput.value);
-          const max = quantityInput.getAttribute('max') ? parseInt(quantityInput.getAttribute('max')) : '';
-
-          if (!max || currentValue < max) {
-            quantityInput.value = currentValue + 1;
-            quantityInput.dispatchEvent(new Event('change', { bubbles: true }));
-          }
-        });
+  // If there's a CTA button that should trigger the add to cart
+  const ctaButton = document.querySelector('.alfredo-cta-button');
+  if (ctaButton) {
+    ctaButton.addEventListener('click', function() {
+      const addToCartButton = document.querySelector('.single_add_to_cart_button, .alfredo-add-to-cart-button');
+      if (addToCartButton) {
+        // Check if we're on a variable product page and all variations are selected
+        if (isVariableProduct() && !allVariationsSelected()) {
+          showNotification('Error', 'Please select all product options before adding to cart');
+          return;
+        }
+        addToCartButton.click();
       }
     });
   }
-
-  // Variation selection highlighting
-  jQuery(document).on('change', '.variations select', function() {
-    const select = jQuery(this);
-    const selectedValue = select.val();
-
-    if (selectedValue) {
-      select.addClass('has-selection');
-    } else {
-      select.removeClass('has-selection');
-    }
-  });
-
-  // Add loading animation to add to cart button
-  jQuery('.single_add_to_cart_button').on('click', function() {
-    jQuery(this).addClass('loading');
-  });
-
-  // Fix quantity controls for variable products
-  jQuery(document).on('show_variation', function() {
-    const variableQuantity = jQuery('.woocommerce-variation-add-to-cart .quantity');
-
-    // If there's no custom wrapper yet
-    if (!variableQuantity.parent().hasClass('alfredo-quantity-wrapper')) {
-      // Create wrapper
-      variableQuantity.wrap('<div class="alfredo-quantity-wrapper"></div>');
-
-      // Add buttons
-      variableQuantity.before('<button type="button" class="alfredo-quantity-btn alfredo-decrease-qty">−</button>');
-      variableQuantity.after('<button type="button" class="alfredo-quantity-btn alfredo-increase-qty">+</button>');
-
-      // Initialize buttons
-      setTimeout(initQuantityButtons, 100);
-    }
-
-    // Highlight the variations container when a valid combination is selected
-    jQuery('.alfredo-variations-wrapper').addClass('valid-selection');
-
-    // Smooth scroll to price if needed
-    const priceElement = jQuery('.woocommerce-variation-price');
-    if (priceElement.length && window.innerWidth < 768) {
-      jQuery('html, body').animate({
-        scrollTop: priceElement.offset().top - 100
-      }, 300);
-    }
-  });
-
-  // Handle "no matches found" state
-  jQuery(document).on('hide_variation', function() {
-    jQuery('.alfredo-variations-wrapper').removeClass('valid-selection');
-  });
-
-  // Initialize quantity buttons
-  initQuantityButtons();
-
-  // Re-initialize quantity buttons when variation changes (for variable products)
-  jQuery(document).on('found_variation', function(event, variation) {
-    console.log('Variation found:', variation);
-
-    setTimeout(function() {
-      // Fix for variable products quantity
-      const variableQuantity = jQuery('.woocommerce-variation-add-to-cart .quantity');
-      if (!variableQuantity.parent().hasClass('alfredo-quantity-wrapper')) {
-        variableQuantity.wrap('<div class="alfredo-quantity-wrapper"></div>');
-        variableQuantity.before('<button type="button" class="alfredo-quantity-btn alfredo-decrease-qty">−</button>');
-        variableQuantity.after('<button type="button" class="alfredo-quantity-btn alfredo-increase-qty">+</button>');
-      }
-
-      // Initialize quantity buttons
-      initQuantityButtons();
-
-      // Make sure the variation ID is properly set
-      const variationForm = document.querySelector('.variations_form');
-      if (variationForm) {
-        const variationIdInput = variationForm.querySelector('input[name="variation_id"]');
-        if (variationIdInput && variation && variation.variation_id) {
-          console.log('Setting variation ID to:', variation.variation_id);
-          variationIdInput.value = variation.variation_id;
-        }
-      }
-    }, 100);
-  });
-
-  // Handle variation hide event (when a variation becomes unavailable)
-  jQuery(document).on('hide_variation', function() {
-    console.log('Variation hidden - no matching variations');
-  });
 });
 </script>
