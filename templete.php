@@ -1001,7 +1001,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const toastClose = document.getElementById('toast-close');
   console.log('Toast close element:', toastClose);
 
-  // Sample cart data (this would be replaced with actual data from your e-commerce system)
+  // Initialize cart data structure
   let cart = {
     items: [],
     subtotal: 0,
@@ -1009,39 +1009,176 @@ document.addEventListener('DOMContentLoaded', function() {
     total: 0
   };
 
-  // Sample products (this would come from your database)
-  const products = [
-    {
-      id: 1,
-      name: "Premium T-Shirt",
-      price: 29.99,
-      image: "https://placekitten.com/200/200",
-      quantity: 1,
-      attributes: {
-        size: "M",
-        color: "Schwarz"
+  // Products will be fetched from WooCommerce
+  let products = [];
+
+  // Function to fetch WooCommerce cart data via AJAX
+  function fetchWooCommerceCart() {
+    console.log('Fetching WooCommerce cart data...');
+
+    // Make sure loading state is applied
+    cartCount.classList.add('loading');
+
+    // Use the WooCommerce AJAX endpoint
+    fetch('/wp-admin/admin-ajax.php?action=get_refreshed_fragments', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
       }
-    },
-    {
-      id: 2,
-      name: "Hoodie mit Logo",
-      price: 49.99,
-      image: "https://placekitten.com/200/201",
-      quantity: 1,
-      attributes: {
-        size: "L",
-        color: "Grau"
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    },
-    {
-      id: 3,
-      name: "Kaffeetasse",
-      price: 14.99,
-      image: "https://placekitten.com/200/202",
-      quantity: 1,
-      attributes: {}
+      return response.json();
+    })
+    .then(data => {
+      console.log('WooCommerce cart data received:', data);
+      updateCartFromWooCommerce(data);
+      // Remove loading state after successful update
+      cartCount.classList.remove('loading');
+    })
+    .catch(error => {
+      console.error('Error fetching WooCommerce cart:', error);
+      // Fall back to localStorage if AJAX fails
+      loadCart();
+      // Remove loading state on error
+      cartCount.classList.remove('loading');
+    });
+  }
+
+  // Function to update cart from WooCommerce data
+  function updateCartFromWooCommerce(wooData) {
+    try {
+      if (!wooData || !wooData.fragments) {
+        console.log('No valid WooCommerce data received');
+        // Use fallback data
+        loadCart();
+        return;
+      }
+
+      // Parse the cart fragments to extract cart data
+      // This is a simplified approach - you may need to adjust based on your WooCommerce setup
+      const cartFragment = wooData.fragments['.widget_shopping_cart_content'];
+      if (!cartFragment) {
+        console.log('No cart fragment found');
+        // Use fallback data
+        loadCart();
+        return;
+      }
+
+      // Create a temporary element to parse the HTML
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = cartFragment;
+
+      // Clear current cart
+      cart.items = [];
+
+      // Extract cart items
+      const wooCartItems = tempDiv.querySelectorAll('.mini_cart_item');
+      console.log('Found', wooCartItems.length, 'items in WooCommerce cart');
+
+      if (wooCartItems.length === 0) {
+        // Cart is empty
+        cart.subtotal = 0;
+        cart.total = 0;
+        updateCartDisplay();
+        console.log('WooCommerce cart is empty');
+        return;
+      }
+
+      wooCartItems.forEach(wooItem => {
+        try {
+          // Extract product data from the WooCommerce cart item
+          const productLink = wooItem.querySelector('a:not(.remove)');
+          const productName = productLink ? productLink.textContent.trim() : 'Unknown Product';
+
+          // Get the cart item key from the remove link
+          const removeLink = wooItem.querySelector('.remove');
+          const cartItemKey = removeLink ? removeLink.dataset.cartItem : '';
+          const productId = parseInt(wooItem.dataset.productId || (removeLink ? removeLink.dataset.productId : 0));
+          const productImage = wooItem.querySelector('img') ? wooItem.querySelector('img').src : '';
+
+          // Extract price and quantity
+          const quantityEl = wooItem.querySelector('.quantity');
+          if (!quantityEl) {
+            console.log('No quantity element found for item:', productName);
+            return;
+          }
+
+          const priceText = quantityEl.textContent;
+          const price = parseFloat(priceText.replace(/[^0-9,.]/g, '').replace(',', '.')) || 0;
+          const quantityMatch = priceText.match(/\d+\s*×/);
+          const quantity = quantityMatch ? parseInt(quantityMatch[0]) : 1;
+
+          // Extract variation attributes if any
+          const variationEl = wooItem.querySelector('.variation');
+          const attributes = {};
+          if (variationEl) {
+            const variationText = variationEl.textContent;
+            const variations = variationText.split(',');
+            variations.forEach(variation => {
+              const parts = variation.split(':').map(s => s.trim());
+              if (parts.length === 2 && parts[0] && parts[1]) {
+                attributes[parts[0]] = parts[1];
+              }
+            });
+          }
+
+          // Add to our cart structure
+          cart.items.push({
+            id: productId,
+            key: cartItemKey, // Store the cart item key for later use
+            name: productName,
+            price: price,
+            image: productImage,
+            quantity: quantity,
+            attributes: attributes
+          });
+
+          console.log('Added item to cart:', productName, 'ID:', productId, 'Key:', cartItemKey);
+        } catch (itemError) {
+          console.error('Error processing cart item:', itemError);
+        }
+      });
+
+      // Extract totals
+      const subtotalEl = tempDiv.querySelector('.subtotal .amount');
+      if (subtotalEl) {
+        const subtotalText = subtotalEl.textContent;
+        cart.subtotal = parseFloat(subtotalText.replace(/[^0-9,.]/g, '').replace(',', '.')) || 0;
+      } else {
+        // Calculate subtotal from items if not found in fragment
+        cart.subtotal = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+      }
+
+      cart.total = cart.subtotal; // Simplified - you may need to add tax, shipping, etc.
+
+      // Update products array for add-to-cart functionality if we don't have any yet
+      if (products.length === 0) {
+        products = cart.items.map(item => ({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          quantity: 1, // Default quantity for adding to cart
+          attributes: item.attributes
+        }));
+      }
+
+      // Update the display
+      updateCartDisplay();
+      console.log('Cart updated from WooCommerce data:', cart);
+    } catch (error) {
+      console.error('Error processing WooCommerce cart data:', error);
+      // Use fallback data
+      loadCart();
+    } finally {
+      // Always make sure loading state is removed
+      cartCount.classList.remove('loading');
     }
-  ];
+  }
 
   // Toggle cart sidebar
   function toggleCart() {
@@ -1109,43 +1246,101 @@ document.addEventListener('DOMContentLoaded', function() {
             .join(' / ');
         }
 
-        cartItem.innerHTML = `
-          <div class="cart-item-image">
-            <img src="${item.image}" alt="${item.name}">
-          </div>
-          <div class="cart-item-content">
-            <a href="/product/${item.id}" class="cart-item-title">${item.name}</a>
-            <div class="cart-item-meta">${attributesHTML}</div>
-            <div class="cart-item-quantity">
-              <button class="quantity-btn decrease-qty" data-id="${item.id}">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-              </button>
-              <span class="quantity-value">${item.quantity}</span>
-              <button class="quantity-btn increase-qty" data-id="${item.id}">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-              </button>
-            </div>
-            <div class="cart-item-price">${formatPrice(item.price * item.quantity)}</div>
-          </div>
-          <button class="cart-item-remove" data-id="${item.id}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
+        // Create cart item structure
+        const cartItemImage = document.createElement('div');
+        cartItemImage.className = 'cart-item-image';
+
+        const img = document.createElement('img');
+        img.alt = item.name;
+        img.src = item.image;
+
+        // Add error handling for images
+        img.onerror = function() {
+          console.log('Image failed to load:', item.image);
+          // Replace with a fallback image
+          this.src = 'https://via.placeholder.com/80x80/cccccc/333333?text=No+Image';
+          this.onerror = null; // Prevent infinite loop if fallback also fails
+        };
+
+        cartItemImage.appendChild(img);
+        cartItem.appendChild(cartItemImage);
+
+        // Create content container
+        const cartItemContent = document.createElement('div');
+        cartItemContent.className = 'cart-item-content';
+
+        // Title
+        const title = document.createElement('a');
+        title.href = `/product/${item.id}`;
+        title.className = 'cart-item-title';
+        title.textContent = item.name;
+        cartItemContent.appendChild(title);
+
+        // Attributes
+        const meta = document.createElement('div');
+        meta.className = 'cart-item-meta';
+        meta.innerHTML = attributesHTML;
+        cartItemContent.appendChild(meta);
+
+        // Quantity controls
+        const quantityContainer = document.createElement('div');
+        quantityContainer.className = 'cart-item-quantity';
+
+        const decreaseBtn = document.createElement('button');
+        decreaseBtn.className = 'quantity-btn decrease-qty';
+        decreaseBtn.dataset.id = item.id;
+        decreaseBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
         `;
+        decreaseBtn.addEventListener('click', () => decreaseQuantity(item.id));
 
+        const quantityValue = document.createElement('span');
+        quantityValue.className = 'quantity-value';
+        quantityValue.textContent = item.quantity;
+
+        const increaseBtn = document.createElement('button');
+        increaseBtn.className = 'quantity-btn increase-qty';
+        increaseBtn.dataset.id = item.id;
+        increaseBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        `;
+        increaseBtn.addEventListener('click', () => increaseQuantity(item.id));
+
+        quantityContainer.appendChild(decreaseBtn);
+        quantityContainer.appendChild(quantityValue);
+        quantityContainer.appendChild(increaseBtn);
+        cartItemContent.appendChild(quantityContainer);
+
+        // Price
+        const price = document.createElement('div');
+        price.className = 'cart-item-price';
+        price.textContent = formatPrice(item.price * item.quantity);
+        cartItemContent.appendChild(price);
+
+        cartItem.appendChild(cartItemContent);
+
+        // Remove button
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'cart-item-remove';
+        removeBtn.dataset.id = item.id;
+        removeBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        `;
+        removeBtn.addEventListener('click', () => removeFromCart(item.id));
+
+        cartItem.appendChild(removeBtn);
+
+        // Add the cart item to the container
         cartItemsContainer.insertBefore(cartItem, cartEmptyState);
-
-        // Add event listeners to buttons
-        cartItem.querySelector('.decrease-qty').addEventListener('click', () => decreaseQuantity(item.id));
-        cartItem.querySelector('.increase-qty').addEventListener('click', () => increaseQuantity(item.id));
-        cartItem.querySelector('.cart-item-remove').addEventListener('click', () => removeFromCart(item.id));
+        console.log('Added cart item to display for product ID:', item.id);
       });
     }
 
@@ -1161,102 +1356,263 @@ document.addEventListener('DOMContentLoaded', function() {
     cart.total = cart.subtotal + cart.shipping;
   }
 
-  // Add item to cart
+  // Add item to cart using WooCommerce AJAX
   function addToCart(productId, quantity = 1) {
-    console.log('Adding to cart, product ID:', productId, 'quantity:', quantity);
+    console.log('Adding to cart via WooCommerce AJAX, product ID:', productId, 'quantity:', quantity);
 
-    // Find product
+    // Find product for notification purposes
     const product = products.find(p => p.id === productId);
-    if (!product) {
-      console.error('Product not found with ID:', productId);
+    let productName = 'Produkt';
+    if (product) {
+      productName = product.name;
+      console.log('Product found:', product);
+    }
+
+    // Show loading state
+    cartCount.classList.add('loading');
+
+    // Prepare form data for WooCommerce AJAX request
+    const formData = new FormData();
+    formData.append('product_id', productId);
+    formData.append('quantity', quantity);
+    formData.append('add-to-cart', productId);
+
+    // Use WooCommerce's add to cart AJAX endpoint
+    fetch('/wp-admin/admin-ajax.php?action=woocommerce_ajax_add_to_cart', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('WooCommerce add to cart response:', data);
+
+      // Remove loading state
+      cartCount.classList.remove('loading');
+
+      if (data.success) {
+        // Animate cart count
+        cartCount.classList.add('pulse');
+        setTimeout(() => {
+          cartCount.classList.remove('pulse');
+        }, 500);
+
+        // Show success notification
+        showNotification('Produkt hinzugefügt', `${productName} wurde deinem Warenkorb hinzugefügt.`);
+
+        // Refresh cart data
+        fetchWooCommerceCart();
+      } else {
+        // Show error notification
+        showNotification('Fehler', data.message || 'Das Produkt konnte nicht hinzugefügt werden.');
+      }
+    })
+    .catch(error => {
+      console.error('Error adding to cart:', error);
+
+      // Remove loading state
+      cartCount.classList.remove('loading');
+
+      // Show error notification
+      showNotification('Fehler', 'Das Produkt konnte nicht hinzugefügt werden. Bitte versuche es später erneut.');
+
+      // Fallback to local cart handling if AJAX fails
+      if (product) {
+        // Check if product already in cart
+        const existingItem = cart.items.find(item => item.id === productId);
+
+        if (existingItem) {
+          // Increase quantity
+          existingItem.quantity += quantity;
+          console.log('Increased quantity for existing item, new quantity:', existingItem.quantity);
+        } else {
+          // Add new item
+          const cartItem = {...product, quantity};
+          cart.items.push(cartItem);
+          console.log('Added new item to cart:', cartItem);
+        }
+
+        // Update totals and display
+        calculateTotals();
+        updateCartDisplay();
+
+        // Save cart to localStorage (for persistence)
+        saveCart();
+      }
+    });
+  }
+
+  // Remove item from cart using WooCommerce AJAX
+  function removeFromCart(productId) {
+    console.log('Removing item from cart, product ID:', productId);
+
+    // Find the cart item key (needed for WooCommerce)
+    const item = cart.items.find(item => item.id === productId);
+    if (!item || !item.key) {
+      console.log('Item not found or no key available, using fallback removal');
+      // Fallback to local removal
+      cart.items = cart.items.filter(item => item.id !== productId);
+      calculateTotals();
+      updateCartDisplay();
+      showNotification('Produkt entfernt', 'Das Produkt wurde aus deinem Warenkorb entfernt.');
+      saveCart();
       return;
     }
 
-    console.log('Product found:', product);
+    // Show loading state
+    cartCount.classList.add('loading');
 
-    // Check if product already in cart
-    const existingItem = cart.items.find(item => item.id === productId);
+    // Use WooCommerce's remove from cart AJAX endpoint
+    fetch('/wp-admin/admin-ajax.php?action=woocommerce_remove_from_cart', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `cart_item_key=${encodeURIComponent(item.key)}`
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('WooCommerce remove from cart response:', data);
 
-    if (existingItem) {
-      // Increase quantity
-      existingItem.quantity += quantity;
-      console.log('Increased quantity for existing item, new quantity:', existingItem.quantity);
-    } else {
-      // Add new item
-      const cartItem = {...product, quantity};
-      cart.items.push(cartItem);
-      console.log('Added new item to cart:', cartItem);
-    }
+      // Remove loading state
+      cartCount.classList.remove('loading');
 
-    // Update totals and display
-    calculateTotals();
-    updateCartDisplay();
+      if (data.success) {
+        // Show success notification
+        showNotification('Produkt entfernt', 'Das Produkt wurde aus deinem Warenkorb entfernt.');
 
-    // Animate cart count
-    cartCount.classList.add('pulse');
-    setTimeout(() => {
-      cartCount.classList.remove('pulse');
-    }, 500);
+        // Refresh cart data
+        fetchWooCommerceCart();
+      } else {
+        // Show error notification
+        showNotification('Fehler', data.message || 'Das Produkt konnte nicht entfernt werden.');
+      }
+    })
+    .catch(error => {
+      console.error('Error removing from cart:', error);
 
-    // Show notification
-    showNotification('Produkt hinzugefügt', `${product.name} wurde deinem Warenkorb hinzugefügt.`);
+      // Remove loading state
+      cartCount.classList.remove('loading');
 
-    // Save cart to localStorage (for persistence)
-    saveCart();
-    console.log('Current cart:', cart);
+      // Show error notification
+      showNotification('Fehler', 'Das Produkt konnte nicht entfernt werden. Bitte versuche es später erneut.');
+
+      // Fallback to local cart handling if AJAX fails
+      cart.items = cart.items.filter(item => item.id !== productId);
+      calculateTotals();
+      updateCartDisplay();
+      saveCart();
+    });
   }
 
-  // Remove item from cart
-  function removeFromCart(productId) {
-    // Remove the item
-    cart.items = cart.items.filter(item => item.id !== productId);
-
-    // Update totals and display
-    calculateTotals();
-    updateCartDisplay();
-
-    // Show notification
-    showNotification('Produkt entfernt', 'Das Produkt wurde aus deinem Warenkorb entfernt.');
-
-    // Save cart to localStorage
-    saveCart();
-  }
-
-  // Decrease item quantity
+  // Decrease item quantity using WooCommerce AJAX
   function decreaseQuantity(productId) {
+    console.log('Decreasing quantity for product ID:', productId);
+
     const item = cart.items.find(item => item.id === productId);
 
     if (item) {
       if (item.quantity > 1) {
-        item.quantity--;
+        // Update quantity via WooCommerce AJAX
+        updateCartItemQuantity(productId, item.quantity - 1);
       } else {
         // Remove item if quantity is 1
-        return removeFromCart(productId);
+        removeFromCart(productId);
       }
-
-      // Update totals and display
-      calculateTotals();
-      updateCartDisplay();
-
-      // Save cart to localStorage
-      saveCart();
     }
   }
 
-  // Increase item quantity
+  // Increase item quantity using WooCommerce AJAX
   function increaseQuantity(productId) {
+    console.log('Increasing quantity for product ID:', productId);
+
     const item = cart.items.find(item => item.id === productId);
 
     if (item) {
-      item.quantity++;
-
-      // Update totals and display
-      calculateTotals();
-      updateCartDisplay();
-
-      // Save cart to localStorage
-      saveCart();
+      // Update quantity via WooCommerce AJAX
+      updateCartItemQuantity(productId, item.quantity + 1);
     }
+  }
+
+  // Update cart item quantity using WooCommerce AJAX
+  function updateCartItemQuantity(productId, newQuantity) {
+    console.log('Updating quantity for product ID:', productId, 'to', newQuantity);
+
+    // Find the cart item
+    const item = cart.items.find(item => item.id === productId);
+    if (!item || !item.key) {
+      console.log('Item not found or no key available, using fallback quantity update');
+      // Fallback to local update
+      if (item) {
+        item.quantity = newQuantity;
+        calculateTotals();
+        updateCartDisplay();
+        saveCart();
+      }
+      return;
+    }
+
+    // Show loading state
+    cartCount.classList.add('loading');
+
+    // Use WooCommerce's update cart AJAX endpoint
+    const formData = new FormData();
+    formData.append('cart[' + item.key + '][qty]', newQuantity);
+    formData.append('update_cart', 'Update Cart');
+
+    fetch('/wp-admin/admin-ajax.php?action=woocommerce_update_cart', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('WooCommerce update cart response:', data);
+
+      // Remove loading state
+      cartCount.classList.remove('loading');
+
+      if (data.success) {
+        // Refresh cart data
+        fetchWooCommerceCart();
+      } else {
+        // Show error notification
+        showNotification('Fehler', data.message || 'Die Menge konnte nicht aktualisiert werden.');
+      }
+    })
+    .catch(error => {
+      console.error('Error updating cart quantity:', error);
+
+      // Remove loading state
+      cartCount.classList.remove('loading');
+
+      // Show error notification
+      showNotification('Fehler', 'Die Menge konnte nicht aktualisiert werden. Bitte versuche es später erneut.');
+
+      // Fallback to local cart handling if AJAX fails
+      if (item) {
+        item.quantity = newQuantity;
+        calculateTotals();
+        updateCartDisplay();
+        saveCart();
+      }
+    });
   }
 
   // Save cart to localStorage
@@ -1283,9 +1639,30 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Cart loaded and displayed:', cart);
       } else {
         console.log('No saved cart found in localStorage');
+        // Initialize empty cart
+        cart = {
+          items: [],
+          subtotal: 0,
+          shipping: 0,
+          total: 0
+        };
+        updateCartDisplay();
       }
     } catch (e) {
       console.error('Error loading cart from localStorage:', e);
+      // Initialize empty cart on error
+      cart = {
+        items: [],
+        subtotal: 0,
+        shipping: 0,
+        total: 0
+      };
+      updateCartDisplay();
+    } finally {
+      // Always make sure loading state is removed
+      if (cartCount) {
+        cartCount.classList.remove('loading');
+      }
     }
   }
 
@@ -1425,23 +1802,75 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Initialize the cart
   console.log('Initializing cart...');
-  loadCart();
 
-  // For demo purposes: Add some items to the cart initially if it's empty
-  if (cart.items.length === 0) {
-    console.log('Cart is empty, adding demo items');
-    // Add demo items to cart for testing
-    addToCart(1);
-    addToCart(3);
-  } else {
-    console.log('Cart already has items:', cart.items.length);
+  // Add a loading spinner CSS to the cart count
+  const loadingStyle = document.createElement('style');
+  loadingStyle.textContent = `
+    .cart-count.loading {
+      position: relative;
+      background: rgba(255, 102, 0, 0.3);
+      color: transparent;
+    }
+
+    .cart-count.loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      margin: -5px 0 0 -5px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: cart-loading-spin 0.8s linear infinite;
+    }
+
+    @keyframes cart-loading-spin {
+      to { transform: rotate(360deg); }
+    }
+  `;
+  document.head.appendChild(loadingStyle);
+
+  // Add loading class to cart count while fetching
+  if (cartCount) {
+    cartCount.classList.add('loading');
+
+    // Set a timeout to remove the loading state if it gets stuck
+    setTimeout(() => {
+      if (cartCount.classList.contains('loading')) {
+        console.log('Loading state timeout reached, removing loading state');
+        cartCount.classList.remove('loading');
+      }
+    }, 5000); // 5 second timeout
   }
+
+  // First try to fetch cart data from WooCommerce
+  fetchWooCommerceCart();
 
   // Dynamic cart count update (for WooCommerce AJAX add-to-cart)
   // This listens for WooCommerce events when items are added to cart
   document.addEventListener('added_to_cart', function(e, fragments, cart_hash, button) {
-    // Reload cart from localStorage or make an AJAX request to get cart data
-    loadCart();
+    console.log('WooCommerce added_to_cart event detected');
+    // Fetch the updated cart data from WooCommerce
+    fetchWooCommerceCart();
+  });
+
+  // Also listen for other WooCommerce cart events
+  document.addEventListener('wc_fragments_refreshed', function() {
+    console.log('WooCommerce fragments refreshed event detected');
+    fetchWooCommerceCart();
+  });
+
+  document.addEventListener('wc_fragments_loaded', function() {
+    console.log('WooCommerce fragments loaded event detected');
+    fetchWooCommerceCart();
+  });
+
+  // Listen for cart updates from other parts of the site
+  document.addEventListener('wc_cart_button_updated', function() {
+    console.log('WooCommerce cart button updated event detected');
+    fetchWooCommerceCart();
   });
 
   // Function to update cart from WooCommerce data
@@ -1487,27 +1916,35 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   }
 
-  // Add demo products to the page (for testing only)
+  // Add products to the page (using WooCommerce products if available)
   function addDemoProducts() {
-    console.log('Adding demo products to page');
-    const demoProductsSection = document.createElement('div');
-    demoProductsSection.className = 'container';
-    demoProductsSection.style.padding = '8rem 0 2rem';
+    console.log('Adding products to page');
+
+    // If no products are available yet, fetch them from WooCommerce
+    if (products.length === 0) {
+      console.log('No products available yet, fetching from WooCommerce...');
+      fetchWooCommerceProducts();
+      return;
+    }
+
+    const productsSection = document.createElement('div');
+    productsSection.className = 'container';
+    productsSection.style.padding = '8rem 0 2rem';
 
     // Create heading
     const heading = document.createElement('h2');
-    heading.textContent = 'Demo Produkte';
+    heading.textContent = 'Unsere Produkte';
     heading.style.color = 'var(--light)';
     heading.style.marginBottom = '2rem';
     heading.style.textAlign = 'center';
-    demoProductsSection.appendChild(heading);
+    productsSection.appendChild(heading);
 
     // Create product grid
     const productGrid = document.createElement('div');
     productGrid.style.display = 'grid';
     productGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(250px, 1fr))';
     productGrid.style.gap = '2rem';
-    demoProductsSection.appendChild(productGrid);
+    productsSection.appendChild(productGrid);
 
     // Add each product
     products.forEach(product => {
@@ -1528,11 +1965,21 @@ document.addEventListener('DOMContentLoaded', function() {
       imageContainer.style.overflow = 'hidden';
 
       const image = document.createElement('img');
-      image.src = product.image;
       image.alt = product.name;
       image.style.width = '100%';
       image.style.height = '100%';
       image.style.objectFit = 'cover';
+
+      // Add error handling for product images
+      image.onerror = function() {
+        console.log('Product image failed to load:', product.image);
+        // Replace with a fallback image
+        this.src = 'https://via.placeholder.com/250x250/cccccc/333333?text=No+Image';
+        this.onerror = null; // Prevent infinite loop if fallback also fails
+      };
+
+      // Set the source after adding the error handler
+      image.src = product.image;
 
       imageContainer.appendChild(image);
       productCard.appendChild(imageContainer);
@@ -1587,15 +2034,110 @@ document.addEventListener('DOMContentLoaded', function() {
       productGrid.appendChild(productCard);
     });
 
-    console.log('Demo products section created with', products.length, 'products');
+    console.log('Products section created with', products.length, 'products');
 
-    // Add the demo products section before the footer
+    // Add the products section before the footer
     const footer = document.querySelector('footer');
     if (footer) {
-      document.body.insertBefore(demoProductsSection, footer);
+      document.body.insertBefore(productsSection, footer);
     } else {
-      document.body.appendChild(demoProductsSection);
+      document.body.appendChild(productsSection);
     }
+  }
+
+  // Function to fetch WooCommerce products
+  function fetchWooCommerceProducts() {
+    console.log('Fetching WooCommerce products...');
+
+    // Add loading indicator
+    if (cartCount) {
+      cartCount.classList.add('loading');
+    }
+
+    // Use the WooCommerce REST API endpoint
+    fetch('/wp-json/wc/v3/products?per_page=12', {
+      method: 'GET',
+      credentials: 'same-origin'
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('WooCommerce products received:', data);
+
+      // Map WooCommerce products to our format
+      products = data.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: parseFloat(product.price || 0),
+        image: product.images && product.images.length > 0 ? product.images[0].src : '',
+        quantity: 1,
+        attributes: {}
+      }));
+
+      // Remove loading indicator
+      if (cartCount) {
+        cartCount.classList.remove('loading');
+      }
+
+      // Now add the products to the page
+      addDemoProducts();
+    })
+    .catch(error => {
+      console.error('Error fetching WooCommerce products:', error);
+
+      // Remove loading indicator on error
+      if (cartCount) {
+        cartCount.classList.remove('loading');
+      }
+
+      // Fallback to demo products if WooCommerce API fails
+      products = [
+        {
+          id: 1,
+          name: "Premium T-Shirt",
+          price: 29.99,
+          image: "https://via.placeholder.com/200x200/333333/ffffff?text=T-Shirt",
+          quantity: 1,
+          attributes: {
+            size: "M",
+            color: "Schwarz"
+          }
+        },
+        {
+          id: 2,
+          name: "Hoodie mit Logo",
+          price: 49.99,
+          image: "https://via.placeholder.com/200x200/444444/ffffff?text=Hoodie",
+          quantity: 1,
+          attributes: {
+            size: "L",
+            color: "Grau"
+          }
+        },
+        {
+          id: 3,
+          name: "Kaffeetasse",
+          price: 14.99,
+          image: "https://via.placeholder.com/200x200/555555/ffffff?text=Tasse",
+          quantity: 1,
+          attributes: {}
+        }
+      ];
+
+      addDemoProducts();
+    });
+
+    // Set a safety timeout to remove loading state if it gets stuck
+    setTimeout(() => {
+      if (cartCount && cartCount.classList.contains('loading')) {
+        console.log('Product loading timeout reached, removing loading state');
+        cartCount.classList.remove('loading');
+      }
+    }, 8000); // 8 second timeout
   }
 
   // Show demo products for testing
