@@ -1,7 +1,7 @@
 <?php
 /**
  * Alfredo Media Header Template with Functioning Cart
- * 
+ *
  * This template includes a header with a working cart sidebar
  * that properly integrates with WooCommerce's AJAX functions.
  */
@@ -250,6 +250,35 @@ header {
   right: 0;
 }
 
+.cart-sidebar.active .cart-header,
+.cart-sidebar.active .cart-body,
+.cart-sidebar.active .cart-footer {
+  animation: slideInRight 0.5s ease forwards;
+}
+
+.cart-sidebar.active .cart-header {
+  animation-delay: 0.1s;
+}
+
+.cart-sidebar.active .cart-body {
+  animation-delay: 0.2s;
+}
+
+.cart-sidebar.active .cart-footer {
+  animation-delay: 0.3s;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .cart-overlay {
   position: fixed;
   top: 0;
@@ -320,6 +349,7 @@ header {
   flex: 1;
   overflow-y: auto;
   padding: 1.5rem;
+  position: relative;
 }
 
 .cart-item {
@@ -329,6 +359,7 @@ header {
   margin-bottom: 1.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   animation: fadeIn 0.3s ease;
+  position: relative;
 }
 
 @keyframes fadeIn {
@@ -349,6 +380,12 @@ header {
   overflow: hidden;
   background: rgba(255, 255, 255, 0.05);
   flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.cart-item:hover .cart-item-image {
+  transform: translateY(-3px);
 }
 
 .cart-item-image img {
@@ -369,6 +406,7 @@ header {
   margin-bottom: 0.25rem;
   text-decoration: none;
   transition: color 0.3s ease;
+  line-height: 1.3;
 }
 
 .cart-item-title:hover {
@@ -385,10 +423,13 @@ header {
   font-weight: 600;
   color: var(--accent);
   margin-top: auto;
+  font-size: 1.1rem;
 }
 
 .cart-item-remove {
-  align-self: flex-start;
+  position: absolute;
+  top: 0;
+  right: 0;
   background: transparent;
   border: none;
   color: var(--gray-500);
@@ -400,11 +441,17 @@ header {
   cursor: pointer;
   border-radius: 50%;
   transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.cart-item:hover .cart-item-remove {
+  opacity: 1;
 }
 
 .cart-item-remove:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #ef4444;
+  transform: rotate(90deg);
 }
 
 .cart-item-remove svg {
@@ -417,7 +464,11 @@ header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  width: fit-content;
 }
 
 .quantity-btn {
@@ -432,10 +483,12 @@ header {
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-weight: bold;
 }
 
 .quantity-btn:hover {
   background: var(--primary);
+  transform: translateY(-2px);
 }
 
 .quantity-btn:active {
@@ -641,6 +694,168 @@ header {
   color: var(--light);
 }
 
+/* WooCommerce Mini Cart Styling */
+.woocommerce-mini-cart-wrapper {
+  width: 100%;
+}
+
+.woocommerce-mini-cart {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.woocommerce-mini-cart li {
+  position: relative;
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  animation: fadeIn 0.3s ease;
+  transition: all 0.3s ease;
+  padding: 0.75rem 0.75rem 1.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.woocommerce-mini-cart li:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+.woocommerce-mini-cart li:last-child {
+  margin-bottom: 0;
+}
+
+.woocommerce-mini-cart li img {
+  width: 80px !important;
+  height: 80px !important;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.woocommerce-mini-cart li:hover img {
+  transform: translateY(-3px);
+}
+
+.woocommerce-mini-cart-item > a:not(.remove) {
+  flex: 1;
+  font-weight: 600;
+  color: var(--light);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  line-height: 1.3;
+  padding-right: 25px; /* Space for remove button */
+}
+
+.woocommerce-mini-cart-item > a:not(.remove):hover {
+  color: var(--primary);
+}
+
+.woocommerce-mini-cart-item .quantity {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.woocommerce-mini-cart-item .remove_from_cart_button {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--gray-500) !important;
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  border-radius: 50% !important;
+  transition: all 0.3s ease !important;
+  opacity: 0.7 !important;
+  text-decoration: none !important;
+  font-size: 1.25rem !important;
+  line-height: 1 !important;
+}
+
+.woocommerce-mini-cart-item:hover .remove_from_cart_button {
+  opacity: 1 !important;
+}
+
+.woocommerce-mini-cart-item .remove_from_cart_button:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ef4444 !important;
+  transform: rotate(90deg) !important;
+}
+
+.woocommerce-mini-cart__total {
+  display: flex;
+  justify-content: space-between;
+  margin: 1.5rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+  color: var(--light);
+}
+
+.woocommerce-mini-cart__total .amount {
+  color: var(--accent);
+}
+
+.woocommerce-mini-cart__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.woocommerce-mini-cart__buttons .button {
+  display: inline-block;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 1rem;
+}
+
+.woocommerce-mini-cart__buttons .button:first-child {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--light);
+}
+
+.woocommerce-mini-cart__buttons .button:first-child:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-3px);
+}
+
+.woocommerce-mini-cart__buttons .button.checkout {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 102, 0, 0.2);
+}
+
+.woocommerce-mini-cart__buttons .button.checkout:hover {
+  background: var(--accent-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(255, 102, 0, 0.3);
+}
+
+.woocommerce-mini-cart__empty-message {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--gray-400);
+}
+
 /* Scrollbar styling */
 .cart-body::-webkit-scrollbar {
   width: 6px;
@@ -670,6 +885,26 @@ header {
   animation: spin 0.8s linear infinite;
 }
 
+.cart-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(26, 26, 26, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  backdrop-filter: blur(2px);
+}
+
+.cart-loading .loading-spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-width: 3px;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -687,7 +922,7 @@ header {
   .c-mobile-toggle {
     display: block;
   }
-  
+
   .nav-list {
     position: fixed;
     top: 0;
@@ -711,19 +946,92 @@ header {
     width: 100%;
     right: -100%;
   }
+
+  .cart-body {
+    padding: 1rem;
+  }
+
+  .woocommerce-mini-cart li {
+    padding: 0.75rem 0.75rem 1.25rem 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .woocommerce-mini-cart li img {
+    width: 70px !important;
+    height: 70px !important;
+  }
+
+  .cart-footer {
+    padding: 1.25rem;
+  }
+
+  .cart-totals-row {
+    margin-bottom: 0.5rem;
+  }
+
+  .cart-actions {
+    gap: 0.75rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.25rem;
+  }
 }
 
 @media (max-width: 576px) {
   .header-icons {
     gap: 1rem;
   }
-  
+
   .cart-count {
     top: -5px;
     right: -5px;
     width: 16px;
     height: 16px;
     font-size: 0.7rem;
+  }
+
+  .cart-header {
+    padding: 1rem;
+  }
+
+  .cart-title {
+    font-size: 1.1rem;
+  }
+
+  .cart-body {
+    padding: 1rem 0.75rem;
+  }
+
+  .woocommerce-mini-cart li {
+    padding: 0.75rem 0.75rem 1rem 0.75rem;
+    margin-bottom: 1rem;
+    gap: 0.75rem;
+  }
+
+  .woocommerce-mini-cart li img {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .woocommerce-mini-cart-item > a:not(.remove) {
+    font-size: 0.95rem;
+  }
+
+  .woocommerce-mini-cart-item .quantity {
+    font-size: 0.85rem;
+  }
+
+  .cart-footer {
+    padding: 1rem;
+  }
+
+  .cart-totals {
+    margin-bottom: 1rem;
+  }
+
+  .cart-totals-row:last-child {
+    font-size: 1rem;
   }
 }
 </style>
@@ -803,7 +1111,7 @@ header {
   <div class="cart-body" id="cart-items">
     <!-- WooCommerce Mini Cart -->
     <div class="woocommerce-mini-cart-wrapper">
-      <?php 
+      <?php
       if (function_exists('woocommerce_mini_cart')) {
         woocommerce_mini_cart();
       } else {
@@ -885,59 +1193,65 @@ jQuery(document).ready(function($) {
   const toastTitle = document.getElementById('toast-title');
   const toastMessage = document.getElementById('toast-message');
   const toastClose = document.getElementById('toast-close');
-  
+
   // Toggle cart sidebar
   function toggleCart() {
     cartSidebar.classList.toggle('active');
     cartOverlay.classList.toggle('active');
-    
+
     if (cartSidebar.classList.contains('active')) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
   }
-  
+
   // Show notification toast
   function showNotification(title, message, duration = 3000) {
     toastTitle.textContent = title;
     toastMessage.textContent = message;
     toast.classList.add('show');
-    
+
     const timeout = setTimeout(() => {
       hideNotification();
     }, duration);
-    
+
     toast.dataset.timeout = timeout;
   }
-  
+
   // Hide notification toast
   function hideNotification() {
     toast.classList.remove('show');
-    
+
     if (toast.dataset.timeout) {
       clearTimeout(parseInt(toast.dataset.timeout));
       toast.dataset.timeout = null;
     }
   }
-  
+
   // Update cart via AJAX
   function refreshCart() {
+    // Add loading indicator
+    $('#cart-items').append('<div class="cart-loading"><div class="loading-spinner"></div></div>');
+
     $.ajax({
       url: wc_add_to_cart_params ? wc_add_to_cart_params.wc_ajax_url.toString().replace('%%endpoint%%', 'get_refreshed_fragments') : '/?wc-ajax=get_refreshed_fragments',
       type: 'POST',
       success: function(data) {
+        // Remove loading indicator
+        $('.cart-loading').remove();
+
         if (data && data.fragments) {
           // Replace fragments
           $.each(data.fragments, function(key, value) {
             $(key).replaceWith(value);
           });
-          
+
           // Update cart count
           const newCount = data.cart_hash ? (data.fragments['.cart-count'] ? $(data.fragments['.cart-count']).text() : $('.woocommerce-mini-cart .quantity').length) : '0';
           $('.cart-count').text(newCount);
           $('#cart-items-count').text(newCount);
-          
+
           // Show/hide empty cart message
           if (newCount === '0') {
             $('#cart-footer').hide();
@@ -946,38 +1260,55 @@ jQuery(document).ready(function($) {
             $('#cart-footer').show();
             $('.cart-empty').hide();
           }
-          
+
           // Update cart totals if available
           if (data.cart_hash) {
             const subtotal = $('.woocommerce-mini-cart__total .amount').text();
             $('#cart-subtotal').text(subtotal);
             $('#cart-total').text(subtotal);
           }
-          
+
+          // Add hover effects to mini cart items
+          $('.woocommerce-mini-cart-item').hover(
+            function() {
+              $(this).find('img').css('transform', 'translateY(-3px)');
+              $(this).find('.remove_from_cart_button').css('opacity', '1');
+            },
+            function() {
+              $(this).find('img').css('transform', 'translateY(0)');
+              $(this).find('.remove_from_cart_button').css('opacity', '0.7');
+            }
+          );
+
           // Trigger event for other scripts
           $(document.body).trigger('wc_fragments_refreshed');
         }
+      },
+      error: function() {
+        // Remove loading indicator
+        $('.cart-loading').remove();
+        showNotification('Fehler', 'Es gab ein Problem beim Aktualisieren des Warenkorbs.');
       }
     });
   }
-  
+
   // Handle add to cart events
   $(document.body).on('added_to_cart', function(event, fragments, cart_hash, $button) {
     // Show success notification
     showNotification('Produkt hinzugefügt', 'Das Produkt wurde deinem Warenkorb hinzugefügt.');
-    
+
     // Update cart count with animation
     cartCount.classList.add('pulse');
     setTimeout(() => {
       cartCount.classList.remove('pulse');
     }, 500);
-    
+
     // Open cart sidebar if it's not already open
     if (!cartSidebar.classList.contains('active')) {
       toggleCart();
     }
   });
-  
+
   // Remove from cart
   $(document).on('click', '.woocommerce-mini-cart .remove_from_cart_button', function(e) {
     // Default WooCommerce functionality will handle the AJAX
@@ -988,29 +1319,29 @@ jQuery(document).ready(function($) {
       $(document.body).off('removed_from_cart');
     });
   });
-  
+
   // Event listeners
   if (cartToggle) cartToggle.addEventListener('click', toggleCart);
   if (cartClose) cartClose.addEventListener('click', toggleCart);
   if (cartOverlay) cartOverlay.addEventListener('click', toggleCart);
   if (toastClose) toastClose.addEventListener('click', hideNotification);
-  
+
   // Close cart with Escape key
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && cartSidebar.classList.contains('active')) {
       toggleCart();
     }
   });
-  
+
   // Mobile menu functionality
   const mobileToggle = document.querySelector('.c-mobile-toggle');
   const mobileOverlay = document.querySelector('.mobile-overlay');
   const navList = document.querySelector('.nav-list');
-  
+
   function toggleMobileMenu() {
     navList.classList.toggle('active');
     mobileOverlay.classList.toggle('active');
-    
+
     if (navList.classList.contains('active')) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -1020,14 +1351,14 @@ jQuery(document).ready(function($) {
       }
     }
   }
-  
+
   if (mobileToggle) mobileToggle.addEventListener('click', toggleMobileMenu);
   if (mobileOverlay) mobileOverlay.addEventListener('click', function() {
     if (navList.classList.contains('active')) {
       toggleMobileMenu();
     }
   });
-  
+
   // Close mobile menu when clicking nav links
   document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', function() {
@@ -1036,7 +1367,7 @@ jQuery(document).ready(function($) {
       }
     });
   });
-  
+
   // Header scroll effect
   function handleHeaderScroll() {
     const header = document.getElementById('header');
@@ -1046,12 +1377,12 @@ jQuery(document).ready(function($) {
       header.classList.remove('header-scrolled');
     }
   }
-  
+
   window.addEventListener('scroll', handleHeaderScroll);
-  
+
   // Initialize the header state on page load
   handleHeaderScroll();
-  
+
   // Refresh fragments on page load
   $(document).ready(function() {
     refreshCart();
