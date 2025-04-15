@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Unsere Merch-Kollektion - Alfredo Media</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <style>
       :root {
@@ -464,10 +458,90 @@
         font-size: 0.875rem;
       }
 
+      /* WooCommerce Specific Styles */
+      /* Hide default WooCommerce elements that we don't want */
+      .woocommerce ul.products li.product {
+        background: transparent;
+        border: none;
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+      }
+
+      .woocommerce ul.products {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        margin: 3rem 0;
+        list-style: none;
+        padding: 0;
+        width: 100%;
+      }
+
+      .woocommerce ul.products li.product .woocommerce-loop-product__title,
+      .woocommerce ul.products li.product .price {
+        display: none;
+      }
+
+      .woocommerce ul.products li.product .button {
+        display: none;
+      }
+
+      /* Custom Product Card Wrapper */
+      .custom-product-card {
+        width: 100%;
+        background: rgba(26, 26, 26, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 1rem;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .custom-product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .custom-product-image {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+      }
+
+      .custom-product-info {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .custom-product-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: var(--light);
+      }
+
+      .custom-product-desc {
+        color: var(--gray-300);
+        font-size: 0.9375rem;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+      }
+
+      .custom-product-price {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary-light);
+        margin-bottom: 1rem;
+        display: block;
+      }
+
       /* Responsive Styles */
       @media (max-width: 992px) {
-        .merch-grid {
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        .woocommerce ul.products {
+          grid-template-columns: repeat(2, 1fr);
         }
 
         .footer-grid {
@@ -508,59 +582,14 @@
           justify-content: center;
         }
       }
+
+      @media (max-width: 576px) {
+        .woocommerce ul.products {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
-  </head>
-  <body>
-    <!-- Header -->
-    <header id="header">
-      <div class="container flex justify-between items-center">
-        <a href="https://alfredomedia.nangkil.com" class="logo">
-          <img
-            src="https://alfredomedia.nangkil.com/wp-content/uploads/2025/04/sdfdffdgfg-Photoroom.png"
-            alt="Alfredo Media Logo"
-            class="logo-icon"
-          />
-          Alfredo Media
-        </a>
-        <nav>
-          <button class="mobile-toggle">☰</button>
-          <ul class="nav-list">
-            <li>
-              <a href="https://alfredomedia.nangkil.com/" class="nav-link"
-                >HOME</a
-              >
-            </li>
-            <li>
-              <a href="https://alfredomedia.nangkil.com/about/" class="nav-link"
-                >ÜBER UNS</a
-              >
-            </li>
-            <li>
-              <a href="https://alfredomedia.nangkil.com/pricing/" class="nav-link"
-                >DIENSTLEISTUNGEN</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://alfredomedia.nangkil.com/portfolio/"
-                class="nav-link"
-                >PORTFOLIO</a
-              >
-            </li>
-            <li>
-              <a href="https://alfredomedia.nangkil.com/merch/" class="nav-link"
-                >MERCH</a
-              >
-            </li>
-            <li>
-              <a href="https://alfredomedia.nangkil.com/contact/" class="nav-link"
-                >KONTAKT</a
-              >
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+
 
     <!-- Mobile Menu Overlay -->
     <div class="mobile-overlay"></div>
@@ -583,156 +612,67 @@
           </p>
         </div>
 
-        <!-- Merch Grid -->
-        <div class="merch-grid">
-          <!-- Merch Item 1 -->
-          <div class="merch-card">
-            <img
-              src="https://pixabay.com/get/g1f28980f62c260f5bc41025a3aae958b63d3bd913b086abee406f74534f979881d3629faee736dd097f2dc909c152586_1280.jpg"
-              alt="Alfredo Media T-Shirt"
-              class="merch-image"
-            />
-            <div class="merch-info">
-              <h3 class="merch-title">Alfredo Media T-Shirt</h3>
-              <p class="merch-desc">
-                Premium T-Shirt mit unserem Signature-Design für jeden Anlass.
-              </p>
-              <span class="merch-price">29,99 €</span>
-              <a href="#" class="btn btn-primary">IN DEN WARENKORB</a>
-            </div>
-          </div>
+        <!-- WooCommerce Products -->
+        <div class="woocommerce-products-wrapper">
+          <?php
+          // Remove default WooCommerce hooks
+          remove_action('woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10);
+          remove_action('woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5);
+          remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_show_product_loop_sale_flash', 10);
+          remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10);
+          remove_action('woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10);
+          remove_action('woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_rating', 5);
+          remove_action('woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10);
+          remove_action('woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10);
 
-          <!-- Merch Item 2 -->
-          <div class="merch-card">
-            <img
-              src="https://pixabay.com/get/g94a85cfc681353e2053aacd25d6e800f3a9aaa4147be62a3d1530f23920ecd5c2ce9058dc26ca072ba465e9708a2a793_1280.jpg"
-              alt="Alfredo Media Hoodie"
-              class="merch-image"
-            />
-            <div class="merch-info">
-              <h3 class="merch-title">Alfredo Media Hoodie</h3>
-              <p class="merch-desc">
-                Gemütlicher Hoodie mit Alfredo Media Logo für kühlere Tage.
-              </p>
-              <span class="merch-price">49,99 €</span>
-              <a href="#" class="btn btn-primary">IN DEN WARENKORB</a>
-            </div>
-          </div>
+          // Add our custom product display
+          add_action('woocommerce_before_shop_loop_item', 'custom_product_wrapper_open', 10);
+          add_action('woocommerce_after_shop_loop_item', 'custom_product_wrapper_close', 10);
 
-          <!-- Merch Item 3 -->
-          <div class="merch-card">
-            <img
-              src="https://pixabay.com/get/gbe3cc08e4d4387c7f48c394c63cc0fe7dddf44bf9789bf16ee3b494da568e992c367f514a319f63985793a11c395c787_1280.jpg"
-              alt="Alfredo Media Cap"
-              class="merch-image"
-            />
-            <div class="merch-info">
-              <h3 class="merch-title">Alfredo Media Cap</h3>
-              <p class="merch-desc">
-                Stilvolle Cap mit unserem Logo, perfekt für jeden Tag.
-              </p>
-              <span class="merch-price">19,99 €</span>
-              <a href="#" class="btn btn-primary">IN DEN WARENKORB</a>
-            </div>
-          </div>
+          function custom_product_wrapper_open() {
+            global $product;
+            echo '<div class="custom-product-card">';
+            echo '<a href="' . get_permalink($product->get_id()) . '">';
+            echo '<img src="' . get_the_post_thumbnail_url($product->get_id(), 'large') . '" alt="' . $product->get_name() . '" class="custom-product-image">';
+            echo '</a>';
+            echo '<div class="custom-product-info">';
+            echo '<h3 class="custom-product-title"><a href="' . get_permalink($product->get_id()) . '">' . $product->get_name() . '</a></h3>';
+            echo '<p class="custom-product-desc">' . wp_trim_words($product->get_short_description(), 15) . '</p>';
+            echo '<span class="custom-product-price">' . $product->get_price_html() . '</span>';
+            echo '<a href="' . $product->add_to_cart_url() . '" class="btn btn-primary add_to_cart_button">IN DEN WARENKORB</a>';
+            echo '</div>';
+          }
+          echo do_shortcode('[products limit="12" columns="3" orderby="date" order="DESC"]');
+          function custom_product_wrapper_close() {
+            echo '</div>';
+          }
+move_action('woocommerce_before_shop_loop_item', 'custom_product_wrapper_open', 10);
+          // Display productsve_action('woocommerce_after_shop_loop_item', 'custom_product_wrapper_close', 10);
+          echo do_shortcode('[products limit="12" columns="3" orderby="date" order="DESC"]');          ?>
+
+          // Remove our custom hooks after use
+          remove_action('woocommerce_before_shop_loop_item', 'custom_product_wrapper_open', 10);
+          remove_action('woocommerce_after_shop_loop_item', 'custom_product_wrapper_close', 10);class="cta-section">
+          ?>
         </div>
-
+t unserer hochwertigen Merch-Kollektion werden Sie Teil der
         <!-- CTA Section -->
         <div class="cta-section">
-          <h2 class="cta-title">Zeigen Sie Ihre Unterstützung</h2>
+          <h2 class="cta-title">Zeigen Sie Ihre Unterstützung</h2> href="<?php echo wc_get_page_permalink('shop'); ?>" class="btn btn-accent">ALLE PRODUKTE ANSEHEN</a>
           <p>
-            Mit unserer hochwertigen Merch-Kollektion werden Sie Teil der
+            Mit unserer hochwertigen Merch-Kollektion werden Sie Teil der      </div>
             Alfredo Media Familie.
           </p>
-          <a href="#" class="btn btn-accent">ALLE PRODUKTE ANSEHEN</a>
+          <a href="<?php echo wc_get_page_permalink('shop'); ?>" class="btn btn-accent">ALLE PRODUKTE ANSEHEN</a>
         </div>
       </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="footer-grid">
-          <div>
-            <div class="footer-brand">
-              <a href="home.html" class="logo">
-                <img
-                  src="https://cdn.pixabay.com/photo/2017/02/18/19/20/logo-2078018_960_720.png"
-                  alt="Alfredo Media Logo"
-                  class="logo-icon"
-                />
-              </a>
-            </div>
-            <p class="footer-brand-desc">
-              Alfredo Media ist Ihr Partner für die digitale Transformation und
-              bietet innovative Lösungen, die Ihrem Unternehmen zum Erfolg
-              verhelfen.
-            </p>
-            <div class="footer-social">
-              <a href="#" class="social-icon"
-                ><img src="https://pixabay.com/get/g19ae54663ccbb22bd65c7cd09901d6868b59fd8a483ce1e9ab42f06068fcc7dafc9b0722b9d18fef2b2cef90ec0bf13d_640.png" alt="Facebook"
-              /></a>
-              <a href="#" class="social-icon"
-                ><img src="https://pixabay.com/get/g786f2e790d9b0254c93490f2f61dc20da8c5728e3f9decb2ecd7789e0f033279ae39f06a632e579af919ac41863e940b_640.png" alt="Twitter"
-              /></a>
-              <a href="#" class="social-icon"
-                ><img src="https://pixabay.com/get/gd32e3c8b47896509a02deea80ae8e2e0fee5cfb6e63cb04a64c9efee645ac033453bc1c81adb8ad8d45aab189ba84b3e_640.png" alt="LinkedIn"
-              /></a>
-            </div>
-          </div>
-          <div>
-            <h3 class="footer-heading">Schnelllinks</h3>
-            <ul class="footer-links">
-              <li class="footer-link"><a href="home.html">HOME</a></li>
-              <li class="footer-link"><a href="team.html">ÜBER UNS</a></li>
-              <li class="footer-link">
-                <a href="3-finger-plan.html">DIENSTLEISTUNGEN</a>
-              </li>
-              <li class="footer-link">
-                <a href="portfolio.html">PORTFOLIO</a>
-              </li>
-              <li class="footer-link">
-                <a href="home.html#contact">KONTAKT</a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="footer-heading">Dienstleistungen</h3>
-            <ul class="footer-links">
-              <li class="footer-link"><a href="#">Webentwicklung</a></li>
-              <li class="footer-link"><a href="#">Digitales Marketing</a></li>
-              <li class="footer-link"><a href="#">E-Commerce Lösungen</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="footer-heading">Kontakt</h3>
-            <ul class="footer-links">
-              <li class="footer-link">
-                <a href="#">Email: info@alfredomedia.com</a>
-              </li>
-              <li class="footer-link">
-                <a href="#">Telefon: +123 456 7890</a>
-              </li>
-              <li class="footer-link">
-                <a href="#">Adresse: 123 Digital Street, Tech City</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <p>
-            &copy; 2020 Alfredo Media | <a href="#">Impressum</a> |
-            <a href="#">Datenschutz</a> | <a href="#">Haftungsausschluss</a>
-          </p>
-        </div>
-      </div>
-    </footer>
-
-    <!-- Scripts -->
+    </section>oll", function () {
+ader");
+    <!-- Scripts -->ow.scrollY > 50) {
     <script>
-      // Scroll event to change header background
-      window.addEventListener("scroll", function () {
-        const header = document.getElementById("header");
+      // Scroll event to change header background else {
+      window.addEventListener("scroll", function () { header.classList.remove("header-scrolled");
+        const header = document.getElementById("header");        }
         if (window.scrollY > 50) {
           header.classList.add("header-scrolled");
         } else {
@@ -740,48 +680,47 @@
         }
       });
 
-      // Mobile menu toggle
-      document
+      // Mobile menu toggleocument.querySelector(".mobile-overlay").classList.add("active");
+      document          document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
         .querySelector(".mobile-toggle")
         .addEventListener("click", function () {
-          document.querySelector(".nav-list").classList.add("active");
+          document.querySelector(".nav-list").classList.add("active");on overlay
           document.querySelector(".mobile-overlay").classList.add("active");
           document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
         });
 
-      // Close mobile menu when clicking on overlay
-      document
+      // Close mobile menu when clicking on overlayocument.querySelector(".mobile-overlay").classList.remove("active");
+      document          document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
         .querySelector(".mobile-overlay")
         .addEventListener("click", function () {
-          document.querySelector(".nav-list").classList.remove("active");
+          document.querySelector(".nav-list").classList.remove("active");(for better UX)
           document.querySelector(".mobile-overlay").classList.remove("active");
           document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
-        });
-
-      // Close mobile menu when clicking a nav link (for better UX)
-      document.querySelectorAll(".nav-link").forEach(function (link) {
+        });ive");
+ocument.querySelector(".mobile-overlay").classList.remove("active");
+      // Close mobile menu when clicking a nav link (for better UX) document.body.style.overflow = ""; // Re-enable scrolling
+      document.querySelectorAll(".nav-link").forEach(function (link) {        });
         link.addEventListener("click", function () {
           document.querySelector(".nav-list").classList.remove("active");
           document.querySelector(".mobile-overlay").classList.remove("active");
           document.body.style.overflow = ""; // Re-enable scrolling
-        });
-      });
+        });        const navList = document.querySelector(".nav-list");
+      });t mobileToggle = document.querySelector(".mobile-toggle");
 
-      // Close mobile menu when clicking outside (keeping for compatibility)
-      document.addEventListener("click", function (event) {
-        const navList = document.querySelector(".nav-list");
+      // Close mobile menu when clicking outside
+      document.addEventListener("click", function (event) {ctive") &&
+        const navList = document.querySelector(".nav-list");navList.contains(event.target) &&
         const mobileToggle = document.querySelector(".mobile-toggle");
 
         if (
-          navList.classList.contains("active") &&
-          !navList.contains(event.target) &&
+          navList.classList.contains("active") && document.querySelector(".mobile-overlay").classList.remove("active");
+          !navList.contains(event.target) && document.body.style.overflow = ""; // Re-enable scrolling
           event.target !== mobileToggle
-        ) {
-          navList.classList.remove("active");
-          document.querySelector(".mobile-overlay").classList.remove("active");
-          document.body.style.overflow = ""; // Re-enable scrolling
-        }
-      });
-    </script>
-  </body>
-</html>
+
+
+
+
+
+
+
+    </script> 
