@@ -5,6 +5,75 @@
  * This template includes a header with a working cart sidebar
  * that properly integrates with WooCommerce's AJAX functions.
  */
+
+// Cart functions are embedded directly in this file for Oxygen Builder compatibility
+if (function_exists('WC')) {
+    // Add AJAX handler for updating cart item quantity
+    if (!function_exists('alfredo_setup_cart_ajax')) {
+        function alfredo_setup_cart_ajax() {
+            // Add AJAX action for logged in users
+            add_action('wp_ajax_update_cart_item_quantity', 'alfredo_update_cart_item_quantity');
+
+            // Add AJAX action for guests
+            add_action('wp_ajax_nopriv_update_cart_item_quantity', 'alfredo_update_cart_item_quantity');
+        }
+        add_action('init', 'alfredo_setup_cart_ajax');
+    }
+
+    // AJAX handler for updating cart item quantity
+    if (!function_exists('alfredo_update_cart_item_quantity')) {
+        function alfredo_update_cart_item_quantity() {
+            // Check nonce for security
+            if (!isset($_POST['security']) || !wp_verify_nonce($_POST['security'], 'woocommerce-cart')) {
+                wp_send_json_error('Security check failed');
+                return;
+            }
+
+            // Get cart item key and quantity
+            $cart_item_key = isset($_POST['cart_item_key']) ? sanitize_text_field($_POST['cart_item_key']) : '';
+            $quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 0;
+
+            // Validate inputs
+            if (empty($cart_item_key) || $quantity < 1) {
+                wp_send_json_error('Invalid input');
+                return;
+            }
+
+            // Update cart
+            WC()->cart->set_quantity($cart_item_key, $quantity);
+
+            // Return success
+            wp_send_json_success();
+        }
+    }
+
+    // Enhance mini cart display with additional information
+    if (!function_exists('alfredo_enhance_mini_cart_item')) {
+        function alfredo_enhance_mini_cart_item($html, $cart_item, $cart_item_key) {
+            // Get product
+            $product = $cart_item['data'];
+
+            if (!$product) {
+                return $html;
+            }
+
+            // Get product category
+            $categories = get_the_terms($product->get_id(), 'product_cat');
+            $category_name = '';
+
+            if (!is_wp_error($categories) && !empty($categories)) {
+                $category = reset($categories); // Get first category
+                $category_name = $category->name;
+            }
+
+            // Add data attributes for JavaScript to use
+            $html = str_replace('<li class="', '<li data-category="' . esc_attr($category_name) . '" class="', $html);
+
+            return $html;
+        }
+        add_filter('woocommerce_cart_item_name', 'alfredo_enhance_mini_cart_item', 10, 3);
+    }
+}
 ?>
 
 <!-- CSS Styles for Header, Cart Sidebar and Footer -->
@@ -707,8 +776,6 @@ header {
 
 .woocommerce-mini-cart li {
   position: relative;
-  display: flex;
-  gap: 1rem;
   margin-bottom: 1.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   animation: fadeIn 0.3s ease;
@@ -739,32 +806,15 @@ header {
   transform: translateY(-3px);
 }
 
-.woocommerce-mini-cart-item > a:not(.remove) {
-  flex: 1;
-  font-weight: 600;
-  color: var(--light);
-  text-decoration: none;
-  transition: color 0.3s ease;
-  line-height: 1.3;
-  padding-right: 25px; /* Space for remove button */
-}
-
-.woocommerce-mini-cart-item > a:not(.remove):hover {
-  color: var(--primary);
-}
-
-.woocommerce-mini-cart-item .quantity {
-  display: block;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--accent);
-  font-weight: 600;
+.woocommerce-mini-cart-item {
+  display: flex;
+  flex-direction: column;
 }
 
 .woocommerce-mini-cart-item .remove_from_cart_button {
   position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
+  top: 0.75rem !important;
+  right: 0.75rem !important;
   background: transparent !important;
   border: none !important;
   color: var(--gray-500) !important;
@@ -780,6 +830,7 @@ header {
   text-decoration: none !important;
   font-size: 1.25rem !important;
   line-height: 1 !important;
+  z-index: 5 !important;
 }
 
 .woocommerce-mini-cart-item:hover .remove_from_cart_button {
@@ -791,6 +842,111 @@ header {
   color: #ef4444 !important;
   transform: rotate(90deg) !important;
 }
+
+.woocommerce-mini-cart-item-top {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.woocommerce-mini-cart-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Prevents text overflow issues */
+  padding-right: 1.5rem; /* Space for remove button */
+}
+
+.woocommerce-mini-cart-item-content a {
+  font-weight: 600;
+  color: var(--light);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  line-height: 1.3;
+  margin-bottom: 0.25rem;
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.woocommerce-mini-cart-item-content a:hover {
+  color: var(--primary);
+}
+
+.woocommerce-mini-cart-item-category {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  margin-bottom: 0.25rem;
+}
+
+.woocommerce-mini-cart-item-variation {
+  font-size: 0.8rem;
+  color: var(--gray-300);
+  margin-bottom: 0.5rem;
+}
+
+.woocommerce-mini-cart-item-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.woocommerce-mini-cart-item .quantity {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.woocommerce-mini-cart-item-price {
+  font-weight: 600;
+  color: var(--light);
+  font-size: 0.9rem;
+}
+
+.woocommerce-mini-cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+
+.mini-cart-qty-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0;
+}
+
+.mini-cart-qty-btn:hover {
+  background: var(--primary);
+}
+
+.mini-cart-qty-value {
+  width: 28px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Remove button styling is now handled above */
+
+/* Remove button hover styling is now handled above */
 
 .woocommerce-mini-cart__total {
   display: flex;
@@ -961,6 +1117,29 @@ header {
     height: 70px !important;
   }
 
+  .woocommerce-mini-cart-item-top {
+    margin-bottom: 0.5rem;
+  }
+
+  .woocommerce-mini-cart-item-details {
+    margin-bottom: 0.5rem;
+  }
+
+  .woocommerce-mini-cart-item-controls {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .mini-cart-qty-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mini-cart-qty-value {
+    width: 28px;
+    font-size: 1rem;
+  }
+
   .cart-footer {
     padding: 1.25rem;
   }
@@ -1006,6 +1185,9 @@ header {
   .woocommerce-mini-cart li {
     padding: 0.75rem 0.75rem 1rem 0.75rem;
     margin-bottom: 1rem;
+  }
+
+  .woocommerce-mini-cart-item-top {
     gap: 0.75rem;
   }
 
@@ -1014,12 +1196,40 @@ header {
     height: 60px !important;
   }
 
-  .woocommerce-mini-cart-item > a:not(.remove) {
+  .woocommerce-mini-cart-item-content a {
     font-size: 0.95rem;
+  }
+
+  .woocommerce-mini-cart-item-category {
+    font-size: 0.7rem;
+  }
+
+  .woocommerce-mini-cart-item-variation {
+    font-size: 0.75rem;
+  }
+
+  .woocommerce-mini-cart-item-details {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .woocommerce-mini-cart-item-price {
+    margin-top: 0.25rem;
   }
 
   .woocommerce-mini-cart-item .quantity {
     font-size: 0.85rem;
+  }
+
+  .woocommerce-mini-cart-item-controls {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
+
+  .mini-cart-qty-btn {
+    width: 32px;
+    height: 32px;
   }
 
   .cart-footer {
@@ -1128,31 +1338,6 @@ header {
         </div>';
       }
       ?>
-    </div>
-  </div>
-
-  <div class="cart-footer" id="cart-footer">
-    <div class="cart-totals">
-      <div class="cart-totals-row">
-        <span class="cart-totals-label">Zwischensumme</span>
-        <span class="cart-totals-value" id="cart-subtotal">
-          <?php echo is_object(WC()->cart) ? WC()->cart->get_cart_subtotal() : '0,00 €'; ?>
-        </span>
-      </div>
-      <div class="cart-totals-row">
-        <span class="cart-totals-label">Versand</span>
-        <span class="cart-totals-value" id="cart-shipping">Berechnet an der Kasse</span>
-      </div>
-      <div class="cart-totals-row">
-        <span class="cart-totals-label">Gesamt</span>
-        <span class="cart-totals-value" id="cart-total">
-          <?php echo is_object(WC()->cart) ? WC()->cart->get_cart_total() : '0,00 €'; ?>
-        </span>
-      </div>
-    </div>
-    <div class="cart-actions">
-      <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="btn btn-outline">Warenkorb anzeigen</a>
-      <a href="<?php echo esc_url(wc_get_checkout_url()); ?>" class="btn btn-accent">Zur Kasse</a>
     </div>
   </div>
 </div>
@@ -1280,8 +1465,174 @@ jQuery(document).ready(function($) {
             }
           );
 
+          // Enhance mini cart items with additional information and controls
+          enhanceMiniCartItems();
+
           // Trigger event for other scripts
           $(document.body).trigger('wc_fragments_refreshed');
+        }
+      },
+      error: function() {
+        // Remove loading indicator
+        $('.cart-loading').remove();
+        showNotification('Fehler', 'Es gab ein Problem beim Aktualisieren des Warenkorbs.');
+      }
+    });
+  }
+
+  // Enhance mini cart items with additional information and controls
+  function enhanceMiniCartItems() {
+    console.log('Enhancing mini cart items');
+    // Process each cart item
+    $('.woocommerce-mini-cart-item').each(function() {
+      const $item = $(this);
+
+      // Skip if already enhanced
+      if ($item.hasClass('enhanced')) {
+        return;
+      }
+
+      // Mark as enhanced to avoid processing it multiple times
+      $item.addClass('enhanced');
+
+      // Get elements
+      const $img = $item.find('img').first();
+      const $link = $item.find('a:not(.remove)').first();
+      const $removeBtn = $item.find('.remove_from_cart_button').first();
+      const $quantityText = $item.find('.quantity').first();
+
+      if (!$img.length || !$link.length || !$quantityText.length) {
+        console.log('Missing required elements for cart item enhancement');
+        return;
+      }
+
+      // Get product data
+      const productTitle = $link.text().trim();
+      const quantityText = $quantityText.text().trim();
+      let quantity = 1;
+
+      // Try to extract quantity
+      const qtyMatch = quantityText.match(/\d+/);
+      if (qtyMatch && qtyMatch.length > 0) {
+        quantity = parseInt(qtyMatch[0]);
+      }
+
+      // Extract price from quantity text (format: "2 × €50.00")
+      let price = '';
+      if (quantityText.includes('×')) {
+        const parts = quantityText.split('×');
+        if (parts.length > 1) {
+          price = parts[1].trim();
+        }
+      }
+
+      // Clear the item's content but keep the remove button
+      const $removeClone = $removeBtn.clone(true);
+      $item.empty().append($removeClone);
+
+      // Create new structure
+      const $top = $('<div class="woocommerce-mini-cart-item-top"></div>').appendTo($item);
+
+      // Add image to top
+      $top.append($img);
+
+      // Create content container
+      const $content = $('<div class="woocommerce-mini-cart-item-content"></div>').appendTo($top);
+
+      // Add link to content
+      $content.append($link);
+
+      // Try to get product category from data attribute
+      let category = $item.attr('data-category') || '';
+
+      // Add category if available
+      if (category) {
+        $('<div class="woocommerce-mini-cart-item-category">' + category + '</div>').appendTo($content);
+      }
+
+      // Check for variations
+      let variations = '';
+      if (productTitle.includes('(') && productTitle.includes(')')) {
+        const variationMatch = productTitle.match(/\(([^)]+)\)/);
+        if (variationMatch && variationMatch.length > 1) {
+          variations = variationMatch[1];
+          // Update product title without variations
+          const cleanTitle = productTitle.replace(/\s*\([^)]*\)\s*/, '');
+          $link.text(cleanTitle);
+        }
+      }
+
+      // Add variations if available
+      if (variations) {
+        $('<div class="woocommerce-mini-cart-item-variation">' + variations + '</div>').appendTo($content);
+      }
+
+      // Create details section
+      const $details = $('<div class="woocommerce-mini-cart-item-details"></div>').appendTo($item);
+
+      // Add quantity text
+      $('<div class="quantity">' + quantityText + '</div>').appendTo($details);
+
+      // Add price separately if available
+      if (price) {
+        $('<div class="woocommerce-mini-cart-item-price">' + price + '</div>').appendTo($details);
+      }
+
+      // Add quantity controls
+      const $controls = $('<div class="woocommerce-mini-cart-item-controls"></div>').appendTo($item);
+
+      $('<button class="mini-cart-qty-btn mini-cart-qty-minus">-</button>').appendTo($controls);
+      $('<span class="mini-cart-qty-value">' + quantity + '</span>').appendTo($controls);
+      $('<button class="mini-cart-qty-btn mini-cart-qty-plus">+</button>').appendTo($controls);
+
+      // Set up quantity control events
+      const $minus = $controls.find('.mini-cart-qty-minus');
+      const $plus = $controls.find('.mini-cart-qty-plus');
+      const $value = $controls.find('.mini-cart-qty-value');
+      const key = $removeBtn.data('cart_item_key') || '';
+
+      if (key) {
+        $minus.on('click', function(e) {
+          e.preventDefault();
+          const currentQty = parseInt($value.text());
+          if (currentQty > 1) {
+            updateCartItemQuantity(key, currentQty - 1);
+          }
+        });
+
+        $plus.on('click', function(e) {
+          e.preventDefault();
+          const currentQty = parseInt($value.text());
+          updateCartItemQuantity(key, currentQty + 1);
+        });
+      } else {
+        console.log('Missing cart item key for quantity controls');
+      }
+    });
+  }
+
+  // Update cart item quantity
+  function updateCartItemQuantity(cart_item_key, quantity) {
+    // Show loading indicator
+    $('#cart-items').append('<div class="cart-loading"><div class="loading-spinner"></div></div>');
+
+    $.ajax({
+      type: 'POST',
+      url: wc_add_to_cart_params.ajax_url,
+      data: {
+        action: 'update_cart_item_quantity',
+        cart_item_key: cart_item_key,
+        quantity: quantity,
+        security: wc_add_to_cart_params.update_cart_nonce || ''
+      },
+      success: function(response) {
+        if (response.success) {
+          // Refresh cart fragments
+          $(document.body).trigger('wc_fragment_refresh');
+        } else {
+          // Remove loading indicator
+          $('.cart-loading').remove();
+          showNotification('Fehler', response.data || 'Es gab ein Problem beim Aktualisieren des Warenkorbs.');
         }
       },
       error: function() {
@@ -1385,7 +1736,23 @@ jQuery(document).ready(function($) {
 
   // Refresh fragments on page load
   $(document).ready(function() {
+    // First try to enhance any existing cart items
+    enhanceMiniCartItems();
+
+    // Then refresh the cart fragments
     refreshCart();
+
+    // Set up a fallback in case the fragments refresh doesn't trigger our enhancement
+    setTimeout(function() {
+      enhanceMiniCartItems();
+    }, 1000);
+
+    // Also listen for fragment refreshes
+    $(document.body).on('wc_fragments_refreshed', function() {
+      setTimeout(function() {
+        enhanceMiniCartItems();
+      }, 100);
+    });
   });
 });
 </script>
