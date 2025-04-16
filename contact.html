@@ -1,783 +1,795 @@
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kontakt - Alfredo Media</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <style>
-      :root {
-        --primary: #0099ff;
-        --primary-light: #33adff;
-        --primary-dark: #0077cc;
-        --accent: #ff6600;
-        --accent-dark: #cc5200;
-        --dark: #1a1a1a;
-        --darker: #121212;
-        --light: #ffffff;
-        --gray-100: #f1f5f9;
-        --gray-200: #e2e8f0;
-        --gray-300: #cbd5e1;
-        --gray-400: #94a3b8;
-        --gray-500: #64748b;
-        --gray-600: #475569;
-        --gray-700: #334155;
-        --gray-800: #1e293b;
-        --gray-900: #0f172a;
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-          Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        background: linear-gradient(to bottom, var(--dark), var(--darker));
-        color: var(--light);
-        line-height: 1.6;
-        overflow-x: hidden;
-      }
-
-      /* Typography */
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        font-weight: 700;
-        line-height: 1.2;
-        margin-bottom: 1rem;
-      }
-
-      h1 {
-        font-size: clamp(2.5rem, 5vw, 4rem);
-        background: linear-gradient(
-          45deg,
-          var(--primary-light) 0%,
-          var(--primary) 20%,
-          var(--accent) 40%,
-          #ff9900 60%,
-          var(--accent-dark) 80%,
-          var(--primary) 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-size: 300% auto;
-        animation: gradientShift 6s ease infinite;
-        text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        letter-spacing: -1px;
-      }
-
-      @keyframes gradientShift {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-
-      h2 {
-        font-size: clamp(1.75rem, 4vw, 2.5rem);
-        position: relative;
-        padding-bottom: 1rem;
-      }
-
-      h3 {
-        font-size: clamp(1.25rem, 3vw, 1.75rem);
-      }
-
-      p {
-        margin-bottom: 1.5rem;
-        color: var(--gray-300);
-      }
-
-      /* Container and Layout Classes */
-      .container {
-        width: 100%;
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 0 1.5rem;
-      }
-
-      .flex {
-        display: flex;
-      }
-
-      .items-center {
-        align-items: center;
-      }
-
-      .justify-between {
-        justify-content: space-between;
-      }
-
-      .justify-center {
-        justify-content: center;
-      }
-
-      .grid {
-        display: grid;
-      }
-
-      .text-center {
-        text-align: center;
-      }
-
-      /* Header */
-      header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
-        padding: 1.5rem 0;
-        transition: all 0.3s ease;
-        background: transparent;
-        backdrop-filter: none;
-      }
-
-      .header-scrolled {
-        padding: 1rem 0;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        background: rgba(26, 26, 26, 0.95);
-        backdrop-filter: blur(10px);
-      }
-
-      .logo {
-        font-size: 1.5rem;
-        font-weight: 700;
-        text-decoration: none;
-        color: var(--light);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .logo-icon {
-        width: 2.5rem;
-        height: 2.5rem;
-      }
-
-      .nav-list {
-        display: flex;
-        list-style: none;
-        gap: 2rem;
-      }
-
-      .nav-link {
-        color: var(--gray-300);
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.3s;
-        position: relative;
-      }
-
-      .nav-link::after {
-        content: "";
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background: linear-gradient(to right, var(--primary), var(--accent));
-        transition: width 0.3s;
-      }
-
-      .nav-link:hover {
-        color: var(--light);
-      }
-
-      .nav-link:hover::after {
-        width: 100%;
-      }
-
-      .mobile-toggle {
-        display: none;
-        background: none;
-        border: none;
-        color: var(--light);
-        font-size: 1.5rem;
-        cursor: pointer;
-      }
-      
-      /* Mobile menu overlay */
-      .mobile-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 999;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      .mobile-overlay.active {
-        display: block;
-        opacity: 1;
-      }
-
-      /* Button Styles */
-      .btn {
-        display: inline-block;
-        padding: 0.875rem 2rem;
-        border-radius: 0.5rem;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        text-align: center;
-        cursor: pointer;
-        border: none;
-        font-size: 1rem;
-      }
-
-      .btn-primary {
-        background: var(--primary);
-        color: white;
-        box-shadow: 0 4px 20px rgba(0, 153, 255, 0.5);
-      }
-
-      .btn-primary:hover {
-        background: var(--primary-dark);
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 153, 255, 0.6);
-      }
-
-      .btn-accent {
-        background: var(--accent);
-        color: white;
-        box-shadow: 0 4px 20px rgba(255, 102, 0, 0.5);
-      }
-
-      .btn-accent:hover {
-        background: var(--accent-dark);
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(255, 102, 0, 0.6);
-      }
-
-      /* Page Header */
-      .page-header {
-        padding-top: 8rem;
-        text-align: center;
-        margin-bottom: 2rem;
-      }
-
-      /* Contact-specific styles */
-      .contact-section {
-        padding: 4rem 0;
-        position: relative;
-      }
-
-      .contact-section::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(
-          circle at 30% 70%,
-          rgba(0, 153, 255, 0.15),
-          transparent 70%
-        );
-        z-index: -1;
-      }
-
-      .contact-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 3rem;
-        margin-bottom: 3rem;
-      }
-
-      .contact-info {
-        background: rgba(26, 26, 26, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 1rem;
-        padding: 2rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      }
-
-      .contact-info h3 {
-        color: var(--primary-light);
-        margin-bottom: 1.5rem;
-      }
-
-      .contact-detail {
-        margin-bottom: 1rem;
-        display: flex;
-        align-items: flex-start;
-        gap: 0.75rem;
-      }
-
-      .contact-detail i {
-        color: var(--accent);
-      }
-
-      .contact-form {
-        background: rgba(26, 26, 26, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 1rem;
-        padding: 2rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      }
-
-      .form-group {
-        margin-bottom: 1.5rem;
-      }
-
-      .form-control {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 0.5rem;
-        color: var(--light);
-        font-size: 1rem;
-        transition: all 0.3s ease;
-      }
-
-      .form-control::placeholder {
-        color: var(--gray-500);
-      }
-
-      .form-control:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(0, 153, 255, 0.2);
-      }
-
-      textarea.form-control {
-        min-height: 150px;
-        resize: vertical;
-      }
-
-      .contact-image {
-        width: 100%;
-        border-radius: 1rem;
-        overflow: hidden;
-        margin-top: 2rem;
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-      }
-
-      .contact-image img {
-        width: 100%;
-        height: auto;
-        display: block;
-      }
-
-      /* Footer */
-      footer {
-        background: var(--darker);
-        padding: 5rem 0 2rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-      }
-
-      .footer-grid {
-        display: grid;
-        grid-template-columns: 2fr repeat(3, 1fr);
-        gap: 2rem;
-        margin-bottom: 3rem;
-      }
-
-      .footer-brand {
-        margin-bottom: 1.5rem;
-      }
-
-      .footer-brand-desc {
-        color: var(--gray-400);
-        font-size: 0.9375rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .footer-social {
-        display: flex;
-        gap: 0.75rem;
-      }
-
-      .social-icon {
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.05);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-      }
-
-      .social-icon:hover {
-        background: var(--primary);
-        transform: translateY(-3px);
-      }
-
-      .footer-heading {
-        font-size: 1.125rem;
-        margin-bottom: 1.5rem;
-        color: var(--light);
-      }
-
-      .footer-links {
-        list-style: none;
-      }
-
-      .footer-link {
-        margin-bottom: 0.75rem;
-      }
-
-      .footer-link a {
-        color: var(--gray-400);
-        text-decoration: none;
-        transition: color 0.3s;
-        font-size: 0.9375rem;
-      }
-
-      .footer-link a:hover {
-        color: var(--primary);
-      }
-
-      .footer-bottom {
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-        padding-top: 2rem;
-        text-align: center;
-        color: var(--gray-500);
-        font-size: 0.875rem;
-      }
-
-      /* Responsive Styles */
-      @media (max-width: 992px) {
-        .contact-container {
-          grid-template-columns: 1fr;
-        }
-
-        .footer-grid {
-          grid-template-columns: 1fr 1fr;
-        }
-      }
-
-      @media (max-width: 768px) {
-        .nav-list {
-          position: fixed;
-          top: 0;
-          right: -100%;
-          width: 250px;
-          height: 100vh;
-          background: var(--darker);
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 2rem;
-          transition: all 0.3s ease;
-          z-index: 1000;
-        }
-
-        .nav-list.active {
-          right: 0;
-        }
-
-        .mobile-toggle {
-          display: block;
-        }
-
-        .footer-grid {
-          grid-template-columns: 1fr;
-          text-align: center;
-        }
-
-        .footer-social {
-          justify-content: center;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Header -->
-    <header id="header">
-      <div class="container flex justify-between items-center">
-        <a href="https://alfredomedia.nangkil.com" class="logo">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<style>
+  :root {
+    --primary: #0099ff;
+    --primary-light: #33adff;
+    --primary-dark: #0077cc;
+    --accent: #ff6600;
+    --accent-dark: #cc5200;
+    --dark: #1a1a1a;
+    --darker: #121212;
+    --light: #ffffff;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: linear-gradient(to bottom, var(--dark), var(--darker));
+    color: var(--light);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Typography */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    background: linear-gradient(
+      45deg,
+      var(--primary-light) 0%,
+      var(--primary) 20%,
+      var(--accent) 40%,
+      #ff9900 60%,
+      var(--accent-dark) 80%,
+      var(--primary) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 300% auto;
+    animation: gradientShift 6s ease infinite;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    letter-spacing: -1px;
+  }
+
+  @keyframes gradientShift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  h2 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    position: relative;
+    padding-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+  }
+
+  p {
+    margin-bottom: 1.5rem;
+    color: var(--gray-300);
+  }
+
+  /* Container and Layout Classes */
+  .container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .flex {
+    display: flex;
+  }
+
+  .items-center {
+    align-items: center;
+  }
+
+  .justify-between {
+    justify-content: space-between;
+  }
+
+  .justify-center {
+    justify-content: center;
+  }
+
+  .grid {
+    display: grid;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  /* Header */
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 1.5rem 0;
+    transition: all 0.3s ease;
+    background: transparent;
+    backdrop-filter: none;
+  }
+
+  .header-scrolled {
+    padding: 1rem 0;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    background: rgba(26, 26, 26, 0.95);
+    backdrop-filter: blur(10px);
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .nav-list {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+  }
+
+  .nav-link {
+    color: var(--gray-300);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--primary), var(--accent));
+    transition: width 0.3s;
+  }
+
+  .nav-link:hover {
+    color: var(--light);
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  .mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--light);
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  /* Mobile menu overlay */
+  .mobile-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .mobile-overlay.active {
+    display: block;
+    opacity: 1;
+  }
+
+  /* Button Styles */
+  .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 20px rgba(0, 153, 255, 0.5);
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 153, 255, 0.6);
+  }
+
+  .btn-accent {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 4px 20px rgba(255, 102, 0, 0.5);
+  }
+
+  .btn-accent:hover {
+    background: var(--accent-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 102, 0, 0.6);
+  }
+
+  /* Page Header */
+  .page-header {
+    padding-top: 8rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  /* Contact-specific styles */
+  .contact-section {
+    padding: 4rem 0;
+    position: relative;
+  }
+
+  .contact-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      circle at 30% 70%,
+      rgba(0, 153, 255, 0.15),
+      transparent 70%
+    );
+    z-index: -1;
+  }
+
+  .contact-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .contact-info {
+    background: rgba(26, 26, 26, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .contact-info h3 {
+    color: var(--primary-light);
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-detail {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .contact-detail i {
+    color: var(--accent);
+  }
+
+  .contact-form {
+    background: rgba(26, 26, 26, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    color: var(--light);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .form-control::placeholder {
+    color: var(--gray-500);
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(0, 153, 255, 0.2);
+  }
+
+  textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  .contact-image {
+    width: 100%;
+    border-radius: 1rem;
+    overflow: hidden;
+    margin-top: 2rem;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .contact-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--darker);
+    padding: 5rem 0 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand {
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-brand-desc {
+    color: var(--gray-400);
+    font-size: 0.9375rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .social-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .social-icon:hover {
+    background: var(--primary);
+    transform: translateY(-3px);
+  }
+
+  .footer-heading {
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+    color: var(--light);
+  }
+
+  .footer-links {
+    list-style: none;
+  }
+
+  .footer-link {
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-link a {
+    color: var(--gray-400);
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 0.9375rem;
+  }
+
+  .footer-link a:hover {
+    color: var(--primary);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 2rem;
+    text-align: center;
+    color: var(--gray-500);
+    font-size: 0.875rem;
+  }
+
+  /* Google Map Styles */
+  .google-map {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Responsive Styles */
+  @media (max-width: 992px) {
+    .contact-container {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .nav-list {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 250px;
+      height: 100vh;
+      background: var(--darker);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .nav-list.active {
+      right: 0;
+    }
+
+    .mobile-toggle {
+      display: block;
+    }
+
+    .footer-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .footer-social {
+      justify-content: center;
+    }
+  }
+</style>
+
+<!-- Header -->
+<header id="header">
+  <div class="container flex justify-between items-center">
+    <a href="https://alfredomedia.nangkil.com" class="logo">
+      <img
+        src="https://alfredomedia.nangkil.com/wp-content/uploads/2025/04/sdfdffdgfg-Photoroom.png"
+        alt="Alfredo Media Logo"
+        class="logo-icon"
+      />
+      Alfredo Media
+    </a>
+    <nav>
+      <button class="mobile-toggle">☰</button>
+      <ul class="nav-list">
+        <li>
+          <a href="https://alfredomedia.nangkil.com/" class="nav-link"
+            >HOME</a
+          >
+        </li>
+        <li>
+          <a href="https://alfredomedia.nangkil.com/about/" class="nav-link"
+            >ÜBER UNS</a
+          >
+        </li>
+        <li>
+          <a href="https://alfredomedia.nangkil.com/pricing/" class="nav-link"
+            >DIENSTLEISTUNGEN</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://alfredomedia.nangkil.com/portfolio/"
+            class="nav-link"
+            >PORTFOLIO</a
+          >
+        </li>
+        <li>
+          <a href="https://alfredomedia.nangkil.com/merch/" class="nav-link"
+            >MERCH</a
+          >
+        </li>
+        <li>
+          <a href="https://alfredomedia.nangkil.com/contact/" class="nav-link"
+            >KONTAKT</a
+          >
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-overlay"></div>
+
+<!-- Page Header -->
+<section class="page-header">
+  <div class="container">
+    <h1>Kontakt</h1>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="contact-container">
+      <div class="contact-info">
+        <h3>Standort</h3>
+        <div class="contact-detail">
+          <i>📍</i>
+          <div>
+            <strong>AlfredoMedia</strong><br />
+            Louis Lampe<br />
+            Worthgarten 10<br />
+            32549 Bad Oeynhausen
+          </div>
+        </div>
+        <div class="contact-detail">
+          <i>📞</i>
+          <div><strong>Telefon:</strong> 1735611892</div>
+        </div>
+        <div class="contact-detail">
+          <i>✉️</i>
+          <div><strong>E-Mail:</strong> louis.lampe@icloud.com</div>
+        </div>
+
+        <div class="contact-image">
           <img
-            src="https://alfredomedia.nangkil.com/wp-content/uploads/2025/04/sdfdffdgfg-Photoroom.png"
-            alt="Alfredo Media Logo"
-            class="logo-icon"
+            src="img/Photo-01.08.24-17-16-12.png"
+            alt="Alfredo Media Office"
           />
-          Alfredo Media
-        </a>
-        <nav>
-          <button class="mobile-toggle">☰</button>
-          <ul class="nav-list">
-            <li>
-              <a href="https://alfredomedia.nangkil.com/" class="nav-link"
-                >HOME</a
-              >
-            </li>
-            <li>
-              <a href="https://alfredomedia.nangkil.com/about/" class="nav-link"
-                >ÜBER UNS</a
-              >
-            </li>
-            <li>
-              <a href="https://alfredomedia.nangkil.com/pricing/" class="nav-link"
-                >DIENSTLEISTUNGEN</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://alfredomedia.nangkil.com/portfolio/"
-                class="nav-link"
-                >PORTFOLIO</a
-              >
-            </li>
-            <li>
-              <a href="https://alfredomedia.nangkil.com/merch/" class="nav-link"
-                >MERCH</a
-              >
-            </li>
-            <li>
-              <a href="https://alfredomedia.nangkil.com/contact/" class="nav-link"
-                >KONTAKT</a
-              >
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+        </div>
 
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-overlay"></div>
-
-    <!-- Page Header -->
-    <section class="page-header">
-      <div class="container">
-        <h1>Kontakt</h1>
-      </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact-section" id="contact">
-      <div class="container">
-        <div class="contact-container">
-          <div class="contact-info">
-            <h3>Standort</h3>
-            <div class="contact-detail">
-              <i>📍</i>
-              <div>
-                <strong>AlfredoMedia</strong><br />
-                Louis Lampe<br />
-                Worthgarten 10<br />
-                32549 Bad Oeynhausen
-              </div>
-            </div>
-            <div class="contact-detail">
-              <i>📞</i>
-              <div><strong>Telefon:</strong> 1735611892</div>
-            </div>
-            <div class="contact-detail">
-              <i>✉️</i>
-              <div><strong>E-Mail:</strong> louis.lampe@icloud.com</div>
-            </div>
-
-            <div class="contact-image">
-              <img
-                src="img/Photo-01.08.24-17-16-12.png"
-                alt="Alfredo Media Office"
-              />
-            </div>
-          </div>
-
-          <div class="contact-form">
-            <h3>Kontaktformular</h3>
-            <form id="contactForm">
-              <div class="form-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Vorname"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <input
-                  type="email"
-                  class="form-control"
-                  placeholder="E-Mail"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <textarea
-                  class="form-control"
-                  placeholder="Deine Nachricht"
-                  required
-                ></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary">Absenden</button>
-            </form>
-          </div>
+        <!-- Google Map -->
+        <div class="google-map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2466.0462939889!2d8.79957!3d52.20611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47ba7a1f8c9e9d7d%3A0x4269a3d62e584af0!2sWorthgarten%2010%2C%2032549%20Bad%20Oeynhausen%2C%20Germany!5e0!3m2!1sen!2sus!4v1691234567890!5m2!1sen!2sus"
+            width="100%"
+            height="300"
+            style="border:0; border-radius: 0.5rem; margin-top: 1.5rem;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
       </div>
-    </section>
 
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="footer-grid">
-          <div>
-            <div class="footer-brand">
-              <a href="home.html" class="logo">
-                <img
-                  src="img/logo.png"
-                  alt="Alfredo Media Logo"
-                  class="logo-icon"
-                />
-              </a>
-            </div>
-            <p class="footer-brand-desc">
-              Alfredo Media ist Ihr Partner für die digitale Transformation und
-              bietet innovative Lösungen, die Ihrem Unternehmen zum Erfolg
-              verhelfen.
-            </p>
-            <div class="footer-social">
-              <a href="#" class="social-icon"
-                ><img src="img/facebook-icon.svg" alt="Facebook"
-              /></a>
-              <a href="#" class="social-icon"
-                ><img src="img/twitter-icon.svg" alt="Twitter"
-              /></a>
-              <a href="#" class="social-icon"
-                ><img src="img/linkedin-icon.svg" alt="LinkedIn"
-              /></a>
-            </div>
+      <div class="contact-form">
+        <h3>Kontaktformular</h3>
+        <form id="contactForm">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Vorname"
+              required
+            />
           </div>
-          <div>
-            <h3 class="footer-heading">Schnelllinks</h3>
-            <ul class="footer-links">
-              <li class="footer-link"><a href="home.html">HOME</a></li>
-              <li class="footer-link"><a href="team.html">ÜBER UNS</a></li>
-              <li class="footer-link">
-                <a href="3-finger-plan.html">DIENSTLEISTUNGEN</a>
-              </li>
-              <li class="footer-link">
-                <a href="portfolio.html">PORTFOLIO</a>
-              </li>
-              <li class="footer-link">
-                <a href="contact.html">KONTAKT</a>
-              </li>
-            </ul>
+          <div class="form-group">
+            <input
+              type="email"
+              class="form-control"
+              placeholder="E-Mail"
+              required
+            />
           </div>
-          <div>
-            <h3 class="footer-heading">Dienstleistungen</h3>
-            <ul class="footer-links">
-              <li class="footer-link"><a href="#">Webentwicklung</a></li>
-              <li class="footer-link"><a href="#">Digitales Marketing</a></li>
-              <li class="footer-link"><a href="#">E-Commerce Lösungen</a></li>
-            </ul>
+          <div class="form-group">
+            <textarea
+              class="form-control"
+              placeholder="Deine Nachricht"
+              required
+            ></textarea>
           </div>
-          <div>
-            <h3 class="footer-heading">Kontakt</h3>
-            <ul class="footer-links">
-              <li class="footer-link">
-                <a href="mailto:louis.lampe@icloud.com"
-                  >Email: louis.lampe@icloud.com</a
-                >
-              </li>
-              <li class="footer-link">
-                <a href="tel:1735611892">Telefon: 1735611892</a>
-              </li>
-              <li class="footer-link">
-                <a href="#">Adresse: Worthgarten 10, 32549 Bad Oeynhausen</a>
-              </li>
-            </ul>
-          </div>
+          <button type="submit" class="btn btn-primary">Absenden</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <a href="home.html" class="logo">
+            <img
+              src="img/logo.png"
+              alt="Alfredo Media Logo"
+              class="logo-icon"
+            />
+          </a>
         </div>
-        <div class="footer-bottom">
-          <p>
-            &copy; 2020 Alfredo Media | <a href="#">Impressum</a> |
-            <a href="#">Datenschutz</a> | <a href="#">Haftungsausschluss</a>
-          </p>
+        <p class="footer-brand-desc">
+          Alfredo Media ist Ihr Partner für die digitale Transformation und
+          bietet innovative Lösungen, die Ihrem Unternehmen zum Erfolg
+          verhelfen.
+        </p>
+        <div class="footer-social">
+          <a href="#" class="social-icon"
+            ><img src="img/facebook-icon.svg" alt="Facebook"
+          /></a>
+          <a href="#" class="social-icon"
+            ><img src="img/twitter-icon.svg" alt="Twitter"
+          /></a>
+          <a href="#" class="social-icon"
+            ><img src="img/linkedin-icon.svg" alt="LinkedIn"
+          /></a>
         </div>
       </div>
-    </footer>
+      <div>
+        <h3 class="footer-heading">Schnelllinks</h3>
+        <ul class="footer-links">
+          <li class="footer-link"><a href="home.html">HOME</a></li>
+          <li class="footer-link"><a href="team.html">ÜBER UNS</a></li>
+          <li class="footer-link">
+            <a href="3-finger-plan.html">DIENSTLEISTUNGEN</a>
+          </li>
+          <li class="footer-link">
+            <a href="portfolio.html">PORTFOLIO</a>
+          </li>
+          <li class="footer-link">
+            <a href="contact.html">KONTAKT</a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer-heading">Dienstleistungen</h3>
+        <ul class="footer-links">
+          <li class="footer-link"><a href="#">Webentwicklung</a></li>
+          <li class="footer-link"><a href="#">Digitales Marketing</a></li>
+          <li class="footer-link"><a href="#">E-Commerce Lösungen</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer-heading">Kontakt</h3>
+        <ul class="footer-links">
+          <li class="footer-link">
+            <a href="mailto:louis.lampe@icloud.com"
+              >Email: louis.lampe@icloud.com</a
+            >
+          </li>
+          <li class="footer-link">
+            <a href="tel:1735611892">Telefon: 1735611892</a>
+          </li>
+          <li class="footer-link">
+            <a href="#">Adresse: Worthgarten 10, 32549 Bad Oeynhausen</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>
+        &copy; 2020 Alfredo Media | <a href="#">Impressum</a> |
+        <a href="#">Datenschutz</a> | <a href="#">Haftungsausschluss</a>
+      </p>
+    </div>
+  </div>
+</footer>
 
-    <!-- Scripts -->
-    <script>
-      // Scroll event to change header background
-      window.addEventListener("scroll", function () {
-        const header = document.getElementById("header");
-        if (window.scrollY > 50) {
-          header.classList.add("header-scrolled");
-        } else {
-          header.classList.remove("header-scrolled");
-        }
-      });
+<!-- Scripts -->
+<script>
+  // Scroll event to change header background
+  window.addEventListener("scroll", function () {
+    const header = document.getElementById("header");
+    if (window.scrollY > 50) {
+      header.classList.add("header-scrolled");
+    } else {
+      header.classList.remove("header-scrolled");
+    }
+  });
 
-      // Mobile menu toggle
-      document
-        .querySelector(".mobile-toggle")
-        .addEventListener("click", function () {
-          document.querySelector(".nav-list").classList.add("active");
-          document.querySelector(".mobile-overlay").classList.add("active");
-          document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
-        });
+  // Mobile menu toggle
+  document
+    .querySelector(".mobile-toggle")
+    .addEventListener("click", function () {
+      document.querySelector(".nav-list").classList.add("active");
+      document.querySelector(".mobile-overlay").classList.add("active");
+      document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
+    });
 
-      // Close mobile menu when clicking on overlay
-      document
-        .querySelector(".mobile-overlay")
-        .addEventListener("click", function () {
-          document.querySelector(".nav-list").classList.remove("active");
-          document.querySelector(".mobile-overlay").classList.remove("active");
-          document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
-        });
+  // Close mobile menu when clicking on overlay
+  document
+    .querySelector(".mobile-overlay")
+    .addEventListener("click", function () {
+      document.querySelector(".nav-list").classList.remove("active");
+      document.querySelector(".mobile-overlay").classList.remove("active");
+      document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
+    });
 
-      // Close mobile menu when clicking a nav link (for better UX)
-      document.querySelectorAll(".nav-link").forEach(function (link) {
-        link.addEventListener("click", function () {
-          document.querySelector(".nav-list").classList.remove("active");
-          document.querySelector(".mobile-overlay").classList.remove("active");
-          document.body.style.overflow = ""; // Re-enable scrolling
-        });
-      });
+  // Close mobile menu when clicking a nav link (for better UX)
+  document.querySelectorAll(".nav-link").forEach(function (link) {
+    link.addEventListener("click", function () {
+      document.querySelector(".nav-list").classList.remove("active");
+      document.querySelector(".mobile-overlay").classList.remove("active");
+      document.body.style.overflow = ""; // Re-enable scrolling
+    });
+  });
 
-      // Close mobile menu when clicking outside
-      document.addEventListener("click", function (event) {
-        const navList = document.querySelector(".nav-list");
-        const mobileToggle = document.querySelector(".mobile-toggle");
+  // Close mobile menu when clicking outside
+  document.addEventListener("click", function (event) {
+    const navList = document.querySelector(".nav-list");
+    const mobileToggle = document.querySelector(".mobile-toggle");
 
-        if (
-          navList.classList.contains("active") &&
-          !navList.contains(event.target) &&
-          event.target !== mobileToggle
-        ) {
-          navList.classList.remove("active");
-          document.querySelector(".mobile-overlay").classList.remove("active");
-          document.body.style.overflow = ""; // Re-enable scrolling
-        }
-      });
+    if (
+      navList.classList.contains("active") &&
+      !navList.contains(event.target) &&
+      event.target !== mobileToggle
+    ) {
+      navList.classList.remove("active");
+      document.querySelector(".mobile-overlay").classList.remove("active");
+      document.body.style.overflow = ""; // Re-enable scrolling
+    }
+  });
 
-      // Form submission
-      document
-        .getElementById("contactForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          alert(
-            "Vielen Dank für Ihre Nachricht! Wir werden uns in Kürze bei Ihnen melden."
-          );
-          this.reset();
-        });
-    </script>
-  </body>
-</html>
+  // Form submission
+  document
+    .getElementById("contactForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+      alert(
+        "Vielen Dank für Ihre Nachricht! Wir werden uns in Kürze bei Ihnen melden."
+      );
+      this.reset();
+    });
+</script>

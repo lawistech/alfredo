@@ -1483,6 +1483,7 @@ jQuery(document).ready(function($) {
   // Enhance mini cart items with additional information and controls
   function enhanceMiniCartItems() {
     console.log('Enhancing mini cart items');
+
     // Process each cart item
     $('.woocommerce-mini-cart-item').each(function() {
       const $item = $(this);
@@ -1492,13 +1493,46 @@ jQuery(document).ready(function($) {
         return;
       }
 
+      console.log('Enhancing cart item:', $item);
+
+      // Store the original cart item key before any DOM manipulation
+      const $removeBtn = $item.find('.remove_from_cart_button').first();
+      let cartItemKey = '';
+
+      // Extract cart item key from remove button
+      if ($removeBtn.length) {
+        console.log('Found remove button:', $removeBtn);
+
+        // Try to get from data attribute first
+        cartItemKey = $removeBtn.data('cart_item_key');
+
+        // If not found, try to extract from the href attribute
+        if (!cartItemKey && $removeBtn.attr('href')) {
+          const hrefMatch = $removeBtn.attr('href').match(/remove_item=([^&]+)/);
+          if (hrefMatch && hrefMatch.length > 1) {
+            cartItemKey = hrefMatch[1];
+            console.log('Extracted cart item key from href:', cartItemKey);
+            // Also set it as a data attribute on the remove button for easier access
+            $removeBtn.attr('data-cart_item_key', cartItemKey);
+          }
+        }
+
+        // Store the key as data attribute on the item for later use
+        if (cartItemKey) {
+          $item.attr('data-cart-item-key', cartItemKey);
+        } else {
+          console.warn('Could not extract cart item key');
+        }
+      } else {
+        console.warn('Remove button not found');
+      }
+
       // Mark as enhanced to avoid processing it multiple times
       $item.addClass('enhanced');
 
       // Get elements
       const $img = $item.find('img').first();
-      const $link = $item.find('a:not(.remove)').first();
-      const $removeBtn = $item.find('.remove_from_cart_button').first();
+      const $link = $item.find('a:not(.remove_from_cart_button)').first();
       const $quantityText = $item.find('.quantity').first();
 
       if (!$img.length || !$link.length || !$quantityText.length) {
@@ -1526,21 +1560,25 @@ jQuery(document).ready(function($) {
         }
       }
 
-      // Clear the item's content but keep the remove button
-      const $removeClone = $removeBtn.clone(true);
-      $item.empty().append($removeClone);
+      // IMPORTANT: Clone the original elements to preserve their event handlers
+      const $imgClone = $img.clone(true);
+      const $linkClone = $link.clone(true);
+
+      // Instead of emptying the entire item, let's keep the remove button in place
+      // and just remove other content
+      $item.find(':not(.remove_from_cart_button)').remove();
 
       // Create new structure
       const $top = $('<div class="woocommerce-mini-cart-item-top"></div>').appendTo($item);
 
       // Add image to top
-      $top.append($img);
+      $top.append($imgClone);
 
       // Create content container
       const $content = $('<div class="woocommerce-mini-cart-item-content"></div>').appendTo($top);
 
       // Add link to content
-      $content.append($link);
+      $content.append($linkClone);
 
       // Try to get product category from data attribute
       let category = $item.attr('data-category') || '';
@@ -1558,7 +1596,7 @@ jQuery(document).ready(function($) {
           variations = variationMatch[1];
           // Update product title without variations
           const cleanTitle = productTitle.replace(/\s*\([^)]*\)\s*/, '');
-          $link.text(cleanTitle);
+          $linkClone.text(cleanTitle);
         }
       }
 
@@ -1579,66 +1617,170 @@ jQuery(document).ready(function($) {
       }
 
       // Add quantity controls
-      const $controls = $('<div class="woocommerce-mini-cart-item-controls"></div>').appendTo($item);
+      const $controls = $('<div class="woocommerce-mini-cart-item-controls" data-cart-item-key="' + cartItemKey + '"></div>').appendTo($item);
 
-      $('<button class="mini-cart-qty-btn mini-cart-qty-minus">-</button>').appendTo($controls);
+      $('<button type="button" class="mini-cart-qty-btn mini-cart-qty-minus">-</button>').appendTo($controls);
       $('<span class="mini-cart-qty-value">' + quantity + '</span>').appendTo($controls);
-      $('<button class="mini-cart-qty-btn mini-cart-qty-plus">+</button>').appendTo($controls);
-
-      // Set up quantity control events
-      const $minus = $controls.find('.mini-cart-qty-minus');
-      const $plus = $controls.find('.mini-cart-qty-plus');
-      const $value = $controls.find('.mini-cart-qty-value');
-      const key = $removeBtn.data('cart_item_key') || '';
-
-      if (key) {
-        $minus.on('click', function(e) {
-          e.preventDefault();
-          const currentQty = parseInt($value.text());
-          if (currentQty > 1) {
-            updateCartItemQuantity(key, currentQty - 1);
-          }
-        });
-
-        $plus.on('click', function(e) {
-          e.preventDefault();
-          const currentQty = parseInt($value.text());
-          updateCartItemQuantity(key, currentQty + 1);
-        });
-      } else {
-        console.log('Missing cart item key for quantity controls');
-      }
+      $('<button type="button" class="mini-cart-qty-btn mini-cart-qty-plus">+</button>').appendTo($controls);
     });
+
+    // We're now using event delegation for the remove buttons via document.on('click.cartRemove')
+    // so we don't need to attach event handlers here
   }
 
   // Update cart item quantity
   function updateCartItemQuantity(cart_item_key, quantity) {
-    // Show loading indicator
-    $('#cart-items').append('<div class="cart-loading"><div class="loading-spinner"></div></div>');
+    if (!cart_item_key) {
+      console.error('Missing cart item key');
+      showNotification('Fehler', 'Produkt konnte nicht aktualisiert werden. Fehlender Produkt-Schlüssel.');
+      return;
+    }
 
+    console.log('Updating cart item quantity:', cart_item_key, quantity);
+
+    // Show loading indicator
+    if (!$('.cart-loading').length) {
+      $('#cart-items').append('<div class="cart-loading"><div class="loading-spinner"></div></div>');
+    }
+
+    // Use WooCommerce's direct cart update endpoint
+    // This is the most reliable method and works without needing a nonce
     $.ajax({
       type: 'POST',
-      url: wc_add_to_cart_params.ajax_url,
+      url: '/?wc-ajax=cart_update_quantity',
       data: {
-        action: 'update_cart_item_quantity',
         cart_item_key: cart_item_key,
-        quantity: quantity,
-        security: wc_add_to_cart_params.update_cart_nonce || ''
+        quantity: quantity
       },
       success: function(response) {
-        if (response.success) {
+        console.log('Cart update response:', response);
+        // Remove loading indicator
+        $('.cart-loading').remove();
+
+        if (response && !response.error) {
+          // Show success notification
+          showNotification('Aktualisiert', 'Warenkorb wurde aktualisiert.');
+
           // Refresh cart fragments
           $(document.body).trigger('wc_fragment_refresh');
         } else {
-          // Remove loading indicator
-          $('.cart-loading').remove();
-          showNotification('Fehler', response.data || 'Es gab ein Problem beim Aktualisieren des Warenkorbs.');
+          console.error('Cart update error:', response);
+          showNotification('Fehler', response.error || 'Es gab ein Problem beim Aktualisieren des Warenkorbs.');
+
+          // Try fallback method
+          updateCartViaDirectSet(cart_item_key, quantity);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('Cart update AJAX error:', status, error);
+        // Remove loading indicator
+        $('.cart-loading').remove();
+        showNotification('Fehler', 'Es gab ein Problem beim Aktualisieren des Warenkorbs.');
+
+        // Try fallback method
+        updateCartViaDirectSet(cart_item_key, quantity);
+      }
+    });
+  }
+
+  // First fallback method - try to use WooCommerce's set_quantity endpoint
+  function updateCartViaDirectSet(cart_item_key, quantity) {
+    console.log('Using direct set quantity fallback for cart item:', cart_item_key);
+
+    // Show loading indicator if not already shown
+    if (!$('.cart-loading').length) {
+      $('#cart-items').append('<div class="cart-loading"><div class="loading-spinner"></div></div>');
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: '/?wc-ajax=set_cart_item_quantity',
+      data: {
+        cart_item_key: cart_item_key,
+        quantity: quantity
+      },
+      success: function(response) {
+        console.log('Set quantity response:', response);
+        // Remove loading indicator
+        $('.cart-loading').remove();
+
+        if (response && response.success) {
+          // Show success notification
+          showNotification('Aktualisiert', 'Warenkorb wurde aktualisiert.');
+
+          // Refresh cart fragments
+          $(document.body).trigger('wc_fragment_refresh');
+        } else {
+          console.error('Set quantity error:', response);
+          showNotification('Fehler', 'Es gab ein Problem beim Aktualisieren des Warenkorbs.');
+
+          // Try second fallback method
+          updateCartViaFragment();
         }
       },
       error: function() {
         // Remove loading indicator
         $('.cart-loading').remove();
         showNotification('Fehler', 'Es gab ein Problem beim Aktualisieren des Warenkorbs.');
+
+        // Try second fallback method
+        updateCartViaFragment();
+      }
+    });
+  }
+
+  // Second fallback method - just refresh the fragments
+  function updateCartViaFragment() {
+    console.log('Using fragment refresh fallback');
+
+    // Show loading indicator if not already shown
+    if (!$('.cart-loading').length) {
+      $('#cart-items').append('<div class="cart-loading"><div class="loading-spinner"></div></div>');
+    }
+
+    // Use WooCommerce's built-in fragment refresh mechanism
+    $.ajax({
+      url: '/?wc-ajax=get_refreshed_fragments',
+      type: 'POST',
+      data: {
+        // Include a timestamp to prevent caching
+        time: new Date().getTime()
+      },
+      success: function(data) {
+        console.log('Fragment refresh response:', data);
+        // Remove loading indicator
+        $('.cart-loading').remove();
+
+        if (data && data.fragments) {
+          // Replace fragments
+          $.each(data.fragments, function(key, value) {
+            $(key).replaceWith(value);
+          });
+
+          // Force re-enhancement of cart items
+          setTimeout(function() {
+            enhanceMiniCartItems();
+          }, 100);
+
+          // Show notification
+          showNotification('Aktualisiert', 'Warenkorb wurde aktualisiert.');
+        } else {
+          // Last resort - just reload the page
+          showNotification('Aktualisiere Seite', 'Der Warenkorb wird aktualisiert...');
+          setTimeout(function() {
+            window.location.reload();
+          }, 1000);
+        }
+      },
+      error: function() {
+        // Remove loading indicator
+        $('.cart-loading').remove();
+        showNotification('Fehler', 'Es gab ein Problem beim Aktualisieren des Warenkorbs.');
+
+        // Last resort - just reload the page
+        setTimeout(function() {
+          window.location.reload();
+        }, 1000);
       }
     });
   }
@@ -1662,12 +1804,39 @@ jQuery(document).ready(function($) {
 
   // Remove from cart
   $(document).on('click', '.woocommerce-mini-cart .remove_from_cart_button', function(e) {
-    // Default WooCommerce functionality will handle the AJAX
-    // We just need to show a notification after it's done
-    $(document.body).on('removed_from_cart', function() {
+    // Store a reference to the clicked button
+    const $removeBtn = $(this);
+    const cartItemKey = $removeBtn.data('cart_item_key') || '';
+
+    // Show loading indicator
+    $('#cart-items').append('<div class="cart-loading"><div class="loading-spinner"></div></div>');
+
+    // Set up a one-time event listener for the removed_from_cart event
+    $(document.body).one('removed_from_cart', function() {
+      // Remove loading indicator
+      $('.cart-loading').remove();
+
+      // Show notification
       showNotification('Produkt entfernt', 'Das Produkt wurde aus deinem Warenkorb entfernt.');
-      // This event runs only once
-      $(document.body).off('removed_from_cart');
+    });
+
+    // Set a timeout to handle cases where the event doesn't fire
+    const removeTimeout = setTimeout(function() {
+      // If we still have the loading indicator after 3 seconds, remove it
+      if ($('.cart-loading').length) {
+        $('.cart-loading').remove();
+
+        // Force refresh the cart fragments
+        $(document.body).trigger('wc_fragment_refresh');
+
+        // Show notification
+        showNotification('Warenkorb aktualisiert', 'Der Warenkorb wurde aktualisiert.');
+      }
+    }, 3000);
+
+    // When fragments are refreshed, clear the timeout
+    $(document.body).one('wc_fragments_refreshed', function() {
+      clearTimeout(removeTimeout);
     });
   });
 
@@ -1736,6 +1905,8 @@ jQuery(document).ready(function($) {
 
   // Refresh fragments on page load
   $(document).ready(function() {
+    console.log('Document ready - initializing cart functionality');
+
     // First try to enhance any existing cart items
     enhanceMiniCartItems();
 
@@ -1749,9 +1920,126 @@ jQuery(document).ready(function($) {
 
     // Also listen for fragment refreshes
     $(document.body).on('wc_fragments_refreshed', function() {
+      console.log('Fragments refreshed - re-enhancing cart items');
       setTimeout(function() {
         enhanceMiniCartItems();
       }, 100);
+    });
+
+    // Re-attach event handlers after DOM changes
+    $(document.body).on('wc_fragments_loaded wc_fragments_refreshed', function() {
+      console.log('Fragments loaded/refreshed - re-attaching event handlers');
+
+      // Re-attach remove button handlers
+      $('.woocommerce-mini-cart-item .remove_from_cart_button').each(function() {
+        const $btn = $(this);
+        // Store cart item key as data attribute if not already present
+        if (!$btn.data('cart_item_key') && $btn.attr('href')) {
+          const keyMatch = $btn.attr('href').match(/remove_item=([^&]+)/);
+          if (keyMatch && keyMatch.length > 1) {
+            $btn.attr('data-cart_item_key', keyMatch[1]);
+          }
+        }
+      });
+
+      // Force re-enhancement after a short delay to ensure all DOM elements are ready
+      setTimeout(enhanceMiniCartItems, 200);
+    });
+
+    // Use event delegation for quantity buttons to ensure they work after DOM updates
+    $(document).off('click.cartQty').on('click.cartQty', '.mini-cart-qty-minus, .mini-cart-qty-plus', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const $btn = $(this);
+      const $item = $btn.closest('.woocommerce-mini-cart-item');
+
+      if (!$item.length) {
+        console.warn('Could not find cart item container');
+        return;
+      }
+
+      // Try multiple ways to get the cart item key
+      let cartItemKey = '';
+
+      // First try from the controls container data attribute
+      const $controls = $btn.closest('.woocommerce-mini-cart-item-controls');
+      if ($controls.length) {
+        cartItemKey = $controls.data('cart-item-key');
+      }
+
+      // If not found, try from the item data attribute
+      if (!cartItemKey) {
+        cartItemKey = $item.attr('data-cart-item-key');
+      }
+
+      // If still not found, try from the remove button
+      if (!cartItemKey) {
+        const $removeBtn = $item.find('.remove_from_cart_button');
+        if ($removeBtn.length) {
+          cartItemKey = $removeBtn.data('cart_item_key');
+
+          // If not in data attribute, try to extract from href
+          if (!cartItemKey && $removeBtn.attr('href')) {
+            const hrefMatch = $removeBtn.attr('href').match(/remove_item=([^&]+)/);
+            if (hrefMatch && hrefMatch.length > 1) {
+              cartItemKey = hrefMatch[1];
+            }
+          }
+        }
+      }
+
+      if (!cartItemKey) {
+        console.error('Could not find cart item key');
+        showNotification('Fehler', 'Produkt konnte nicht aktualisiert werden. Fehlender Produkt-Schlüssel.');
+        return;
+      }
+
+      const $value = $item.find('.mini-cart-qty-value');
+      let quantity = parseInt($value.text() || '1');
+
+      if ($btn.hasClass('mini-cart-qty-minus')) {
+        if (quantity > 1) quantity -= 1;
+      } else {
+        quantity += 1;
+      }
+
+      console.log('Updating quantity for item', cartItemKey, 'to', quantity);
+
+      // Update the quantity value immediately for better UX
+      $value.text(quantity);
+
+      // Call the update function
+      updateCartItemQuantity(cartItemKey, quantity);
+    });
+
+    // Also handle the remove button clicks with event delegation
+    $(document).off('click.cartRemove').on('click.cartRemove', '.woocommerce-mini-cart-item .remove_from_cart_button', function(e) {
+      // Don't prevent default to allow WooCommerce's handler to work
+      console.log('Remove button clicked');
+
+      // Show loading indicator
+      if (!$('.cart-loading').length) {
+        $('#cart-items').append('<div class="cart-loading"><div class="loading-spinner"></div></div>');
+      }
+
+      // Set up a one-time event listener for the removed_from_cart event
+      $(document.body).one('removed_from_cart', function() {
+        console.log('Item removed from cart');
+        // Remove loading indicator
+        $('.cart-loading').remove();
+
+        // Show notification
+        showNotification('Produkt entfernt', 'Das Produkt wurde aus deinem Warenkorb entfernt.');
+      });
+
+      // Set a timeout to handle cases where the event doesn't fire
+      setTimeout(function() {
+        if ($('.cart-loading').length) {
+          $('.cart-loading').remove();
+          refreshCart(); // Force refresh if the event didn't fire
+        }
+      }, 3000);
     });
   });
 });

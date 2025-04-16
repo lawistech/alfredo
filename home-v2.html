@@ -1,0 +1,1603 @@
+<style>
+    :root {
+      --primary: #0099ff;
+      --primary-light: #33adff;
+      --primary-dark: #0077cc;
+      --accent: #ff6600;
+      --accent-dark: #cc5200;
+      --dark: #1a1a1a;
+      --darker: #121212;
+      --light: #ffffff;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: linear-gradient(to bottom, var(--dark), var(--darker));
+      color: var(--light);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      background: linear-gradient(
+        45deg,
+        var(--primary-light) 0%,
+        var(--primary) 20%,
+        var(--accent) 40%,
+        #ff9900 60%,
+        var(--accent-dark) 80%,
+        var(--primary) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 300% auto;
+      animation: gradientShift 6s ease infinite;
+      text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      letter-spacing: -1px;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      position: relative;
+      padding-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+      color: var(--gray-300);
+    }
+
+    /* Container and Layout Classes */
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .justify-center {
+      justify-content: center;
+    }
+
+    .grid {
+      display: grid;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 1.5rem 0;
+      transition: all 0.3s ease;
+      background: transparent;
+      backdrop-filter: none;
+    }
+
+    .header-scrolled {
+      padding: 1rem 0;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      background: rgba(26, 26, 26, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .nav-list {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-link {
+      color: var(--gray-300);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+      display: block;
+      width: 100%;
+      padding: 0.75rem 0;
+      text-align: center;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      transition: width 0.3s;
+    }
+
+    .nav-link:hover {
+      color: var(--light);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--light);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Mobile menu overlay */
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .mobile-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 8rem 0 5rem;
+    }
+
+    .hero-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(
+        circle at 30% 30%,
+        rgba(0, 153, 255, 0.15),
+        transparent 70%
+      );
+      z-index: -1;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-subtitle {
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+      color: var(--primary-light);
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+
+    .hero-description {
+      font-size: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.875rem 2rem;
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      font-size: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 153, 255, 0.5);
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 153, 255, 0.6);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      box-shadow: 0 4px 20px rgba(255, 102, 0, 0.5);
+    }
+
+    .btn-accent:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 8px 25px rgba(255, 102, 0, 0.6);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      box-shadow: none;
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 8px 25px rgba(0, 153, 255, 0.6);
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 2rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      margin-bottom: 0.5rem;
+      letter-spacing: -1px;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Subscription Plans Section */
+    .subscription-section {
+      padding: 5rem 0;
+      position: relative;
+    }
+
+    .subscription-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(
+        circle at 70% 30%,
+        rgba(255, 102, 0, 0.15),
+        transparent 70%
+      );
+      z-index: -1;
+    }
+
+    .section-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      text-align: center;
+    }
+
+    .section-heading {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading::after {
+      content: "";
+      position: absolute;
+      bottom: -0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      border-radius: 3px;
+    }
+
+    .subscription-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .subscription-card {
+      background: rgba(26, 26, 26, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .subscription-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .subscription-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: 12px;
+      right: -30px;
+      background: var(--accent);
+      color: white;
+      padding: 0.25rem 2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      transform: rotate(45deg);
+    }
+
+    .subscription-name {
+      font-size: 1.25rem;
+      color: var(--light);
+      margin-bottom: 1rem;
+    }
+
+    .subscription-price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      margin-bottom: 0.25rem;
+    }
+
+    .popular-card .subscription-price {
+      color: var(--accent);
+    }
+
+    .subscription-period {
+      color: var(--gray-400);
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+      display: block;
+    }
+
+    .subscription-features {
+      list-style: none;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+
+    .subscription-features li {
+      margin-bottom: 0.75rem;
+      padding-left: 1.5rem;
+      position: relative;
+      color: var(--gray-300);
+    }
+
+    .subscription-features li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .popular-card .subscription-features li::before {
+      color: var(--accent);
+    }
+
+    /* Industry Solutions Section */
+    .industry-section {
+      padding: 5rem 0;
+      position: relative;
+    }
+
+    .industry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .industry-card {
+      background: rgba(26, 26, 26, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .industry-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .industry-icon {
+      width: 100%;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .industry-icon svg {
+      width: 64px;
+      height: 64px;
+      color: var(--primary-light);
+    }
+
+    .industry-content {
+      padding: 1.5rem;
+    }
+
+    .industry-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: var(--light);
+    }
+
+    .industry-description {
+      color: var(--gray-300);
+      font-size: 0.9375rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Digital Products Section */
+    .products-section {
+      padding: 5rem 0;
+      position: relative;
+    }
+
+    .products-section::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(
+        circle at 30% 70%,
+        rgba(0, 153, 255, 0.15),
+        transparent 70%
+      );
+      z-index: -1;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      background: rgba(26, 26, 26, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .product-content {
+      padding: 1.5rem;
+    }
+
+    .product-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--light);
+    }
+
+    .product-price {
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .product-description {
+      color: var(--gray-300);
+      font-size: 0.9375rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Testimonials Section */
+    .testimonials-section {
+      padding: 5rem 0;
+      position: relative;
+    }
+
+    .testimonials-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+
+    .testimonial-card {
+      background: rgba(26, 26, 26, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .testimonial-content {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--gray-300);
+      font-style: italic;
+    }
+
+    .testimonial-content::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: -0.5rem;
+      font-size: 3rem;
+      line-height: 1;
+      color: var(--primary);
+      font-family: Georgia, serif;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+    }
+
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 1rem;
+      object-fit: cover;
+    }
+
+    .author-info {
+      flex: 1;
+    }
+
+    .author-name {
+      font-weight: 600;
+      color: var(--light);
+      margin-bottom: 0.25rem;
+    }
+
+    .author-company {
+      font-size: 0.875rem;
+      color: var(--gray-400);
+    }
+
+  
+  /* Features Section */
+  .features-section {
+  padding: 5rem 0;
+  position: relative;
+  }
+
+  .features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+  }
+
+  .feature-card {
+  background: rgba(26, 26, 26, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Updated icon styles - made smaller */
+  .feature-icon {
+  width: 48px; /* Reduced from 60px */
+  height: 48px; /* Reduced from 60px */
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 153, 255, 0.1);
+  border-radius: 50%;
+  color: var(--primary);
+  }
+
+  .feature-icon svg {
+  width: 22px; /* Reduced from 30px */
+  height: 22px; /* Reduced from 30px */
+  }
+
+  .feature-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--light);
+  }
+
+  .feature-description {
+  color: var(--gray-300);
+  font-size: 0.9375rem;
+  }
+
+  @media (max-width: 992px) {
+  .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+  }
+  }
+
+  @media (max-width: 768px) {
+  .features-grid {
+      grid-template-columns: 1fr;
+  }
+  }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 5rem 0;
+      text-align: center;
+      background: linear-gradient(to right, rgba(26, 26, 26, 0.8), rgba(18, 18, 18, 0.8));
+      border-radius: 1rem;
+      margin: 2rem 0;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cta-description {
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      font-size: 1.1rem;
+    }
+
+
+
+    /* Footer */
+    footer {
+      background: var(--darker);
+      padding: 5rem 0 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-brand {
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-brand-desc {
+      color: var(--gray-400);
+      font-size: 0.9375rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .social-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .social-icon:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .footer-heading {
+      font-size: 1.125rem;
+      margin-bottom: 1.5rem;
+      color: var(--light);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-link {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-link a {
+      color: var(--gray-400);
+      text-decoration: none;
+      transition: color 0.3s;
+      font-size: 0.9375rem;
+    }
+
+    .footer-link a:hover {
+      color: var(--primary);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 2rem;
+      text-align: center;
+      color: var(--gray-500);
+      font-size: 0.875rem;
+    }
+
+    /* Client Logo Slider */
+    .clients-section {
+      padding: 3rem 0;
+      text-align: center;
+    }
+
+    .client-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4rem;
+      margin-top: 2rem;
+    }
+
+    .client-logo {
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+      max-width: 120px;
+      filter: grayscale(100%) brightness(200%);
+    }
+
+    .client-logo:hover {
+      opacity: 1;
+      filter: grayscale(0%) brightness(100%);
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .subscription-grid,
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-stats {
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .mobile-toggle {
+        display: block;
+      }
+
+      .nav-list {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 280px;
+        height: 100vh;
+        background: var(--darker);
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        z-index: 1001;
+        padding: 2rem 0;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+        overflow-y: auto;
+      }
+
+      .nav-list li {
+        width: 100%;
+        padding: 0 1.5rem;
+      }
+
+      .nav-link {
+        padding: 1rem 0;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .nav-link::after {
+        display: none;
+      }
+
+      .nav-list.active {
+        right: 0;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .subscription-grid,
+      .industry-grid,
+      .products-grid,
+      .testimonials-list,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-social {
+        justify-content: center;
+      }
+
+      .client-logos {
+        gap: 2rem;
+      }
+
+      .client-logo {
+        max-width: 100px;
+      }
+    }
+  </style>
+
+ 
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-overlay"></div>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-subtitle">Ihr Partner für digitalen Erfolg</div>
+        <h1>Digitale Lösungen für nachhaltiges Wachstum</h1>
+        <p class="hero-description">
+          Wir bieten maßgeschneiderte digitale Strategien und kontinuierliche
+          Betreuung, die messbare Ergebnisse liefern. Von Website-Entwicklung
+          über SEO bis hin zu Social Media Marketing – alles aus einer Hand.
+        </p>
+        <div class="hero-buttons">
+          <a href="solutions.html" class="btn">LÖSUNGEN ENTDECKEN</a>
+          <a href="contact.html" class="btn btn-accent"
+            >BERATUNG VEREINBAREN</a
+          >
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-number">250+</div>
+            <div class="stat-label">Zufriedene Kunden</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">97%</div>
+            <div class="stat-label">Kundenbindung</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">12+</div>
+            <div class="stat-label">Branchen-Expertise</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Client Logos Section -->
+  <section class="clients-section">
+    <div class="container">
+      <p>VERTRAUEN VON FÜHRENDEN UNTERNEHMEN</p>
+      <div class="client-logos">
+        <img
+          src="https://via.placeholder.com/120x40"
+          alt="Client Logo 1"
+          class="client-logo"
+        />
+        <img
+          src="https://via.placeholder.com/120x40"
+          alt="Client Logo 2"
+          class="client-logo"
+        />
+        <img
+          src="https://via.placeholder.com/120x40"
+          alt="Client Logo 3"
+          class="client-logo"
+        />
+        <img
+          src="https://via.placeholder.com/120x40"
+          alt="Client Logo 4"
+          class="client-logo"
+        />
+        <img
+          src="https://via.placeholder.com/120x40"
+          alt="Client Logo 5"
+          class="client-logo"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Subscription Plans Section -->
+  <section class="subscription-section" id="subscription-plans">
+    <div class="container">
+      <div class="section-intro">
+        <h2 class="section-heading">Unsere Abonnementpakete</h2>
+        <p>
+          Entdecken Sie unsere flexiblen Abonnementoptionen, die auf Ihre
+          Bedürfnisse zugeschnitten sind. Kontinuierliche Unterstützung und
+          Wachstum ohne unerwartete Kosten.
+        </p>
+      </div>
+
+      <div class="subscription-grid">
+        <!-- Basic Plan -->
+        <div class="subscription-card">
+          <h3 class="subscription-name">Basic</h3>
+          <div class="subscription-price">€99</div>
+          <span class="subscription-period">pro Monat</span>
+          <ul class="subscription-features">
+            <li>Responsive Website (bis zu 5 Seiten)</li>
+            <li>SEO-Grundoptimierung</li>
+            <li>1 Social Media Post pro Woche</li>
+            <li>Monatlicher Performance-Bericht</li>
+            <li>E-Mail Support</li>
+          </ul>
+          <a href="subscription-plans.html" class="btn">AUSWÄHLEN</a>
+        </div>
+
+        <!-- Standard Plan -->
+        <div class="subscription-card popular-card">
+          <div class="popular-badge">Beliebt</div>
+          <h3 class="subscription-name">Growth</h3>
+          <div class="subscription-price">€249</div>
+          <span class="subscription-period">pro Monat</span>
+          <ul class="subscription-features">
+            <li>Responsive Website (bis zu 10 Seiten)</li>
+            <li>Erweiterte SEO-Optimierung</li>
+            <li>3 Social Media Posts pro Woche</li>
+            <li>Google Ads Management (Budget separat)</li>
+            <li>Wöchentliche Performance-Berichte</li>
+            <li>Persönlicher Account Manager</li>
+            <li>Prioritäts-Support</li>
+          </ul>
+          <a href="subscription-plans.html" class="btn btn-accent"
+            >AUSWÄHLEN</a
+          >
+        </div>
+
+        <!-- Premium Plan -->
+        <div class="subscription-card">
+          <h3 class="subscription-name">Enterprise</h3>
+          <div class="subscription-price">€499</div>
+          <span class="subscription-period">pro Monat</span>
+          <ul class="subscription-features">
+            <li>Unbegrenzte Website-Seiten & Funktionen</li>
+            <li>Premium SEO-Strategie & Umsetzung</li>
+            <li>Tägliche Social Media Betreuung</li>
+            <li>Google & Meta Ads Management</li>
+            <li>Content Marketing & Blogging</li>
+            <li>E-Commerce Integration</li>
+            <li>Dediziertes Strategieteam</li>
+            <li>24/7 Support</li>
+          </ul>
+          <a href="subscription-plans.html" class="btn">AUSWÄHLEN</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Industry Solutions Section -->
+  <section class="industry-section">
+    <div class="container">
+      <div class="section-intro">
+        <h2 class="section-heading">Branchenlösungen</h2>
+        <p>
+          Unsere maßgeschneiderten Lösungen für verschiedene Branchen
+          berücksichtigen die spezifischen Anforderungen und Herausforderungen
+          Ihres Geschäftsbereichs.
+        </p>
+      </div>
+
+      <div class="industry-grid">
+        <!-- Retail Industry -->
+        <div class="industry-card">
+          <div class="industry-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+              />
+            </svg>
+          </div>
+          <div class="industry-content">
+            <h3 class="industry-title">Einzelhandel</h3>
+            <p class="industry-description">
+              E-Commerce-Lösungen, die Ihren stationären Handel ergänzen und
+              Ihre Reichweite erweitern.
+            </p>
+            <a href="industries/retail.html" class="btn btn-outline"
+              >MEHR ERFAHREN</a
+            >
+          </div>
+        </div>
+
+        <!-- Hospitality Industry -->
+        <div class="industry-card">
+          <div class="industry-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"
+              />
+            </svg>
+          </div>
+          <div class="industry-content">
+            <h3 class="industry-title">Gastronomie</h3>
+            <p class="industry-description">
+              Digitale Präsenz, Online-Reservierungen und zielgerichtetes
+              Marketing für Ihr Restaurant.
+            </p>
+            <a href="industries/hospitality.html" class="btn btn-outline"
+              >MEHR ERFAHREN</a
+            >
+          </div>
+        </div>
+
+        <!-- Health & Wellness Industry -->
+        <div class="industry-card">
+          <div class="industry-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+          </div>
+          <div class="industry-content">
+            <h3 class="industry-title">Gesundheit & Wellness</h3>
+            <p class="industry-description">
+              Patientenfreundliche Websites mit Online-Terminbuchung und
+              DSGVO-konformen Lösungen.
+            </p>
+            <a href="industries/health.html" class="btn btn-outline"
+              >MEHR ERFAHREN</a
+            >
+          </div>
+        </div>
+
+        <!-- Professional Services Industry -->
+        <div class="industry-card">
+          <div class="industry-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+          <div class="industry-content">
+            <h3 class="industry-title">Professionelle Dienstleistungen</h3>
+            <p class="industry-description">
+              Vertrauensbildende Webpräsenzen für Anwälte, Berater und andere
+              Fachleute.
+            </p>
+            <a href="industries/professional.html" class="btn btn-outline"
+              >MEHR ERFAHREN</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Digital Products Section -->
+  <section class="products-section">
+    <div class="container">
+      <div class="section-intro">
+        <h2 class="section-heading">Digitale Produkte</h2>
+        <p>
+          Entdecken Sie unsere vorgefertigten digitalen Produkte und
+          Ressourcen, die Ihnen Zeit und Geld sparen und Ihnen helfen, Ihre
+          Ziele schneller zu erreichen.
+        </p>
+      </div>
+
+      <div class="products-grid">
+        <!-- WordPress Theme -->
+        <div class="product-card">
+          <img
+            src="https://via.placeholder.com/600x400"
+            alt="Business Pro WordPress Theme"
+            class="product-image"
+          />
+          <div class="product-content">
+            <h3 class="product-title">Business Pro WordPress Theme</h3>
+            <span class="product-price">€79,00</span>
+            <p class="product-description">
+              Professionelles WordPress-Theme mit vorgefertigten
+              Geschäftsseiten, optimiert für Conversion und Mobilgeräte.
+            </p>
+            <a href="shop/business-pro-theme.html" class="btn">ZUM PRODUKT</a>
+          </div>
+        </div>
+
+        <!-- SEO Toolkit -->
+        <div class="product-card">
+          <img
+            src="https://via.placeholder.com/600x400"
+            alt="Ultimate SEO Toolkit"
+            class="product-image"
+          />
+          <div class="product-content">
+            <h3 class="product-title">Ultimate SEO Toolkit</h3>
+            <span class="product-price">€49,00</span>
+            <p class="product-description">
+              Komplettes Toolset für Ihre eigene SEO-Strategie mit
+              Keyword-Recherche, Content-Planer und Analysetools.
+            </p>
+            <a href="shop/seo-toolkit.html" class="btn">ZUM PRODUKT</a>
+          </div>
+        </div>
+
+        <!-- Social Media Templates -->
+        <div class="product-card">
+          <img
+            src="https://via.placeholder.com/600x400"
+            alt="Social Media Templates Pack"
+            class="product-image"
+          />
+          <div class="product-content">
+            <h3 class="product-title">Social Media Templates Pack</h3>
+            <span class="product-price">€39,00</span>
+            <p class="product-description">
+              50+ vorgefertigte Templates für Instagram, Facebook und
+              LinkedIn, leicht anpassbar mit Canva.
+            </p>
+            <a href="shop/social-templates.html" class="btn">ZUM PRODUKT</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="section-intro">
+        <h2 class="section-heading">Kundenstimmen</h2>
+        <p>
+          Sehen Sie, was unsere Kunden über ihre Erfahrungen mit Alfredo Media
+          sagen.
+        </p>
+      </div>
+
+      <div class="testimonials-list">
+        <!-- Testimonial 1 -->
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            Seit wir auf das monatliche Betreuungspaket von Alfredo Media
+            umgestiegen sind, hat sich unser Online-Umsatz um 38% gesteigert.
+            Der kontinuierliche Support und die strategische Beratung sind
+            unbezahlbar.
+          </div>
+          <div class="testimonial-author">
+            <img
+              src="https://via.placeholder.com/50x50"
+              alt="Marina Schmidt"
+              class="author-avatar"
+            />
+            <div class="author-info">
+              <div class="author-name">Marina Schmidt</div>
+              <div class="author-company">Schmidt's Backwaren GmbH</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            Was uns bei Alfredo Media besonders gefällt, ist der ganzheitliche
+            Ansatz. Sie kümmern sich nicht nur um unsere Website, sondern um
+            unsere gesamte digitale Präsenz. Das Abonnementmodell gibt uns
+            zudem finanzielle Planungssicherheit.
+          </div>
+          <div class="testimonial-author">
+            <img
+              src="https://via.placeholder.com/50x50"
+              alt="Thomas Weber"
+              class="author-avatar"
+            />
+            <div class="author-info">
+              <div class="author-name">Thomas Weber</div>
+              <div class="author-company">Weber Rechtsanwälte</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            Als Startup hatten wir zunächst Bedenken wegen der monatlichen
+            Kosten, aber die Investition hat sich schnell amortisiert. Der ROI
+            durch die verbesserte Online-Präsenz übertrifft unsere Erwartungen
+            deutlich.
+          </div>
+          <div class="testimonial-author">
+            <img
+              src="https://via.placeholder.com/50x50"
+              alt="Sophia Müller"
+              class="author-avatar"
+            />
+            <div class="author-info">
+              <div class="author-name">Sophia Müller</div>
+              <div class="author-company">GreenTech Solutions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <h2 class="cta-title">Bereit für Ihren digitalen Erfolg?</h2>
+      <p class="cta-description">
+        Lassen Sie uns gemeinsam Ihr Unternehmen auf die nächste Stufe
+        bringen. Vereinbaren Sie jetzt Ihre kostenlose Beratung und erhalten
+        Sie eine maßgeschneiderte Strategie für nachhaltiges Wachstum.
+      </p>
+      <div class="hero-buttons">
+        <a href="contact.html" class="btn btn-accent">KOSTENLOSE BERATUNG</a>
+        <a href="client-portal.html" class="btn">ZUM CLIENT PORTAL</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <div class="section-intro">
+        <h2 class="section-heading">Ihre Vorteile mit unserem Abo-Modell</h2>
+        <p>
+          Warum immer mehr Unternehmen auf kontinuierliche digitale Betreuung
+          setzen
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <h3 class="feature-title">Planbare Kosten</h3>
+          <p class="feature-description">
+            Keine unerwarteten Ausgaben. Transparente monatliche Investition
+            für kontinuierliches Wachstum.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+          </div>
+          <h3 class="feature-title">Schnelle Reaktion</h3>
+          <p class="feature-description">
+            Garantierte Reaktionszeiten und regelmäßige Updates halten Ihre
+            digitale Präsenz immer aktuell.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+            </svg>
+          </div>
+          <h3 class="feature-title">Messbare Ergebnisse</h3>
+          <p class="feature-description">
+            Detaillierte Berichte zeigen Ihnen genau, wie Ihre Investition
+            sich in Wachstum umwandelt.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+          </div>
+          <h3 class="feature-title">Dediziertes Team</h3>
+          <p class="feature-description">
+            Ihr persönlicher Ansprechpartner und ein Team, das Ihr Unternehmen
+            und Ihre Ziele kennt und versteht.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ 
+
+<!-- Scripts -->
+<script>
+  // Scroll event to change header background
+  window.addEventListener("scroll", function () {
+    const header = document.getElementById("header");
+    if (window.scrollY > 50) {
+      header.classList.add("header-scrolled");
+    } else {
+      header.classList.remove("header-scrolled");
+    }
+  });
+
+  // Mobile menu toggle
+  document
+    .querySelector(".mobile-toggle")
+    .addEventListener("click", function () {
+      document.querySelector(".nav-list").classList.toggle("active");
+      document.querySelector(".mobile-overlay").classList.toggle("active");
+      document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
+    });
+    
+  // Close mobile menu when clicking on overlay
+  document
+    .querySelector(".mobile-overlay")
+    .addEventListener("click", function () {
+      document.querySelector(".nav-list").classList.remove("active");
+      document.querySelector(".mobile-overlay").classList.remove("active");
+      document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
+    });
+    
+  // Close mobile menu when clicking on a navigation link
+  document.querySelectorAll(".nav-link").forEach(function(link) {
+    link.addEventListener("click", function() {
+      if (window.innerWidth <= 768) { // Only on mobile
+        document.querySelector(".nav-list").classList.remove("active");
+        document.querySelector(".mobile-overlay").classList.remove("active");
+        document.body.style.overflow = ""; // Re-enable scrolling
+      }
+    });
+  });
+
+  // Animated counter for stats
+  function animateCounter(element, target, duration) {
+    let start = 0;
+    const increment = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      element.textContent = Math.floor(start);
+      if (start >= target) {
+        clearInterval(timer);
+        element.textContent = target;
+      }
+    }, 16);
+  }
+
+  // Intersection Observer for stats animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Start animation when element is visible
+        document.querySelectorAll('.stat-number').forEach(stat => {
+          const targetValue = parseInt(stat.textContent);
+          stat.textContent = '0';
+          animateCounter(stat, targetValue, 2000);
+        });
+        // Disconnect observer after animation starts
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+
+  // Observe stats section
+  const statsSection = document.querySelector('.hero-stats');
+  if (statsSection) {
+    observer.observe(statsSection);
+  }
+
+  // Initialize header state on page load
+  if (window.scrollY > 50) {
+    document.getElementById("header").classList.add("header-scrolled");
+  }
+</script>
+</body>
+
+           
