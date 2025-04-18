@@ -1,4 +1,4 @@
-<style>
+ <style>
     :root {
       --primary: #0099ff;
       --primary-light: #33adff;
@@ -57,7 +57,9 @@
         var(--primary) 100%
       );
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
+      color: transparent;
       background-size: 300% auto;
       animation: gradientShift 6s ease infinite;
       text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -683,7 +685,7 @@
       color: var(--gray-400);
     }
 
-  
+
   /* Features Section */
   .features-section {
   padding: 5rem 0;
@@ -766,7 +768,9 @@
       margin-bottom: 1.5rem;
       background: linear-gradient(45deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
+      color: transparent;
     }
 
     .cta-description {
@@ -967,8 +971,6 @@
     }
   </style>
 
- 
-
   <!-- Mobile Menu Overlay -->
   <div class="mobile-overlay"></div>
 
@@ -1014,29 +1016,22 @@
       <p>VERTRAUEN VON FÜHRENDEN UNTERNEHMEN</p>
       <div class="client-logos">
         <img
-          src="https://via.placeholder.com/120x40"
-          alt="Client Logo 1"
+          src="https://cdn.pixabay.com/photo/2015/05/26/09/37/paypal-784404_1280.png"
+          alt="PayPal"
           class="client-logo"
+          style="width: 120px; height: 60px; object-fit: contain;"
         />
         <img
-          src="https://via.placeholder.com/120x40"
-          alt="Client Logo 2"
+          src="https://cdn.pixabay.com/photo/2013/02/12/09/07/microsoft-80658_1280.png"
+          alt="Microsoft"
           class="client-logo"
+          style="width: 120px; height: 60px; object-fit: contain;"
         />
         <img
-          src="https://via.placeholder.com/120x40"
-          alt="Client Logo 3"
+          src="https://cdn.pixabay.com/photo/2016/11/18/11/16/social-1834011_960_720.png"
+          alt="Amazon"
           class="client-logo"
-        />
-        <img
-          src="https://via.placeholder.com/120x40"
-          alt="Client Logo 4"
-          class="client-logo"
-        />
-        <img
-          src="https://via.placeholder.com/120x40"
-          alt="Client Logo 5"
-          class="client-logo"
+          style="width: 120px; height: 60px; object-fit: contain;"
         />
       </div>
     </div>
@@ -1244,8 +1239,10 @@
   </section>
 
   <!-- Digital Products Section -->
-  <section class="products-section">
-    <div class="container">
+  <section class="products-section" style="background-image: url('https://cdn.pixabay.com/photo/2018/05/04/20/01/website-3374825_960_720.jpg'); background-size: cover; background-position: center; background-attachment: fixed; position: relative;">
+    <!-- Overlay to ensure text readability -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(26, 26, 26, 0.85); z-index: 0;"></div>
+    <div class="container" style="position: relative; z-index: 1;">
       <div class="section-intro">
         <h2 class="section-heading">Digitale Produkte</h2>
         <p>
@@ -1259,7 +1256,7 @@
         <!-- WordPress Theme -->
         <div class="product-card">
           <img
-            src="https://via.placeholder.com/600x400"
+            src="https://cdn.pixabay.com/photo/2016/03/27/18/54/technology-1283624_1280.jpg"
             alt="Business Pro WordPress Theme"
             class="product-image"
           />
@@ -1277,7 +1274,7 @@
         <!-- SEO Toolkit -->
         <div class="product-card">
           <img
-            src="https://via.placeholder.com/600x400"
+            src="https://cdn.pixabay.com/photo/2018/05/08/08/44/artificial-intelligence-3382507_1280.jpg"
             alt="Ultimate SEO Toolkit"
             class="product-image"
           />
@@ -1295,7 +1292,7 @@
         <!-- Social Media Templates -->
         <div class="product-card">
           <img
-            src="https://via.placeholder.com/600x400"
+            src="https://cdn.pixabay.com/photo/2020/05/18/16/17/social-media-5187243_1280.png"
             alt="Social Media Templates Pack"
             class="product-image"
           />
@@ -1335,7 +1332,7 @@
           </div>
           <div class="testimonial-author">
             <img
-              src="https://via.placeholder.com/50x50"
+              src="https://randomuser.me/api/portraits/women/65.jpg"
               alt="Marina Schmidt"
               class="author-avatar"
             />
@@ -1356,7 +1353,7 @@
           </div>
           <div class="testimonial-author">
             <img
-              src="https://via.placeholder.com/50x50"
+              src="https://randomuser.me/api/portraits/men/32.jpg"
               alt="Thomas Weber"
               class="author-avatar"
             />
@@ -1377,7 +1374,7 @@
           </div>
           <div class="testimonial-author">
             <img
-              src="https://via.placeholder.com/50x50"
+              src="https://randomuser.me/api/portraits/women/68.jpg"
               alt="Sophia Müller"
               class="author-avatar"
             />
@@ -1514,7 +1511,7 @@
     </div>
   </section>
 
- 
+
 
 <!-- Scripts -->
 <script>
@@ -1536,7 +1533,7 @@
       document.querySelector(".mobile-overlay").classList.toggle("active");
       document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
     });
-    
+
   // Close mobile menu when clicking on overlay
   document
     .querySelector(".mobile-overlay")
@@ -1545,7 +1542,7 @@
       document.querySelector(".mobile-overlay").classList.remove("active");
       document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
     });
-    
+
   // Close mobile menu when clicking on a navigation link
   document.querySelectorAll(".nav-link").forEach(function(link) {
     link.addEventListener("click", function() {
@@ -1599,5 +1596,4 @@
   }
 </script>
 </body>
-
-           
+</html>
