@@ -2671,6 +2671,26 @@ footer {
 }
 
 /* ===== Contact Page Styles ===== */
+.contact-section {
+    padding: 4rem 0;
+    position: relative;
+}
+
+.contact-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at 30% 70%,
+        rgba(0, 153, 255, 0.15),
+        transparent 70%
+    );
+    z-index: -1;
+}
+
 .contact-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -2752,6 +2772,14 @@ textarea.form-control {
     width: 100%;
     height: auto;
     display: block;
+}
+
+/* Google Map Styles */
+.google-map {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 /* ===== Portfolio Page Styles ===== */
