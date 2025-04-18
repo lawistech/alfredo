@@ -1342,11 +1342,11 @@ header {
         position: static;
         margin-bottom: 2rem;
     }
-    
+
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .cart-collaterals .cart_totals {
         width: 100%;
         float: none;
@@ -1419,7 +1419,17 @@ header {
         text-align: center;
         gap: 3rem;
     }
-    
+
+    .team-member {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .member-photo {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
     .features-grid {
         grid-template-columns: 1fr;
     }
@@ -1495,7 +1505,7 @@ header {
     .btn {
         padding: 0.75rem 1.25rem;
     }
-    
+
     .alfredo-tabs {
         overflow-x: auto;
     }
@@ -1610,12 +1620,12 @@ header {
     .legal-content {
         padding: 1.5rem;
     }
-    
+
     .woocommerce-mini-cart__buttons .button {
         padding: 0.75rem 1rem;
         font-size: 0.9rem;
     }
-    
+
     .client-logos {
         gap: 2rem;
     }
@@ -1623,7 +1633,7 @@ header {
     .client-logo {
         max-width: 100px;
     }
-    
+
     /* WooCommerce mobile adjustments */
     .woocommerce ul.products {
         grid-template-columns: 1fr;
@@ -2479,6 +2489,32 @@ footer {
 }
 
 /* ===== Team Page Styles ===== */
+.team-section {
+    padding: 4rem 0;
+    position: relative;
+}
+
+.team-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at 30% 70%,
+        rgba(255, 102, 0, 0.15),
+        transparent 70%
+    );
+    z-index: -1;
+}
+
+.team-intro {
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    text-align: center;
+}
+
 .team-member {
     display: grid;
     grid-template-columns: 1fr 2fr;
