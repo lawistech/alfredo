@@ -1357,6 +1357,11 @@ header {
         flex-direction: column;
     }
 
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
     .woocommerce-cart-form__contents .actions .coupon {
         width: 100%;
         margin-bottom: 1rem;
@@ -1418,6 +1423,17 @@ header {
         grid-template-columns: 1fr;
         text-align: center;
         gap: 3rem;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+
+    .filter-buttons {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        justify-content: flex-start;
     }
 
     .team-member {
@@ -1523,7 +1539,8 @@ header {
 
 @media (max-width: 576px) {
     .project-grid,
-    .merch-grid {
+    .merch-grid,
+    .projects-grid {
         grid-template-columns: 1fr;
     }
 
@@ -2741,6 +2758,32 @@ textarea.form-control {
 }
 
 /* ===== Portfolio Page Styles ===== */
+.portfolio-section {
+    padding: 4rem 0;
+    position: relative;
+}
+
+.portfolio-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at 70% 30%,
+        rgba(0, 153, 255, 0.15),
+        transparent 70%
+    );
+    z-index: -1;
+}
+
+.portfolio-intro {
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    text-align: center;
+}
+
 .project-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -2749,11 +2792,15 @@ textarea.form-control {
 }
 
 .project-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    margin-bottom: 20px;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     background: rgba(26, 26, 26, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 1rem;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .project-card:hover {
@@ -2761,10 +2808,63 @@ textarea.form-control {
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
+.project-link {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+}
+
 .project-image {
     width: 100%;
-    height: 250px;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+    border-radius: 1rem;
     object-fit: cover;
+}
+
+.project-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 1rem;
+}
+
+.project-card:hover .project-overlay {
+    opacity: 1;
+}
+
+.project-card:hover .project-image {
+    transform: scale(1.05);
+}
+
+.project-btn {
+    padding: 10px 20px;
+    background-color: var(--light);
+    color: var(--dark);
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.project-btn:hover {
+    background-color: var(--accent);
+    color: var(--light);
+    transform: translateY(-3px);
 }
 
 .project-info {
@@ -2781,6 +2881,62 @@ textarea.form-control {
     color: var(--gray-300);
     font-size: 0.9375rem;
     margin-bottom: 1.5rem;
+}
+
+/* Filter buttons */
+.filter-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    gap: 10px;
+}
+
+.filter-btn {
+    padding: 8px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--gray-300);
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filter-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--light);
+}
+
+.filter-btn.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 153, 255, 0.3);
+}
+
+/* Projects grid layout */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+/* Animation for filtered items */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
 }
 
 .highlight-text {
