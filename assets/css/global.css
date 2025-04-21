@@ -2650,10 +2650,213 @@ footer {
     border: 1px solid rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border-radius: 1rem;
-    padding: 2.5rem 2rem;
+    padding: 2rem;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+}
+
+/* ===== Mobile Improvements for About, Merch and Contact Pages ===== */
+
+/* General Mobile Improvements */
+@media (max-width: 768px) {
+  /* Improved padding and spacing */
+  .page-header {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+
+  section {
+    padding: 2rem 0;
+  }
+
+  .container {
+    padding: 0 1.25rem;
+  }
+
+  /* Better typography for mobile */
+  h1 {
+    font-size: 2.25rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  h3 {
+    font-size: 1.35rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+}
+
+/* ===== About Page Mobile Improvements ===== */
+@media (max-width: 768px) {
+  /* Team section mobile improvements */
+  .team-member {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .member-image {
+    text-align: center;
+  }
+
+  .member-photo {
+    max-width: 85%;
+    margin: 0 auto;
+    border-radius: 1rem;
+  }
+
+  .member-info h3 {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .team-intro {
+    margin-bottom: 2rem;
+  }
+
+  .team-intro p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* Fix text alignment on mobile */
+  .team-section h2.text-center {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* ===== Merch Page Mobile Improvements ===== */
+@media (max-width: 768px) {
+  /* Fix product grid on mobile */
+  .custom-product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .custom-product-image {
+    height: 180px;
+  }
+
+  .custom-product-info {
+    padding: 1.25rem;
+  }
+
+  .custom-product-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .custom-product-price {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Improved add to cart button */
+  .custom-product-card .btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .merch-intro {
+    margin-bottom: 2rem;
+  }
+}
+
+/* Further optimize for smaller mobile screens */
+@media (max-width: 576px) {
+  .custom-product-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .custom-product-card {
+    max-width: 100%;
+    margin: 0 auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .custom-product-image {
+    height: 200px;
+  }
+}
+
+/* ===== Contact Page Mobile Improvements ===== */
+@media (max-width: 768px) {
+  /* Contact container improvements */
+  .contact-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .contact-info,
+  .contact-form {
+    padding: 1.5rem;
+  }
+
+  /* Improved form inputs for mobile */
+  .form-control {
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  /* Better submit button */
+  .contact-form .btn {
+    width: 100%;
+    padding: 0.85rem;
+  }
+
+  /* Map container adjustments */
+  .google-map {
+    margin-top: 1.5rem;
+  }
+
+  .google-map iframe {
+    height: 250px;
+  }
+
+  /* Contact details spacing */
+  .contact-detail {
+    margin-bottom: 1.25rem;
+  }
+
+  .contact-detail i {
+    font-size: 1.25rem;
+    margin-top: 0.25rem;
+  }
+}
+
+/* Additional mobile navigation fixes */
+@media (max-width: 768px) {
+  .mobile-toggle, .c-mobile-toggle {
+    display: block;
+    z-index: 1002;
+  }
+
+  .nav-list {
+    padding-top: 4rem;
+  }
+
+  .nav-list li {
+    width: 100%;
+  }
+
+  .nav-link {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
 }
 
 .pricing-card.featured {

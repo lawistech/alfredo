@@ -33,6 +33,7 @@
             src="https://alfredomedia.nangkil.com/wp-content/uploads/2025/04/Photo-23.07.24-21-20-37_94b4e21614308d9c14429531ff9375f6.jpg"
             alt="Louis, CEO von Alfredo Media"
             class="member-photo"
+            loading="lazy"
           />
         </div>
         <div class="member-info">
@@ -67,80 +68,51 @@
       }
     });
 
-    // Mobile menu toggle
-    document
-      .querySelector(".mobile-toggle")
-      .addEventListener("click", function () {
-        document.querySelector(".nav-list").classList.add("active");
-        document.querySelector(".mobile-overlay").classList.add("active");
-        document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
-      });    // Mobile menu close button
-      document
-    .querySelector(".mobile-overlay")
-    .addEventListener("click", function () {
-      document.querySelector(".nav-list").classList.remove("active");
-      document.querySelector(".mobile-overlay").classList.remove("active");
-      document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
-    });
-
-  // Close mobile menu when clicking a nav link (for better UX)
-  document.querySelectorAll(".nav-link").forEach(function (link) {
-    link.addEventListener("click", function () {
-      document.querySelector(".nav-list").classList.remove("active");
-      document.querySelector(".mobile-overlay").classList.remove("active");
-      document.body.style.overflow = ""; // Re-enable scrolling
-    });
-  });
-
-  // Close mobile menu when clicking outside
-  document.addEventListener("click", function (event) {
-    const navList = document.querySelector(".nav-list");
-    const mobileToggle = document.querySelector(".mobile-toggle");
-    const mobileOverlay = document.querySelector(".mobile-overlay");
-
-    if (
-      navList.classList.contains("active") &&
-      !navList.contains(event.target) &&
-      event.target !== mobileToggle
-    ) {
-      navList.classList.remove("active");
-      document.querySelector(".mobile-overlay").classList.remove("active");
-      document.body.style.overflow = ""; // Re-enable scrolling
-    }
-  });
-
-    // Close mobile menu when clicking on overlay
-    document
-      .querySelector(".mobile-overlay")
-      .addEventListener("click", function () {
-        document.querySelector(".nav-list").classList.remove("active");
-        document.querySelector(".mobile-overlay").classList.remove("active");
-        document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
-      });
-
-    // Close mobile menu when clicking a nav link (for better UX)
-    document.querySelectorAll(".nav-link").forEach(function (link) {
-      link.addEventListener("click", function () {
-        document.querySelector(".nav-list").classList.remove("active");
-        document.querySelector(".mobile-overlay").classList.remove("active");
-        document.body.style.overflow = ""; // Re-enable scrolling
-      });
-    });
-
-    // Close mobile menu when clicking outside (keeping for compatibility)
-    document.addEventListener("click", function (event) {
-      const navList = document.querySelector(".nav-list");
+    // Mobile menu toggle - improved implementation
+    document.addEventListener('DOMContentLoaded', function() {
       const mobileToggle = document.querySelector(".mobile-toggle");
+      const mobileOverlay = document.querySelector(".mobile-overlay");
+      const navList = document.querySelector(".nav-list");
 
-      if (
-        navList.classList.contains("active") &&
-        !navList.contains(event.target) &&
-        event.target !== mobileToggle
-      ) {
-        navList.classList.remove("active");
-        document.querySelector(".mobile-overlay").classList.remove("active");
-        document.body.style.overflow = ""; // Re-enable scrolling
+      // Helper function to toggle menu
+      function toggleMenu() {
+        navList.classList.toggle("active");
+        mobileOverlay.classList.toggle("active");
+
+        if (navList.classList.contains("active")) {
+          document.body.style.overflow = "hidden"; // Prevent scrolling
+        } else {
+          document.body.style.overflow = ""; // Re-enable scrolling
+        }
       }
+
+      // Toggle menu on button click
+      if (mobileToggle) {
+        mobileToggle.addEventListener("click", toggleMenu);
+      }
+
+      // Close menu when clicking on overlay
+      if (mobileOverlay) {
+        mobileOverlay.addEventListener("click", toggleMenu);
+      }
+
+      // Close menu when clicking nav links
+      document.querySelectorAll(".nav-link").forEach(function(link) {
+        link.addEventListener("click", function() {
+          if (navList.classList.contains("active")) {
+            toggleMenu();
+          }
+        });
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener("click", function(event) {
+        if (navList && navList.classList.contains("active") &&
+            !navList.contains(event.target) &&
+            event.target !== mobileToggle) {
+          toggleMenu();
+        }
+      });
     });
   </script>
 </body>

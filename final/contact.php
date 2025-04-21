@@ -37,12 +37,12 @@
           <div><strong>E-Mail:</strong> louis.lampe@icloud.com</div>
         </div>
 
-        <!-- Google Map -->
+        <!-- Google Map - optimized height for mobile -->
         <div class="google-map">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2466.0462939889!2d8.79957!3d52.20611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47ba7a1f8c9e9d7d%3A0x4269a3d62e584af0!2sWorthgarten%2010%2C%2032549%20Bad%20Oeynhausen%2C%20Germany!5e0!3m2!1sen!2sus!4v1691234567890!5m2!1sen!2sus"
             width="100%"
-            height="300"
+            height="250"
             style="border:0; border-radius: 0.5rem; margin-top: 1.5rem;"
             allowfullscreen=""
             loading="lazy"
@@ -96,57 +96,68 @@
     }
   });
 
-  // Mobile menu toggle
-  document
-    .querySelector(".mobile-toggle")
-    .addEventListener("click", function () {
-      document.querySelector(".nav-list").classList.add("active");
-      document.querySelector(".mobile-overlay").classList.add("active");
-      document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
-    });
-
-  // Close mobile menu when clicking on overlay
-  document
-    .querySelector(".mobile-overlay")
-    .addEventListener("click", function () {
-      document.querySelector(".nav-list").classList.remove("active");
-      document.querySelector(".mobile-overlay").classList.remove("active");
-      document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
-    });
-
-  // Close mobile menu when clicking a nav link (for better UX)
-  document.querySelectorAll(".nav-link").forEach(function (link) {
-    link.addEventListener("click", function () {
-      document.querySelector(".nav-list").classList.remove("active");
-      document.querySelector(".mobile-overlay").classList.remove("active");
-      document.body.style.overflow = ""; // Re-enable scrolling
-    });
-  });
-
-  // Close mobile menu when clicking outside
-  document.addEventListener("click", function (event) {
-    const navList = document.querySelector(".nav-list");
+  // Mobile menu toggle - improved implementation with better performance
+  document.addEventListener('DOMContentLoaded', function() {
     const mobileToggle = document.querySelector(".mobile-toggle");
+    const mobileOverlay = document.querySelector(".mobile-overlay");
+    const navList = document.querySelector(".nav-list");
 
-    if (
-      navList.classList.contains("active") &&
-      !navList.contains(event.target) &&
-      event.target !== mobileToggle
-    ) {
-      navList.classList.remove("active");
-      document.querySelector(".mobile-overlay").classList.remove("active");
-      document.body.style.overflow = ""; // Re-enable scrolling
+    // Helper function to toggle menu
+    function toggleMenu() {
+      navList.classList.toggle("active");
+      mobileOverlay.classList.toggle("active");
+
+      if (navList.classList.contains("active")) {
+        document.body.style.overflow = "hidden"; // Prevent scrolling
+      } else {
+        document.body.style.overflow = ""; // Re-enable scrolling
+      }
     }
+
+    // Toggle menu on button click
+    if (mobileToggle) {
+      mobileToggle.addEventListener("click", toggleMenu);
+    }
+
+    // Close menu when clicking on overlay
+    if (mobileOverlay) {
+      mobileOverlay.addEventListener("click", toggleMenu);
+    }
+
+    // Close menu when clicking nav links
+    document.querySelectorAll(".nav-link").forEach(function(link) {
+      link.addEventListener("click", function() {
+        if (navList.classList.contains("active")) {
+          toggleMenu();
+        }
+      });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", function(event) {
+      if (navList && navList.classList.contains("active") &&
+          !navList.contains(event.target) &&
+          event.target !== mobileToggle) {
+        toggleMenu();
+      }
+    });
   });
 
-  // Form submission
-  document
-    .getElementById("contactForm")
-    .addEventListener("submit", function (e) {
-      e.preventDefault();
-      alert(
-        "Vielen Dank für Ihre Nachricht! Wir werden uns in Kürze bei Ihnen melden."
-      );
+  // Form submission with improved feedback
+  document.getElementById("contactForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    // Disable submit button to prevent double submissions
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = "Wird gesendet...";
+
+    // Simulate form submission
+    setTimeout(() => {
+      alert("Vielen Dank für Ihre Nachricht! Wir werden uns in Kürze bei Ihnen melden.");
       this.reset();
-    });
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = "Absenden";
+    }, 800);
+  });
 </script>
