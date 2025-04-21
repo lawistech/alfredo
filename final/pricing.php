@@ -43,49 +43,49 @@
         </div>
 
         <div class="pricing-cards">
-          <!-- Basic Package -->
+          <!-- Basis-Paket -->
           <div class="pricing-card">
-            <h3 class="card-title">BASIC</h3>
+            <h3 class="card-title">BASIS-PAKET</h3>
             <div class="card-price">975€</div>
             <div class="price-note">zzgl. 19% MwSt.</div>
             <ul class="feature-list">
-              <li>Homepage</li>
+              <li>Startseite</li>
               <li>Design für alle Geräte</li>
-              <li>Kontaktformular und Social Media-Integration</li>
+              <li>Kontaktformular und Integration sozialer Medien</li>
               <li>Kostenlose Anpassungen</li>
             </ul>
-            <a href="https://alfredomedia.nangkil.com/contact/" class="btn">JETZT KAUFEN</a>
+            <a href="https://alfredomedia.nangkil.com/contact/" class="btn btn-primary">JETZT KAUFEN</a>
           </div>
 
-          <!-- Standard Package -->
+          <!-- Standard-Paket -->
           <div class="pricing-card">
-            <h3 class="card-title">STANDARD</h3>
+            <h3 class="card-title">STANDARD-PAKET</h3>
             <div class="card-price">1475€</div>
             <div class="price-note">zzgl. 19% MwSt.</div>
             <ul class="feature-list">
-              <li>Homepage +2 Seiten</li>
+              <li>Startseite +2 Seiten</li>
               <li>Design für alle Geräte</li>
-              <li>Kontaktformular und Social Media-Integration</li>
+              <li>Kontaktformular und Integration sozialer Medien</li>
               <li>Terminbuchungssystem</li>
               <li>Kostenlose Anpassungen</li>
             </ul>
-            <a href="https://alfredomedia.nangkil.com/contact/" class="btn">JETZT KAUFEN</a>
+            <a href="https://alfredomedia.nangkil.com/contact/" class="btn btn-primary">JETZT KAUFEN</a>
           </div>
 
-          <!-- Premium Package -->
+          <!-- Premium-Paket -->
           <div class="pricing-card">
-            <h3 class="card-title">PREMIUM</h3>
+            <h3 class="card-title">PREMIUM-PAKET</h3>
             <div class="card-price">1975€</div>
             <div class="price-note">zzgl. 19% MwSt.</div>
             <ul class="feature-list">
-              <li>Homepage +4 Seiten</li>
+              <li>Startseite +4 Seiten</li>
               <li>Design für alle Geräte</li>
-              <li>Kontaktformular und Social Media-Integration</li>
+              <li>Kontaktformular und Integration sozialer Medien</li>
               <li>Terminbuchungssystem</li>
-              <li>Online Shop</li>
+              <li>Online-Shop</li>
               <li>Kostenlose Anpassungen</li>
             </ul>
-            <a href="https://alfredomedia.nangkil.com/contact/" class="btn">JETZT KAUFEN</a>
+            <a href="https://alfredomedia.nangkil.com/contact/" class="btn btn-primary">JETZT KAUFEN</a>
           </div>
         </div>
       </div>
@@ -104,9 +104,9 @@
         </div>
 
         <div class="pricing-cards">
-          <!-- Basic Package -->
+          <!-- Basis-Paket -->
           <div class="pricing-card">
-            <h3 class="card-title">BASIC</h3>
+            <h3 class="card-title">BASIS-PAKET</h3>
             <div class="card-price">80€</div>
             <div class="price-note">zzgl. 19% MwSt.</div>
             <ul class="feature-list">
@@ -114,12 +114,12 @@
               <li>Optimierung für Suchmaschinen</li>
               <li>Kostenlose Anpassungen</li>
             </ul>
-            <a href="https://alfredomedia.nangkil.com/contact/" class="btn">JETZT KAUFEN</a>
+            <a href="https://alfredomedia.nangkil.com/contact/" class="btn btn-primary">JETZT KAUFEN</a>
           </div>
 
-          <!-- Standard Package -->
+          <!-- Standard-Paket -->
           <div class="pricing-card">
-            <h3 class="card-title">STANDARD</h3>
+            <h3 class="card-title">STANDARD-PAKET</h3>
             <div class="card-price">120€</div>
             <div class="price-note">zzgl. 19% MwSt.</div>
             <ul class="feature-list">
@@ -129,12 +129,12 @@
               <li>Optimierung für Suchmaschinen</li>
               <li>Kostenlose Anpassungen</li>
             </ul>
-            <a href="https://alfredomedia.nangkil.com/contact/" class="btn">JETZT KAUFEN</a>
+            <a href="https://alfredomedia.nangkil.com/contact/" class="btn btn-primary">JETZT KAUFEN</a>
           </div>
 
-          <!-- Premium Package -->
+          <!-- Premium-Paket -->
           <div class="pricing-card">
-            <h3 class="card-title">PREMIUM</h3>
+            <h3 class="card-title">PREMIUM-PAKET</h3>
             <div class="card-price">160€</div>
             <div class="price-note">zzgl. 19% MwSt.</div>
             <ul class="feature-list">
@@ -144,62 +144,62 @@
               <li>Optimierung für Suchmaschinen</li>
               <li>Kostenlose Anpassungen</li>
             </ul>
-            <a href="https://alfredomedia.nangkil.com/contact/" class="btn">JETZT KAUFEN</a>
+            <a href="https://alfredomedia.nangkil.com/contact/" class="btn btn-primary">JETZT KAUFEN</a>
           </div>
         </div>
       </div>
 
-      <!-- Social Media Werbung Section -->
+      <!-- Werbung in sozialen Medien Section -->
       <div class="service-section">
         <div class="service-header">
-          <h2>Social Media Werbung</h2>
+          <h2>Werbung in sozialen Medien</h2>
           <p>
             Neben einer gut gestalteten und optimierten Website ist es wichtig,
             Ihre Zielgruppe dort zu erreichen, wo sie ihre Zeit verbringt – auf
             den sozialen Medien. Unsere Experten entwickeln maßgeschneiderte
-            Social Media Werbekampagnen, die Ihre Marke ins Rampenlicht rücken
+            Werbekampagnen für soziale Medien, die Ihre Marke ins Rampenlicht rücken
             und mehr Kunden zu Ihnen führen.
           </p>
         </div>
 
         <div class="pricing-cards">
-          <!-- Basic Package -->
+          <!-- Basis-Paket -->
           <div class="pricing-card">
-            <h3 class="card-title">BASIC</h3>
+            <h3 class="card-title">BASIS-PAKET</h3>
             <div class="card-price">30€ mtl.</div>
             <div class="price-note">zzgl. 19% MwSt.</div>
             <ul class="feature-list">
-              <li>Erstellung von 1 Social Media Beitrag mtl.</li>
+              <li>Erstellung von 1 Beitrag für soziale Medien mtl.</li>
               <li>Werbebudget: 15€</li>
-              <li>Zielgruppen-Targeting</li>
+              <li>Zielgruppenausrichtung</li>
             </ul>
-            <a href="https://alfredomedia.nangkil.com/contact/" class="btn">JETZT KAUFEN</a>
+            <a href="https://alfredomedia.nangkil.com/contact/" class="btn btn-primary">JETZT KAUFEN</a>
           </div>
 
-          <!-- Standard Package -->
+          <!-- Standard-Paket -->
           <div class="pricing-card">
-            <h3 class="card-title">STANDARD</h3>
+            <h3 class="card-title">STANDARD-PAKET</h3>
             <div class="card-price">50€ mtl.</div>
             <div class="price-note">zzgl. 19% MwSt.</div>
             <ul class="feature-list">
-              <li>Erstellung von 3 Social Media Beiträgen mtl.</li>
+              <li>Erstellung von 3 Beiträgen für soziale Medien mtl.</li>
               <li>Werbebudget: 20€</li>
-              <li>Zielgruppen-Targeting</li>
+              <li>Zielgruppenausrichtung</li>
             </ul>
-            <a href="https://alfredomedia.nangkil.com/contact/" class="btn">JETZT KAUFEN</a>
+            <a href="https://alfredomedia.nangkil.com/contact/" class="btn btn-primary">JETZT KAUFEN</a>
           </div>
 
-          <!-- Premium Package -->
+          <!-- Premium-Paket -->
           <div class="pricing-card">
-            <h3 class="card-title">PREMIUM</h3>
+            <h3 class="card-title">PREMIUM-PAKET</h3>
             <div class="card-price">70€ mtl.</div>
             <div class="price-note">zzgl. 19% MwSt.</div>
             <ul class="feature-list">
-              <li>Erstellung von 6 Social Media Beiträgen mtl.</li>
+              <li>Erstellung von 6 Beiträgen für soziale Medien mtl.</li>
               <li>Werbebudget: 25€</li>
-              <li>Zielgruppen-Targeting</li>
+              <li>Zielgruppenausrichtung</li>
             </ul>
-            <a href="https://alfredomedia.nangkil.com/contact/" class="btn">JETZT KAUFEN</a>
+            <a href="https://alfredomedia.nangkil.com/contact/" class="btn btn-primary">JETZT KAUFEN</a>
           </div>
         </div>
       </div>
@@ -227,31 +227,49 @@
       }
     });
 
-    // Mobile menu toggle
-    document
-      .querySelector(".mobile-toggle")
-      .addEventListener("click", function () {
-        document.querySelector(".nav-list").classList.toggle("active");
-        document.querySelector(".mobile-overlay").classList.toggle("active");
-        document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
-      });
+    // Mobile menu toggle - improved implementation with better performance
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileToggle = document.querySelector(".mobile-toggle");
+      const mobileOverlay = document.querySelector(".mobile-overlay");
+      const navList = document.querySelector(".nav-list");
 
-    // Close mobile menu when clicking on overlay
-    document
-      .querySelector(".mobile-overlay")
-      .addEventListener("click", function () {
-        document.querySelector(".nav-list").classList.remove("active");
-        document.querySelector(".mobile-overlay").classList.remove("active");
-        document.body.style.overflow = ""; // Re-enable scrolling when menu is closed
-      });
+      // Helper function to toggle menu
+      function toggleMenu() {
+        navList.classList.toggle("active");
+        mobileOverlay.classList.toggle("active");
 
-    // Close mobile menu when clicking on a navigation link
-    document.querySelectorAll(".nav-link").forEach(function(link) {
-      link.addEventListener("click", function() {
-        if (window.innerWidth <= 768) { // Only on mobile
-          document.querySelector(".nav-list").classList.remove("active");
-          document.querySelector(".mobile-overlay").classList.remove("active");
+        if (navList.classList.contains("active")) {
+          document.body.style.overflow = "hidden"; // Prevent scrolling
+        } else {
           document.body.style.overflow = ""; // Re-enable scrolling
+        }
+      }
+
+      // Toggle menu on button click
+      if (mobileToggle) {
+        mobileToggle.addEventListener("click", toggleMenu);
+      }
+
+      // Close menu when clicking on overlay
+      if (mobileOverlay) {
+        mobileOverlay.addEventListener("click", toggleMenu);
+      }
+
+      // Close menu when clicking nav links
+      document.querySelectorAll(".nav-link").forEach(function(link) {
+        link.addEventListener("click", function() {
+          if (navList.classList.contains("active")) {
+            toggleMenu();
+          }
+        });
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener("click", function(event) {
+        if (navList && navList.classList.contains("active") &&
+            !navList.contains(event.target) &&
+            event.target !== mobileToggle) {
+          toggleMenu();
         }
       });
     });
